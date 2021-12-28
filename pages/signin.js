@@ -35,10 +35,10 @@ export default function Login() {
     return (
         <>
             {user ?
-                <div className={'centerContainer'}>
+                <div style={{ textAlign: 'center' }}>
                     <h1>Your In!</h1>
                     <br />
-                    <a href="/" style={{ textAlign: 'center' }}>Jump to main page</a>
+                    <a href="/">Jump to main page</a>
                 </div> :
                 <div className={'centerContainer'}>
                     <div className="loginContainer">

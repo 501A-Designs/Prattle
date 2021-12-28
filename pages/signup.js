@@ -28,13 +28,13 @@ export default function Login() {
                 }
             }
         )
-        alert(`Hey ${username}! Check your email inbox for a link to active your ShedLive account! (make sure to close this tab since you wont be using it.)`)
+        // alert(`Hey ${username}! Check your email inbox for a link to active your ShedLive account! (make sure to close this tab since you wont be using it.)`)
     }
 
     return (
         <>
             {user ?
-                <div>
+                <div style={{ textAlign: 'center' }}>
                     <h1>Hey! Your already in so no worries ;)</h1>
                     <br />
                     <a href="/">Jump to main page</a>
