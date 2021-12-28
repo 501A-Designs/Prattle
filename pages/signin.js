@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react'
 import ShedButton from './lib/ShedButton';
+import Link from 'next/link'
+
 import { useRouter } from "next/router";
 import { useRef, useState } from 'react'
 import { supabase } from '../utils/supabaseClient'
 import { VscSignIn } from "react-icons/vsc";
 
 
-export default function login() {
+export default function Login() {
     const userEmail = useRef()
     const userPassword = useRef()
     const user = supabase.auth.user();
@@ -64,7 +66,9 @@ export default function login() {
                         <p>
                             *Sign in for those who already have an exisiting account.
                             <br />
-                            <a href="signup">Don't have an account?</a>
+                            <Link href="/signup">
+                                <a>Don&apos;t have an account?</a>
+                            </Link>
                         </p>
                     </div>
                 </div>

@@ -8,6 +8,7 @@ export default function ContactsChip(props) {
         <button
             className="contactsChip"
             onClick={props.click}
+            key={props.key}
         >
             <IconContext.Provider value={{ className: 'icons' }}>
                 {props.type === 'newChange' && <VscCircleLargeFilled />}

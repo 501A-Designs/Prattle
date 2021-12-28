@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { supabase } from '../../utils/supabaseClient'
-
+import Image from 'next/image'
 
 export default function TextMessage(props) {
     const user = supabase.auth.user();
@@ -45,6 +45,7 @@ export default function TextMessage(props) {
     return (
         <div
             className="shedLiveTextMessage"
+            key={props.key}
         >
             <h4 title="View Profile" onClick={props.inspectUserData}>{name}</h4>
             {foundUrl === 'none' && <span title="Save to notes" onClick={handleSaveNote}>{message}</span>}
@@ -52,7 +53,12 @@ export default function TextMessage(props) {
                 <div>
                     <a href={message}>{message}</a>
                     {message.match(new RegExp(/(https?:\/\/.*\.(?:png|jpg))/i)) &&
-                        <img src={message} alt="Img url on ShedLive" />}
+                        // <img src={message} alt="Img url on ShedLive" />
+                        <Image
+                            src={message}
+                            alt="Img url on ShedLive"
+                        />
+                    }
                 </div>
             }
             <time>{time.split('T')[1]}</time>

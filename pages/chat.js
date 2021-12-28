@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
+import Link from 'next/link'
+
 import { supabase } from '../utils/supabaseClient'
 import { useRouter } from "next/router";
 import ShedButton from './lib/ShedButton';
@@ -9,7 +11,7 @@ import TextMessage from './lib/TextMessage';
 import TextMessageNote from './lib/TextMessageNote';
 import { v4 as uuidv4 } from 'uuid';
 
-export default function chat() {
+export default function Chat() {
     const user = supabase.auth.user();
     const [openUserToggle, setOpenUserToggle] = useState(true);
     const [addGroupToggle, setAddGroupToggle] = useState(false);
@@ -58,12 +60,15 @@ export default function chat() {
         setGroupNameInput('');
     }
 
-    useEffect(async () => {
-        let { data: rooms, error } = await supabase
-            .from('rooms')
-            .select('*')
-            .eq('room_id', joinGroupInput);
-        setFetchedRoomName(rooms[0].room_name);
+    useEffect(() => {
+        async function fetchData() {
+            let { data: rooms, error } = await supabase
+                .from('rooms')
+                .select('*')
+                .eq('room_id', joinGroupInput);
+            setFetchedRoomName(rooms[0].room_name);
+        }
+        fetchData();
     }, [joinGroupInput])
 
     // Join a group
@@ -100,42 +105,54 @@ export default function chat() {
     }
 
     // fetch message / notes
-    useEffect(async () => {
-        let { data: messages, error } = await supabase
-            .from('messages')
-            .select('*')
-            .eq('room_id', currentRoom)
-            .order('id', { ascending: false });
-        setMessagesArray(messages);
+    useEffect(() => {
+        async function fetchData() {
+            let { data: messages, error } = await supabase
+                .from('messages')
+                .select('*')
+                .eq('room_id', currentRoom)
+                .order('id', { ascending: false });
+            setMessagesArray(messages);
+        }
+        fetchData();
     }, [message, currentRoom])
 
-    useEffect(async () => {
-        let { data: notes, error } = await supabase
-            .from('notes')
-            .select('*')
-            .eq('room_id', user.id)
-            .order('id', { ascending: false });
-        setMessagesNotesArray(notes);
-    }, [message, currentRoom])
+    useEffect(() => {
+        async function fetchData() {
+            let { data: notes, error } = await supabase
+                .from('notes')
+                .select('*')
+                .eq('room_id', user.id)
+                .order('id', { ascending: false });
+            setMessagesNotesArray(notes);
+        }
+        fetchData();
+    }, [message, currentRoom, user.id])
 
-    useEffect(async () => {
-        let { data: users, error } = await supabase
-            .from('users')
-            .select('*')
-            .eq('user_id', user.id)
-            .order('id', { ascending: false });
-        setGroupsArray(users);
-    }, [message])
+    useEffect(() => {
+        async function fetchData() {
+            let { data: users, error } = await supabase
+                .from('users')
+                .select('*')
+                .eq('user_id', user.id)
+                .order('id', { ascending: false });
+            setGroupsArray(users);
+        }
+        fetchData();
+    }, [message, user.id])
     console.log(messagesArray)
 
-    useEffect(async () => {
-        let timeStamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }).split(' ')[0];
-        let reFormattedTime = `${timeStamp.split('/')[0]}-${timeStamp.split('/')[1]}-${timeStamp.split('/')[2]}T23:30:30+00:00`;
-        console.log(reFormattedTime)
-        const { data, error } = await supabase
-            .from('messages')
-            .delete()
-            .gte("created_at", reFormattedTime)
+    useEffect(() => {
+        async function fetchData() {
+            let timeStamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }).split(' ')[0];
+            let reFormattedTime = `${timeStamp.split('/')[0]}-${timeStamp.split('/')[1]}-${timeStamp.split('/')[2]}T23:30:30+00:00`;
+            console.log(reFormattedTime)
+            const { data, error } = await supabase
+                .from('messages')
+                .delete()
+                .gte("created_at", reFormattedTime)
+        }
+        fetchData();
     }, [message])
 
     // Signout
@@ -150,7 +167,9 @@ export default function chat() {
             {
                 user ?
                     <div className="container">
-                        <a href="/">&lt; Navigate back</a>
+                        <Link href="/">
+                            <a>&lt; Navigate back</a>
+                        </Link>
                         <div className="chatAppContainer">
                             <section>
                                 <h3>Notes</h3>
@@ -158,6 +177,7 @@ export default function chat() {
                                     {messagesNotesArray === null || currentRoom ?
                                         messagesNotesArray.map(props =>
                                             <TextMessageNote
+                                                key={currentRoom}
                                                 room={currentRoom}
                                                 whoSaid={props.who_said}
                                                 message={props.message}
@@ -185,6 +205,7 @@ export default function chat() {
                                     {messagesArray === null || currentRoom ?
                                         messagesArray.map(props =>
                                             <TextMessage
+                                                key={props.sent_by_user.id}
                                                 inspectUserData={() => {
                                                     setOpenUserToggle(true);
                                                     setAddGroupToggle(false);
@@ -206,8 +227,8 @@ export default function chat() {
                                             <h2>Get Started !</h2>
                                             <ol>
                                                 <li>Join an existing group or create your own group</li>
-                                                <li>In case you create your own group, make sure to ask your friends what their user ID's are.</li>
-                                                <li>Once you added their user ID's you can start chatting!</li>
+                                                <li>In case you create your own group, make sure to ask your friends what their user IDs are.</li>
+                                                <li>Once you added their user ID&apos;s you can start chatting!</li>
                                             </ol>
                                             <p>
                                                 In case your messages are not showing, please note that ShedLive deletes messages after 24 hours have past.
@@ -369,6 +390,7 @@ export default function chat() {
                                         <div className="chatContacts">
                                             {groupsArray ? groupsArray.map((props) => {
                                                 return <ContactsChip
+                                                    key={props.room_name}
                                                     click={() => setCurrentRoom(props.room_id)}
                                                     type={'standard'}
                                                     name={props.room_name}

@@ -10,7 +10,7 @@ export default function about() {
                 <div>
                     <h1>About ShedLive</h1>
                     <h2>Get to know ShedLive</h2>
-                    <div class="grid" style={{width: '80%'}}>
+                    <div className="grid" style={{ width: '80%' }}>
                         <ClickableCard
                             name="Get Started"
                             content="Sign up using your Google account and try out ShedLive!"

@@ -5,7 +5,7 @@ import { supabase } from '../utils/supabaseClient'
 import { VscAccount } from "react-icons/vsc";
 
 
-export default function login() {
+export default function Login() {
     const userEmail = useRef()
     const userPassword = useRef()
     const userName = useRef()
@@ -52,7 +52,7 @@ export default function login() {
                             <ol>
                                 <li>Input credetials to create an account</li>
                                 <li>Copy your user ID</li>
-                                <li>Invite your friends and family and share each others user ID's so that you can add each other.</li>
+                                <li>Invite your friends and family and share each others user ID&apos;s so that you can add each other.</li>
                                 <li>Start chatting in the shed!</li>
                             </ol>
                         </p>
