@@ -7,7 +7,6 @@ import ShedButton from './lib/ShedButton';
 import { VscMail, VscAccount, VscAdd, VscChevronUp, VscSignOut, VscActivateBreakpoints } from "react-icons/vsc";
 
 import ContactsChip from './lib/ContactsChip';
-import TextMessage from './lib/TextMessage';
 import TextMessageNote from './lib/TextMessageNote';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -30,8 +29,44 @@ export default function Chat() {
 
     const [generateRoom, setGeneratedRoom] = useState()
     const [currentRoom, setCurrentRoom] = useState()
+    const [currentRoomName, setCurrentRoomName] = useState()
     const [fetchedRoomName, setFetchedRoomName] = useState('')
 
+    const fetchMessage = async () => {
+        let { data: messages, error } = await supabase
+            .from('messages')
+            .select('*')
+            .eq('room_id', currentRoom)
+            .order('id', { ascending: false });
+        setMessagesArray(messages);
+    }
+    const fetchMessageNotes = async () => {
+        // setMessagesNotesArray();
+        let { data: notes, error } = await supabase
+            .from('notes')
+            .select('*')
+            .eq('room_id', user.id)
+            .order('id', { ascending: false });
+        setMessagesNotesArray(notes);
+    }
+    const fetchGroupName = async () => {
+        // setGroupsArray();
+        let { data: users, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('id', { ascending: false });
+        setGroupsArray(users);
+    }
+    const eraseMessage = async () => {
+        let timeStamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }).split(' ')[0];
+        let reFormattedTime = `${timeStamp.split('/')[0]}-${timeStamp.split('/')[1]}-${timeStamp.split('/')[2]}T23:30:30+00:00`;
+        console.log(reFormattedTime)
+        const { data, error } = await supabase
+            .from('messages')
+            .delete()
+            .gte("created_at", reFormattedTime)
+    }
 
     // Send Message
     const handleMessageChange = (e) => {
@@ -106,54 +141,15 @@ export default function Chat() {
 
     // fetch message / notes
     useEffect(() => {
-        async function fetchData() {
-            let { data: messages, error } = await supabase
-                .from('messages')
-                .select('*')
-                .eq('room_id', currentRoom)
-                .order('id', { ascending: false });
-            setMessagesArray(messages);
-        }
-        fetchData();
+        fetchMessage();
+        fetchMessageNotes();
+        fetchGroupName();
+        eraseMessage();
     }, [message, currentRoom])
 
-    useEffect(() => {
-        async function fetchData() {
-            let { data: notes, error } = await supabase
-                .from('notes')
-                .select('*')
-                .eq('room_id', user.id)
-                .order('id', { ascending: false });
-            setMessagesNotesArray(notes);
-        }
-        fetchData();
-    }, [message, currentRoom, user.id])
-
-    useEffect(() => {
-        async function fetchData() {
-            let { data: users, error } = await supabase
-                .from('users')
-                .select('*')
-                .eq('user_id', user.id)
-                .order('id', { ascending: false });
-            setGroupsArray(users);
-        }
-        fetchData();
-    }, [message, user.id])
-    console.log(messagesArray)
-
-    useEffect(() => {
-        async function fetchData() {
-            let timeStamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }).split(' ')[0];
-            let reFormattedTime = `${timeStamp.split('/')[0]}-${timeStamp.split('/')[1]}-${timeStamp.split('/')[2]}T23:30:30+00:00`;
-            console.log(reFormattedTime)
-            const { data, error } = await supabase
-                .from('messages')
-                .delete()
-                .gte("created_at", reFormattedTime)
-        }
-        fetchData();
-    }, [message])
+    // useEffect(() => {
+    //     setJoinGroupInput(currentRoom);
+    // }, [currentRoom])
 
     // Signout
     const router = useRouter();
@@ -162,6 +158,62 @@ export default function Chat() {
         router.push("/signin");
     }
 
+
+
+    // TEXT MESSAGE
+    function TextMessage(props) {
+        const user = supabase.auth.user();
+        let name = props.name;
+        let message = props.message;
+        let time = props.time;
+        let room = props.currentRoom;
+
+        // Sent message
+        let foundUrl = 'none';
+        let regex = new RegExp(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi);
+
+        if (message.match(regex)) {
+            foundUrl = 'url';
+        } else {
+            foundUrl = 'none';
+        }
+
+        const handleSaveNote = async () => {
+            if (window.confirm(`Add [${message}] to notes?`)) {
+                console.log(room)
+                const { data, error } = await supabase
+                    .from('notes')
+                    .insert([{
+                        created_at: time,
+                        message: message,
+                        set_by: user.user_metadata.first_name,
+                        who_said: name,
+                        room_id: room
+                    },])
+                console.log(error);
+            }
+        }
+        return (
+            <div
+                className="shedLiveTextMessage"
+                key={props.key}
+            >
+                <h4 title="View Profile" onClick={props.inspectUserData}>{name}</h4>
+                {foundUrl === 'none' && <span title="Save to notes" onClick={handleSaveNote}>{message}</span>}
+                {foundUrl === 'url' &&
+                    <div>
+                        <a href={message}>{message}</a>
+                        {message.match(new RegExp(/(https?:\/\/.*\.(?:png|jpg))/i)) &&
+                            <img src={message} alt="Img url on ShedLive" />
+                        }
+                    </div>
+                }
+                <time>{time.split('T')[1]}</time>
+            </div>
+        )
+    }
+
+    // FULL APP BODY
     return (
         <>
             {
@@ -178,7 +230,7 @@ export default function Chat() {
                                         messagesNotesArray.map(props =>
                                             <TextMessageNote
                                                 key={currentRoom}
-                                                room={currentRoom}
+                                                room={props.room_name}
                                                 whoSaid={props.who_said}
                                                 message={props.message}
                                             />
@@ -196,7 +248,7 @@ export default function Chat() {
                                     <h3>Chat</h3>
                                     {currentRoom &&
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                            <h4>Current Room ID:</h4>
+                                            <h4>{currentRoomName}</h4>
                                             <code>{currentRoom}</code>
                                         </div>
                                     }
@@ -277,7 +329,7 @@ export default function Chat() {
                                             openUserToggle === true ?
                                                 <VscChevronUp /> : <VscAccount />
                                         }
-                                        name="Profile inspector"
+                                        name="Inspector"
                                     />
                                     <ShedButton
                                         // disabled={openUserToggle}
@@ -385,13 +437,16 @@ export default function Chat() {
                                         <p>
                                             Nobody is in your contacts list.
                                             <br />
-                                            Click the buttton above to add somebody to your contacts list.
+                                            Click the button above to add somebody to your contacts list.
                                         </p> :
                                         <div className="chatContacts">
                                             {groupsArray ? groupsArray.map((props) => {
                                                 return <ContactsChip
                                                     key={props.room_name}
-                                                    click={() => setCurrentRoom(props.room_id)}
+                                                    click={() => {
+                                                        setCurrentRoom(props.room_id);
+                                                        setCurrentRoomName(props.room_name)
+                                                    }}
                                                     type={'standard'}
                                                     name={props.room_name}
                                                     id={props.room_id}

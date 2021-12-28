@@ -1,8 +1,6 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import { useState } from 'react'
 import { supabase } from '../utils/supabaseClient'
-import ClickableCard from '../lib/ClickableCard'
+import ClickableCard from './lib/ClickableCard'
 
 
 export default function Home() {
