@@ -37,7 +37,7 @@ export default function Login() {
                 <div>
                     <h1>Hey! Your already in so no worries ;)</h1>
                     <br />
-                    <a href="http://localhost:3000/">Jump to main page</a>
+                    <a href="/">Jump to main page</a>
                 </div> :
                 <div className={'centerContainer'}>
                     <div className="loginContainer">
