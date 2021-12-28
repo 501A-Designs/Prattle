@@ -270,17 +270,14 @@ export default function Chat() {
                                             />
                                         ) :
                                         <div>
-                                            <h2>Get Started !</h2>
+                                            <h2>Get Started</h2>
                                             <ol>
                                                 <li>Join an existing group or create your own group</li>
-                                                <li>In case you create your own group, make sure to ask your friends what their user IDs are.</li>
-                                                <li>Once you added their user ID&apos;s you can start chatting!</li>
+                                                <li>In case you create your own group, make sure share the generated group ID to your friends and family so that they can join.</li>
+                                                <li>Once you added their join the chat just start chatting live!</li>
                                             </ol>
                                             <p>
-                                                In case your messages are not showing, please note that ShedLive deletes messages after 24 hours have past.
-                                                <br />
-                                                <br />
-                                                Make sure to preserve important messages through the notes feature.
+                                                In case your messages are not showing, please note that ShedLive deletes messages after 24 hours have past. Make sure to preserve important messages through the notes feature. Also, chat contents will not update unless you start typing. ShedLive aims to emulate traditional conversations and the ability to only listen when the person is present.
                                             </p>
                                         </div>
                                     }
