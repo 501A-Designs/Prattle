@@ -38,14 +38,14 @@ export default function Chat() {
             .select('*')
             .eq('room_id', currentRoom)
             .order('id', { ascending: false });
+        console.log(message);
         setMessagesArray(messages);
     }
     const fetchMessageNotes = async () => {
-        // setMessagesNotesArray();
         let { data: notes, error } = await supabase
             .from('notes')
             .select('*')
-            .eq('room_id', user.id)
+            .eq('room_id', currentRoom)
             .order('id', { ascending: false });
         setMessagesNotesArray(notes);
     }
@@ -95,15 +95,12 @@ export default function Chat() {
         setGroupNameInput('');
     }
 
-    useEffect(() => {
-        async function fetchData() {
-            let { data: rooms, error } = await supabase
-                .from('rooms')
-                .select('*')
-                .eq('room_id', joinGroupInput);
-            setFetchedRoomName(rooms[0].room_name);
-        }
-        fetchData();
+    useEffect(async () => {
+        let { data: rooms, error } = await supabase
+            .from('rooms')
+            .select('*')
+            .eq('room_id', joinGroupInput);
+        setFetchedRoomName(rooms[0].room_name);
     }, [joinGroupInput])
 
     // Join a group
@@ -143,13 +140,11 @@ export default function Chat() {
     useEffect(() => {
         fetchMessage();
         fetchMessageNotes();
+    }, [message, currentRoom])
+    useEffect(() => {
         fetchGroupName();
         eraseMessage();
-    }, [message, currentRoom])
-
-    // useEffect(() => {
-    //     setJoinGroupInput(currentRoom);
-    // }, [currentRoom])
+    }, [message])
 
     // Signout
     const router = useRouter();
@@ -180,7 +175,6 @@ export default function Chat() {
 
         const handleSaveNote = async () => {
             if (window.confirm(`Add [${message}] to notes?`)) {
-                console.log(room)
                 const { data, error } = await supabase
                     .from('notes')
                     .insert([{
@@ -188,7 +182,7 @@ export default function Chat() {
                         message: message,
                         set_by: user.user_metadata.first_name,
                         who_said: name,
-                        room_id: room
+                        room_id: currentRoom
                     },])
                 console.log(error);
             }
@@ -226,11 +220,11 @@ export default function Chat() {
                             <section>
                                 <h3>Notes</h3>
                                 <div className="messagesContainer">
-                                    {messagesNotesArray === null || currentRoom ?
+                                    {messagesNotesArray ?
                                         messagesNotesArray.map(props =>
                                             <TextMessageNote
-                                                key={currentRoom}
-                                                room={props.room_name}
+                                                key={props}
+                                                setBy={props.set_by}
                                                 whoSaid={props.who_said}
                                                 message={props.message}
                                             />
@@ -257,7 +251,7 @@ export default function Chat() {
                                     {messagesArray === null || currentRoom ?
                                         messagesArray.map(props =>
                                             <TextMessage
-                                                key={props.sent_by_user.id}
+                                                key={props.user}
                                                 inspectUserData={() => {
                                                     setOpenUserToggle(true);
                                                     setAddGroupToggle(false);
@@ -295,7 +289,7 @@ export default function Chat() {
                                 {messagesNotesArray === null || currentRoom &&
                                     <form className="shedForm" style={{ marginTop: '1em' }} onSubmit={handleMessageSubmit}>
                                         <input
-                                            placeholder="Type text message"
+                                            placeholder="Type a... text message / URL / Image URL  (p.s. the chat won't update unless you type, like a real conversation)"
                                             onChange={handleMessageChange}
                                             value={message}
                                         />
@@ -314,7 +308,7 @@ export default function Chat() {
                                     </form>
                                 }
                             </section>
-                            <section>
+                            <section className="contactsContainer">
                                 <div style={{ textAlign: 'right', marginBottom: '2em' }}>
                                     <h2 style={{ marginBottom: '0.1em' }}>ShedLive</h2>
                                     <p style={{ marginTop: '0.1em' }}>More than just a chat app</p>
@@ -383,7 +377,7 @@ export default function Chat() {
                                 }
                                 {addGroupToggle == true &&
                                     <div>
-                                        <h3 style={{ marginBottom: '0.5em' }}>Join a Shed</h3>
+                                        <h4 style={{ marginBottom: '0.5em' }}>Join a Shed</h4>
                                         {generateRoom &&
                                             <div>
                                                 <h4>Generated Room ID:</h4>
@@ -413,9 +407,9 @@ export default function Chat() {
                                                 name="Join a group"
                                             />
                                         </form>
-                                        <h3 style={{ marginBottom: '0.5em' }}>Create a Shed</h3>
+                                        <h4 style={{ marginBottom: '0.5em' }}>Create a Shed</h4>
                                         <form className="shedForm" style={{ marginTop: '1em' }} onSubmit={handleCreateGroup}>
-                                            <p>A shedlive group requires a minimum of 3 people</p>
+                                            <p>Name your new shedlive group. You can add emojis and be creative ;)</p>
                                             <input
                                                 placeholder="New group name"
                                                 onChange={(e) => setGroupNameInput(e.target.value)}

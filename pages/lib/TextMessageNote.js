@@ -11,7 +11,7 @@ export default function TextMessageNote(props) {
                 </IconContext.Provider>
                 {props.whoSaid}
             </section>
-            <span>Room: {props.room}</span>
+            <span>Statement noted by: {props.setBy}</span>
             <p>{props.message}</p>
         </div>
     )

@@ -92,6 +92,9 @@ table {
 	color: var(--grey1);
 	border-collapse: collapse;
 }
+p{
+	margin: 0.4em 0;
+}
 table, td, th {
 	border: var(--grey1Border);
 }
@@ -318,7 +321,8 @@ code {
   
   /* Medium devices (landscape tablets, 768px and up) */
   @media only screen and (min-width: 768px) {
-	.chatAppContainer {grid-template-columns: 1fr 1fr;}
+	.chatAppContainer {grid-template-columns: 1fr;
+	}
   } 
   
   /* Large devices (laptops/desktops, 992px and up) */
