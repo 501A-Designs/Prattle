@@ -38,7 +38,10 @@ export default function Login() {
                 <div style={{ textAlign: 'center' }}>
                     <h1>Your In!</h1>
                     <br />
-                    <a href="/">Jump to main page</a>
+                    <Link href="/">
+                        <a>Jump to main page</a>
+                    </Link>
+
                 </div> :
                 <div className={'centerContainer'}>
                     <div className="loginContainer">

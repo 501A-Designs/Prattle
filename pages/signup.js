@@ -3,6 +3,7 @@ import ShedButton from './lib/ShedButton';
 import { useRef } from 'react'
 import { supabase } from '../utils/supabaseClient'
 import { VscAccount } from "react-icons/vsc";
+import Link from 'next/link'
 
 
 export default function Login() {
@@ -37,7 +38,9 @@ export default function Login() {
                 <div style={{ textAlign: 'center' }}>
                     <h1>Hey! Your already in so no worries ;)</h1>
                     <br />
-                    <a href="/">Jump to main page</a>
+                    <Link href="/">
+                        <a>Jump to main page</a>
+                    </Link>
                 </div> :
                 <div className={'centerContainer'}>
                     <div className="loginContainer">
