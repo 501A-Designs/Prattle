@@ -13,7 +13,7 @@ export default function about() {
                     <div className="grid" style={{ width: '80%' }}>
                         <ClickableCard
                             name="Get Started"
-                            content="Sign up using your Google account and try out ShedLive!"
+                            content="Sign up using your email account and try out ShedLive!"
                             href="signup"
                         />
                         <ClickableCard
@@ -25,11 +25,11 @@ export default function about() {
                 <div>
                     <Card
                         name="What is it?"
-                        content="ShedLive is a next generation chat application that lets you communicate with your friends and family. Each message sent on shedlive can have a thread generated below it. Using the powerful OpenAI API's text messages can be optionally classified with different colors determining the writers emotion."
+                        content="ShedLive is a cyber-esque chat app application that lets you communicate with your friends and family. Each message sent on shedlive is inserted in as a new column in the messages table. Users can input commands such as $colorname to specify the color of the message they send, and use the * to make their messages appear larger."
                     />
                     <Card
                         name="Technologies"
-                        content="ShedLive is built on top of the Next.Js framework. It also uses Supabase as a backend as a service. Because Supabase is a PostGresSQL based database, it is highly scalable and suitable for a chat app. Unlike regular chat applications, ShedLive aims to help its users with tools that would otherwise be out of reach. By using OpenAI's public API that gives us access to the powerful GPT-3, ShedLive is able to classify emotions in a text message as well as summerize long texts to reduce redundancy."
+                        content="ShedLive is built on top of the Next.Js framework. It also uses Supabase as a backend as a service. Supabase is a PostGreSQL based database that is anticipated to become an opensource Firebase alternative. In the new future, ShedLive aims to advance the key commands for a more customized way of communicating."
                     />
                     <Card
                         name="Development"
@@ -37,7 +37,7 @@ export default function about() {
                     />
                     <Card
                         name="Terms & Services"
-                        content="ShedLive uses Google as its primary authentication tool. Therfore, information such as your Google username, profile photo URl can be accessed by ShedLive. In terms of your chat messages, ShedLive deletes your messages in a day, this is not only to keep the authenticity of the conversation (hence the name 'Live') but it is also to keep your conversations private and secure. Your messages are deleted at the database level so if you wish to have your messages stay, ShedLive may not be the platform for you."
+                        content="Logging into ShedLive requires your email address. You can set your own username, however, it is important to note that any group you join on ShedLive other users will be able to view your credentials (username, email). In terms of your chat messages, ShedLive deletes your messages in a day, this is not only to keep the authenticity of the conversation (hence the name 'Live') but it is also to keep your conversations private and secure. Your messages are deleted at the database level so if you wish to have your messages stay, consider using the notes feature that can be activated in any ShedLive group."
                     />
                 </div>
             </div>

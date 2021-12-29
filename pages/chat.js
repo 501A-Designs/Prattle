@@ -21,6 +21,7 @@ export default function Chat() {
     const [messagesArray, setMessagesArray] = useState();
     const [messagesNotesArray, setMessagesNotesArray] = useState();
     const [groupsArray, setGroupsArray] = useState();
+    const [latestMessagedate, setLatestMessageDate] = useState()
 
     const [inspectedUser, setInspectedUser] = useState();
 
@@ -32,15 +33,33 @@ export default function Chat() {
     const [currentRoomName, setCurrentRoomName] = useState()
     const [fetchedRoomName, setFetchedRoomName] = useState('')
 
+    let timeStamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }).split(' ')[0];
+    let reFormattedDate = `${timeStamp.split('/')[0]}-${timeStamp.split('/')[1]}-${timeStamp.split('/')[2]}`;
+
+    const fetchLatestMessageDate = async () => {
+        let { data: messages, error } = await supabase
+            .from('messages')
+            .select('*')
+            .eq('room_id', currentRoom)
+            .order('id', { ascending: true });
+        setLatestMessageDate(messages[0].created_at)
+    }
     const fetchMessage = async () => {
         let { data: messages, error } = await supabase
             .from('messages')
             .select('*')
             .eq('room_id', currentRoom)
             .order('id', { ascending: false });
-        console.log(message);
         setMessagesArray(messages);
+
+        if (latestMessagedate.split('T')[0] < reFormattedDate) {
+            eraseMessage();
+            // console.log('delete')
+        } else {
+            console.log('keep');
+        }
     }
+
     const fetchMessageNotes = async () => {
         let { data: notes, error } = await supabase
             .from('notes')
@@ -59,13 +78,9 @@ export default function Chat() {
         setGroupsArray(users);
     }
     const eraseMessage = async () => {
-        let timeStamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }).split(' ')[0];
-        let reFormattedTime = `${timeStamp.split('/')[0]}-${timeStamp.split('/')[1]}-${timeStamp.split('/')[2]}T23:30:30+00:00`;
-        console.log(reFormattedTime)
         const { data, error } = await supabase
             .from('messages')
             .delete()
-            .gte("created_at", reFormattedTime)
     }
 
     // Send Message
@@ -138,12 +153,13 @@ export default function Chat() {
 
     // fetch message / notes
     useEffect(() => {
+        fetchLatestMessageDate();
         fetchMessage();
         fetchMessageNotes();
     }, [message, currentRoom])
     useEffect(() => {
         fetchGroupName();
-        eraseMessage();
+        // eraseMessage();
     }, [message])
 
     // Signout
@@ -305,7 +321,7 @@ export default function Chat() {
                                             </p>
                                         </div>
                                     }
-                                    <p>All messages will be deleted on 23:30:30 today.</p>
+                                    <p>All messages before {reFormattedDate} (Today) are deleted.</p>
                                 </div>
                                 {messagesNotesArray === null || currentRoom &&
                                     <form className="shedForm" style={{ marginTop: '1em' }} onSubmit={handleMessageSubmit}>
