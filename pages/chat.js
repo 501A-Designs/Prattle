@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { supabase } from '../utils/supabaseClient'
 import { useRouter } from "next/router";
 import ShedButton from './lib/ShedButton';
-import { VscMail, VscAccount, VscAdd, VscChevronUp, VscSignOut, VscActivateBreakpoints } from "react-icons/vsc";
+import { VscMail, VscAccount, VscAdd, VscChevronUp, VscSignOut, VscActivateBreakpoints, VscDebugDisconnect } from "react-icons/vsc";
 
 import ContactsChip from './lib/ContactsChip';
 import TextMessageNote from './lib/TextMessageNote';
@@ -18,10 +18,12 @@ export default function Chat() {
     const [message, setMessage] = useState();
     const [messageByte, setMessageByte] = useState(0);
     const [messageWordCount, setMessageWordCount] = useState(0);
-    const [messagesArray, setMessagesArray] = useState();
+    const [messagesArray, setMessagesArray] = useState([]);
     const [messagesNotesArray, setMessagesNotesArray] = useState();
     const [groupsArray, setGroupsArray] = useState();
     const [latestMessagedate, setLatestMessageDate] = useState()
+
+    const [newChangeInfo, setNewChangeInfo] = useState()
 
     const [inspectedUser, setInspectedUser] = useState();
 
@@ -36,6 +38,20 @@ export default function Chat() {
     let timeStamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }).split(' ')[0];
     let reFormattedDate = `${timeStamp.split('/')[0]}-${timeStamp.split('/')[1]}-${timeStamp.split('/')[2]}`;
 
+    const handleSaveNote = async () => {
+        if (window.confirm(`Add [${message}] to notes?`)) {
+            const { data, error } = await supabase
+                .from('notes')
+                .insert([{
+                    created_at: time,
+                    message: message,
+                    set_by: user.user_metadata.first_name,
+                    who_said: name,
+                    room_id: currentRoom
+                },])
+        }
+    }
+
     const fetchLatestMessageDate = async () => {
         let { data: messages, error } = await supabase
             .from('messages')
@@ -49,16 +65,20 @@ export default function Chat() {
             .from('messages')
             .select('*')
             .eq('room_id', currentRoom)
-            .order('id', { ascending: false });
+            .order('created_at', { ascending: false });
         setMessagesArray(messages);
-
         if (latestMessagedate.split('T')[0] < reFormattedDate) {
             eraseMessage();
-            // console.log('delete')
+            console.log('delete')
         } else {
             console.log('keep');
         }
     }
+
+    const messageListener = supabase
+        .from('messages')
+        .on('*', payload => setNewChangeInfo(payload.new))
+        .subscribe();
 
     const fetchMessageNotes = async () => {
         let { data: notes, error } = await supabase
@@ -154,13 +174,17 @@ export default function Chat() {
     // fetch message / notes
     useEffect(() => {
         fetchLatestMessageDate();
-        fetchMessage();
         fetchMessageNotes();
-    }, [message, currentRoom])
-    useEffect(() => {
         fetchGroupName();
-        // eraseMessage();
-    }, [message])
+    }, [currentRoom])
+    useEffect(() => {
+        fetchMessage();
+    }, [message, currentRoom])
+
+    const disconnect = () => {
+        messageListener.unsubscribe();
+        setCurrentRoom()
+    };
 
     // Signout
     const router = useRouter();
@@ -169,13 +193,10 @@ export default function Chat() {
         router.push("/signin");
     }
 
-
-
     // TEXT MESSAGE
     function TextMessage(props) {
-        const user = supabase.auth.user();
         let name = props.name;
-        let message = props.message;
+        let content = props.content;
         let time = props.time;
         let room = props.currentRoom;
 
@@ -183,27 +204,16 @@ export default function Chat() {
         let foundUrl = null;
         let regex = new RegExp(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi);
 
-        if (message.match(regex)) {
-            foundUrl = message;
+        if (content.match(regex)) {
+            foundUrl = content;
         }
-
-        const handleSaveNote = async () => {
-            if (window.confirm(`Add [${message}] to notes?`)) {
-                const { data, error } = await supabase
-                    .from('notes')
-                    .insert([{
-                        created_at: time,
-                        message: message,
-                        set_by: user.user_metadata.first_name,
-                        who_said: name,
-                        room_id: currentRoom
-                    },])
-                console.log(error);
-            }
-        }
-        let setBold = message.match(new RegExp(/[*]/));
-        let setColor = message.match(new RegExp(/[$]/));
-        let imgClassification = message.match(new RegExp(/(https?:\/\/.*\.(?:png|jpg))/i));
+        let setBold = content.match(new RegExp(/[*]/));
+        let setColor = content.match(new RegExp(/[$]/));
+        let setGsearch = content.match(new RegExp(/[>]/));
+        let imgClassification = content.match(new RegExp(/(https?:\/\/.*\.(?:png|jpg))/i));
+        let ytvidClassification = content.match(new RegExp(/^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/));
+        let embededVid = 'https://www.youtube.com/embed/' + content.split('=')[1];
+        let gSearch = 'https://www.google.com/search?q=' + content;
 
         return (
             <div
@@ -211,19 +221,19 @@ export default function Chat() {
                 key={props.key}
             >
                 <h4 title="View Profile" onClick={props.inspectUserData}>{name}</h4>
-                {!foundUrl && !setBold && !setColor &&
+                {!foundUrl && !setBold && !setColor && !setGsearch &&
                     <span
                         title="Save to notes"
                         onClick={handleSaveNote}>
-                        {message}
+                        {content}
                     </span>
                 }
                 {setColor &&
                     <span
-                        style={{ color: message.split(' ')[0].substring(1) }}
+                        style={{ color: content.split(' ')[0].substring(1) }}
                         title="Cannot add to notes"
                     >
-                        {message.substr(message.indexOf(" ") + 1)}
+                        {content.substr(content.indexOf(" ") + 1)}
                     </span>
                 }
                 {setBold &&
@@ -231,14 +241,23 @@ export default function Chat() {
                         title="Save bold text message to notes"
                         onClick={handleSaveNote}
                     >
-                        {message.substring(1)}
+                        {content.substring(1)}
                     </h3>
+                }
+                {setGsearch &&
+                    <div>
+                        Google search:
+                        <a href={gSearch}>{content.substring(1)}</a>
+                    </div>
                 }
                 {foundUrl &&
                     <div>
-                        <a href={message}>{imgClassification ? 'JPG/PNG Image' : message}</a>
+                        <a href={content}>{imgClassification ? 'JPG/PNG Image' : content}</a>
                         {imgClassification &&
-                            <img src={message} alt="Img url on ShedLive" />
+                            <img src={content} alt="Img url on ShedLive" />
+                        }
+                        {ytvidClassification &&
+                            <iframe src={embededVid} />
                         }
                     </div>
                 }
@@ -288,6 +307,11 @@ export default function Chat() {
                                     }
                                 </div>
                                 <div className="messagesContainer">
+                                    {newChangeInfo &&
+                                        <p style={{ cursor: 'pointer', color: 'rgb(107, 255, 70)' }}>
+                                            New messages sent by {newChangeInfo.sent_by_user.user_metadata.first_name}
+                                        </p>
+                                    }
                                     {messagesArray === null || currentRoom ?
                                         messagesArray.map(props =>
                                             <TextMessage
@@ -305,7 +329,7 @@ export default function Chat() {
                                                     ])
                                                 }}
                                                 name={props.sent_by_user.user_metadata.first_name}
-                                                message={props.message}
+                                                content={props.message}
                                                 time={props.created_at}
                                             />
                                         ) :
@@ -464,34 +488,33 @@ export default function Chat() {
 
                                 }
                                 <div>
-                                    {!user ?
-                                        <p>
-                                            Nobody is in your contacts list.
-                                            <br />
-                                            Click the button above to add somebody to your contacts list.
-                                        </p> :
-                                        <div className="chatContacts">
-                                            {groupsArray ? groupsArray.map((props) => {
-                                                return <ContactsChip
-                                                    key={props.room_name}
-                                                    click={() => {
-                                                        setCurrentRoom(props.room_id);
-                                                        setCurrentRoomName(props.room_name)
-                                                    }}
-                                                    type={'standard'}
-                                                    name={props.room_name}
-                                                    id={props.room_id}
-                                                />
-                                            }) :
-                                                <p>
-                                                    You are not in any groups.
-                                                    <br />
-                                                    <br />
-                                                    (You can go ahead and create one and invite your friends and family, or join an existing one).
-                                                </p>
-                                            }
-                                        </div>
-                                    }
+                                    <div className="chatContacts">
+                                        <ShedButton
+                                            disabled={!groupsArray}
+                                            click={disconnect}
+                                            icon={<VscDebugDisconnect />}
+                                            name="Disconnect from group"
+                                        />
+                                        {groupsArray ? groupsArray.map((props) => {
+                                            return <ContactsChip
+                                                key={props.room_name}
+                                                click={() => {
+                                                    setCurrentRoom(props.room_id);
+                                                    setCurrentRoomName(props.room_name)
+                                                }}
+                                                type={'standard'}
+                                                name={props.room_name}
+                                                id={props.room_id}
+                                            />
+                                        }) :
+                                            <p>
+                                                You are not in any groups.
+                                                <br />
+                                                <br />
+                                                (You can go ahead and create one and invite your friends and family, or join an existing one).
+                                            </p>
+                                        }
+                                    </div>
                                 </div>
                             </section>
                         </div>
