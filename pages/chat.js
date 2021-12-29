@@ -164,13 +164,11 @@ export default function Chat() {
         let room = props.currentRoom;
 
         // Sent message
-        let foundUrl = 'none';
+        let foundUrl = null;
         let regex = new RegExp(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi);
 
         if (message.match(regex)) {
-            foundUrl = 'url';
-        } else {
-            foundUrl = 'none';
+            foundUrl = message;
         }
 
         const handleSaveNote = async () => {
@@ -187,17 +185,43 @@ export default function Chat() {
                 console.log(error);
             }
         }
+        let setBold = message.match(new RegExp(/[*]/));
+        let setColor = message.match(new RegExp(/[$]/));
+        let imgClassification = message.match(new RegExp(/(https?:\/\/.*\.(?:png|jpg))/i));
+
         return (
             <div
                 className="shedLiveTextMessage"
                 key={props.key}
             >
                 <h4 title="View Profile" onClick={props.inspectUserData}>{name}</h4>
-                {foundUrl === 'none' && <span title="Save to notes" onClick={handleSaveNote}>{message}</span>}
-                {foundUrl === 'url' &&
+                {!foundUrl && !setBold && !setColor &&
+                    <span
+                        title="Save to notes"
+                        onClick={handleSaveNote}>
+                        {message}
+                    </span>
+                }
+                {setColor &&
+                    <span
+                        style={{ color: message.split(' ')[0].substring(1) }}
+                        title="Cannot add to notes"
+                    >
+                        {message.substr(message.indexOf(" ") + 1)}
+                    </span>
+                }
+                {setBold &&
+                    <h3
+                        title="Save bold text message to notes"
+                        onClick={handleSaveNote}
+                    >
+                        {message.substring(1)}
+                    </h3>
+                }
+                {foundUrl &&
                     <div>
-                        <a href={message}>{message}</a>
-                        {message.match(new RegExp(/(https?:\/\/.*\.(?:png|jpg))/i)) &&
+                        <a href={message}>{imgClassification ? 'JPG/PNG Image' : message}</a>
+                        {imgClassification &&
                             <img src={message} alt="Img url on ShedLive" />
                         }
                     </div>
@@ -220,7 +244,7 @@ export default function Chat() {
                             <section>
                                 <h3>Notes</h3>
                                 <div className="messagesContainer">
-                                    {messagesNotesArray ?
+                                    {messagesNotesArray !== undefined ?
                                         messagesNotesArray.map(props =>
                                             <TextMessageNote
                                                 key={props}
