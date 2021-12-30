@@ -183,7 +183,8 @@ export default function Chat() {
 
     const disconnect = () => {
         messageListener.unsubscribe();
-        setCurrentRoom()
+        setCurrentRoom();
+        setNewChangeInfo();
     };
 
     // Signout
