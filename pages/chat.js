@@ -309,7 +309,7 @@ export default function Chat() {
                                 <div className="messagesContainer">
                                     {newChangeInfo &&
                                         <p style={{ cursor: 'pointer', color: 'rgb(107, 255, 70)' }}>
-                                            New messages sent by {newChangeInfo.sent_by_user.user_metadata.first_name}
+                                            New changes by {newChangeInfo.sent_by_user.user_metadata.first_name == user.user_metadata.first_name ? 'you' : newChangeInfo.sent_by_user.user_metadata.first_name}
                                         </p>
                                     }
                                     {messagesArray === null || currentRoom ?
