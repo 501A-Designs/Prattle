@@ -1,72 +1,10 @@
 import Head from 'next/head'
 import { supabase } from '../utils/supabaseClient'
-import ClickableCard from './lib/ClickableCard'
-
+import ChatApp from './lib/ChatApp';
+import LandingPage from './lib/LandingPage';
 
 export default function Home() {
   const user = supabase.auth.user();
-  function ChatApp() {
-    return (
-      <div className={'centerContainer'}>
-        <h1>Hi, {user.user_metadata.first_name}</h1>
-        <div>
-          <p>
-            Welcome to ShedLive, you are authenticated.
-            <br />
-            Now that you are in you can go ahead and <a href="chat">chat now!</a>
-            <br />
-            Below is some of the info we have about you.
-          </p>
-          <ul>
-            <li>Username: {user.user_metadata.first_name}</li>
-            <li>User ID: {user.id}</li>
-            <li>Email Address: {user.email}</li>
-          </ul>
-
-        </div>
-      </div>
-    )
-  }
-  function LandingPage() {
-    return (
-      <div className={'centerContainer'}>
-        <main className={'main'}>
-          <h1 className={'title'}>
-            Welcome
-            <br />
-            to ShedLive
-          </h1>
-          <p style={{ textAlign: 'center' }}>
-            More than just a chat app.
-          </p>
-          <br />
-
-          <div className={'grid'}>
-            <ClickableCard
-              href='signup'
-              name='Visit App'
-              content='Get Started by creating an account.'
-            />
-            <ClickableCard
-              href='about'
-              name='View Development'
-              content='Get to learn what ShedLive is built on top of.'
-            />
-          </div>
-        </main>
-
-        <footer className={'footer'}>
-          <a
-            href="https://501a.netlify.app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <p style={{ textAlign: 'center' }}>Designed & Developed By 501A</p>
-          </a>
-        </footer>
-      </div>
-    )
-  }
 
   return (
     <>

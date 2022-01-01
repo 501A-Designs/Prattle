@@ -45,7 +45,7 @@
 
 html,
 body {
-	padding: 0;
+	padding: 0.5em;
 	margin: 0;
 	background-color: var(--grey4);
 }
@@ -138,14 +138,11 @@ td, th {
 .container {
 	padding: 4rem;
 }
-.centerContainer {
-	min-height: 100vh;
-	padding: 0 0.5rem;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	height: 100vh;
+.duoGrid {
+	gap: 1em;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+
 }
 
 .loginContainer {
@@ -168,7 +165,7 @@ td, th {
 	align-items: center;
 }
 
-.footer {
+header,footer {
 	width: 100%;
 	height: 100px;
 	border-top: var(--grey3Border);
@@ -177,7 +174,7 @@ td, th {
 	align-items: center;
 }
 
-.footer a {
+footer a {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -189,10 +186,12 @@ td, th {
 }
 
 code {
+	display:inline-block;
 	background: var(--grey3);
 	color: white;
 	border-radius: var(--borderRadius);
 	padding: 1em;
+	margin: 0;
 	height: min-content;
 	font-size: 0.8em;
 	font-family: "Share Tech Mono", monospace;
@@ -238,6 +237,11 @@ code {
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: 0.5em;
+	margin-bottom: 0.5em;
+	background-color: var(--grey4);
+	border: var(--grey2Border);
+	border-radius: var(--borderRadius);
+	padding: 0.5em;
 }
 .shedForm input,
 .shedForm textArea {
@@ -274,7 +278,7 @@ code {
 	display: flex;
 	align-items: center;
 	justify-content: left;
-	gap: 5px;
+	gap: 1.5em;
 	border: 1px solid transparent;
 	background-color: transparent;
     border-radius: 5px;
@@ -287,14 +291,19 @@ code {
 	transition: 0.3s;
 }
 .contactsChip div{
-	text-align: left;
-	margin-left: 0.5em;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 .contactsChip h4{
+	font-size: 1.2em;
+	width: max-content;
 	margin: 0;
 	padding: 0;
 }
 .contactsChip p{
+	width: max-content;
 	margin: 0;
 	padding: 0;
 }
@@ -336,18 +345,20 @@ code {
   }
 
 .messagesContainer{
-	height: 50vh;
-	overflow-x: scroll;
 	padding: 0 0.3em;
 	margin: 0;
-	border-radius:var(--borderRadius);
+	height: 80vh;
 	/* box-shadow: inset 0px -35px 10px -10px var(--grey3);  */
 }
 .notesContainer{
-	height: 40vh;
+	display:flex;
+	flex-direction:row;
+	gap: 0.5em;
+	height: min-content;
 	overflow-x: scroll;
-	padding: 0 0.3em;
+	padding: 0 0.3em 0.3em 0.3em;
 	margin: 0;
+	border-radius: var(--borderRadius);
 }
 .shedLiveTextMessage{
 	font-family: "Share Tech Mono", monospace;
@@ -412,11 +423,13 @@ code {
 }
 
 .note{
-	box-shadow:0px 2px 0px var(--grey2);
+	border: var(--grey3Border);
+	width: 400px;
+	min-width: 300px;
 	padding:0.5em;
-	/* font-family: "Kanit", sans-serif; */
 	font-family: "Share Tech Mono", monospace;
-	margin-bottom: 1em;
+	border-radius:var(--borderRadius);
+
 }
 .note section{
 	font-weight: bold;

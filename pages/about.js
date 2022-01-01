@@ -39,6 +39,34 @@ export default function about() {
                         name="Terms & Services"
                         content="Logging into ShedLive requires your email address. You can set your own username, however, it is important to note that any group you join on ShedLive other users will be able to view your credentials (username, email). In terms of your chat messages, ShedLive deletes your messages in a day, this is not only to keep the authenticity of the conversation (hence the name 'Live') but it is also to keep your conversations private and secure. Your messages are deleted at the database level so if you wish to have your messages stay, consider using the notes feature that can be activated in any ShedLive group."
                     />
+                    <div>
+                        <table>
+                            <tr>
+                                <th>Shortcut</th>
+                                <th>Action</th>
+                            </tr>
+                            <tr>
+                                <td>$</td>
+                                <td>Specificies the color of the sent text. (Allows for plain CSS color names such as Hex color codes and RGB values.)</td>
+                            </tr>
+                            <tr>
+                                <td>*</td>
+                                <td>Large text, allowing you to emphasize your messages.</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>Shows a Google searched resault of the sent message.</td>
+                            </tr>
+                            <tr>
+                                <td>:</td>
+                                <td>Send ShedLive original stamps and emotes.</td>
+                            </tr>
+                            <tr>
+                                <td>+</td>
+                                <td>Have your message be be packed in a drop down. (add a space between the title and the actual message like this example '+Title lorem ipsum...')</td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

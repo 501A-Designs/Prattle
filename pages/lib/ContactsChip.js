@@ -1,13 +1,26 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 // Icons
 import { IconContext } from "react-icons";
 import { VscCircleLargeFilled, VscActivateBreakpoints, VscBookmark } from "react-icons/vsc";
+import { useRouter } from "next/router";
+import { useAppContext } from '../appContext';
 
 export default function ContactsChip(props) {
+    const router = useRouter();
+    const { currentRoom, setCurrentRoom } = useAppContext();
+    useEffect(() => {
+        if (currentRoom != undefined) {
+            router.push(`/chats/${currentRoom}`)
+        }
+    }, [currentRoom])
+
     return (
         <button
             className="contactsChip"
-            onClick={props.click}
+            onClick={() => {
+                setCurrentRoom(props.currentRoom);
+                console.log(currentRoom)
+            }}
             key={props.key}
         >
             <IconContext.Provider value={{ className: 'icons' }}>
