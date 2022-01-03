@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { supabase } from '../utils/supabaseClient'
-import ChatApp from './lib/ChatApp';
-import LandingPage from './lib/LandingPage';
+import ChatApp from '../lib/ChatApp';
+import LandingPage from '../lib/LandingPage';
 
 export default function Home() {
   const user = supabase.auth.user();

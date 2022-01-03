@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import ShedButton from './lib/ShedButton';
+import ShedButton from '../lib/ShedButton';
 import Link from 'next/link'
 
 import { useRouter } from "next/router";
@@ -43,7 +43,7 @@ export default function Login() {
                     </Link>
 
                 </div> :
-                <div className={'centerContainer'}>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                     <div className="loginContainer">
                         <h2>Sign In</h2>
                         <h3>

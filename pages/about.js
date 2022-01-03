@@ -1,6 +1,6 @@
 import React from 'react'
-import Card from './lib/Card'
-import ClickableCard from './lib/ClickableCard'
+import Card from '../lib/Card'
+import ClickableCard from '../lib/ClickableCard'
 
 
 export default function about() {
@@ -54,16 +54,20 @@ export default function about() {
                                 <td>Large text, allowing you to emphasize your messages.</td>
                             </tr>
                             <tr>
-                                <td></td>
+                                <td>&gt;</td>
                                 <td>Shows a Google searched resault of the sent message.</td>
                             </tr>
-                            <tr>
+                            {/* <tr>
                                 <td>:</td>
                                 <td>Send ShedLive original stamps and emotes.</td>
-                            </tr>
+                            </tr> */}
                             <tr>
                                 <td>+</td>
-                                <td>Have your message be be packed in a drop down. (add a space between the title and the actual message like this example '+Title lorem ipsum...')</td>
+                                <td>Have your message be be packed in a drop down. (add a space between the title and the actual message like this example &apos;+Title lorem ipsum...&apos;)</td>
+                            </tr>
+                            <tr>
+                                <td>!</td>
+                                <td>Have your message be be sealed. The other users can click a button to open the message.</td>
                             </tr>
                         </table>
                     </div>

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { useAppContext } from '../appContext';
-import TextMessage from '../lib/TextMessage'
-import TextMessageNote from '../lib/TextMessageNote';
+import { useAppContext } from '../../lib/AppContext';
+import TextMessage from '../../lib/TextMessage'
+import TextMessageNote from '../../lib/TextMessageNote';
 import { supabase } from '../../utils/supabaseClient'
 import Link from 'next/link'
-import ShedButton from '../lib/ShedButton';
-import { VscMail, VscAccount, VscAdd, VscChevronUp, VscSignOut, VscActivateBreakpoints, VscDebugDisconnect } from "react-icons/vsc";
+import ShedButton from '../../lib/ShedButton';
+import { VscMail } from "react-icons/vsc";
 
 
 function IndivisualChat({ roomId }) {
@@ -15,27 +15,11 @@ function IndivisualChat({ roomId }) {
   const [messagesArray, setMessagesArray] = useState([]);
   const [messagesNotesArray, setMessagesNotesArray] = useState();
   const [latestMessagedate, setLatestMessageDate] = useState();
-  const [newChangeInfo, setNewChangeInfo] = useState();
 
   const [messageByte, setMessageByte] = useState(0);
   const [messageWordCount, setMessageWordCount] = useState(0);
 
   let messageSubscription = null;
-
-  let timeStamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }).split(' ')[0];
-  let reFormattedDate = `${timeStamp.split('/')[0]}-${timeStamp.split('/')[1]}-${timeStamp.split('/')[2]}`;
-
-  const getMessagesAndSubscribe = async () => {
-    if (!messageSubscription) {
-      fetchMessages();
-      messageSubscription = supabase
-        .from("messages")
-        .on("*", (payload) => {
-          handleNewMessage(payload);
-        })
-        .subscribe();
-    }
-  };
 
   useEffect(() => {
     getMessagesAndSubscribe();
@@ -53,7 +37,7 @@ function IndivisualChat({ roomId }) {
       .insert([{
         created_at: timeStamp,
         message: message,
-        sent_by_user: user,
+        sent_by_user: user.user_metadata.first_name,
         room_id: roomId
       },])
     console.log(message);
@@ -62,25 +46,27 @@ function IndivisualChat({ roomId }) {
     setMessageWordCount(0);
   }
 
+  const handleNewMessage = (payload) => {
+    setMessagesArray((prevMessages) => [payload.new, ...prevMessages]);
+  };
+
   const fetchMessages = async (prop) => {
-    let { data: messages, error } = await supabase
-      .from('messages')
-      .select('*')
-      .eq('room_id', prop)
-      .order('created_at', { ascending: false });
-    setMessagesArray(messages);
-    if (latestMessagedate.split('T')[0] < reFormattedDate) {
-      eraseMessage();
-      console.log('delete')
-    } else {
-      console.log('keep');
+    console.log(prop);
+    if (!messagesArray.length) {
+      let { data: messages, error } = await supabase
+        .from('messages')
+        .select('*')
+        .eq('room_id', roomId)
+        .order('created_at', { ascending: false });
+      setMessagesArray(messages);
     }
   }
   const fetchMessageNotes = async (prop) => {
+    console.log(prop)
     let { data: notes, error } = await supabase
       .from('notes')
       .select('*')
-      .eq('room_id', prop)
+      .eq('room_id', roomId)
       .order('id', { ascending: false });
     setMessagesNotesArray(notes);
   }
@@ -90,26 +76,40 @@ function IndivisualChat({ roomId }) {
       .select('*')
       .eq('room_id', prop)
       .order('id', { ascending: true });
-    setLatestMessageDate(messages[0].created_at)
+    setLatestMessageDate(messages[0].created_at.split('T')[0])
+  }
+  // Deleting messages
+  const eraseMessage = async () => {
+    let timeStamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }).split(' ')[0];
+    let reFormattedDate = `${timeStamp.split('/')[0]}-${timeStamp.split('/')[1]}-${timeStamp.split('/')[2]}`;
+    if (latestMessagedate != reFormattedDate) {
+      console.log('keep')
+    } else {
+      const { data, error } = await supabase
+        .from('messages')
+        .delete()
+      console.log('delete')
+    }
   }
 
+  const getMessagesAndSubscribe = async () => {
+    if (!messageSubscription) {
+      fetchMessages();
+      messageSubscription = supabase
+        .from("messages")
+        .on("*", (payload) => {
+          handleNewMessage(payload);
+        })
+        .subscribe();
+    }
+  };
+
   useEffect(() => {
+    eraseMessage();
     fetchLatestMessageDate(roomId);
     fetchMessages(roomId);
     fetchMessageNotes(roomId);
   }, [roomId])
-
-  const handleNewMessage = (payload) => {
-    setMessagesArray((prevMessages) => [payload.new, ...prevMessages]);
-  };
-
-
-  // Deleting messages
-  const eraseMessage = async () => {
-    const { data, error } = await supabase
-      .from('messages')
-      .delete()
-  }
 
   // Send Message
   const handleMessageChange = (e) => {
@@ -122,7 +122,6 @@ function IndivisualChat({ roomId }) {
     }
   }
 
-
   return (
     <>
       <Link href="/">
@@ -133,7 +132,7 @@ function IndivisualChat({ roomId }) {
         {messagesNotesArray !== undefined ?
           messagesNotesArray.map(props =>
             <TextMessageNote
-              key={props}
+              key={props.message}
               setBy={props.set_by}
               whoSaid={props.who_said}
               message={props.message}
@@ -147,36 +146,23 @@ function IndivisualChat({ roomId }) {
         }
       </div>
       <div className="messagesContainer">
-        {newChangeInfo &&
-          <p style={{ cursor: 'pointer', color: 'rgb(107, 255, 70)' }}>
-            New changes by {newChangeInfo.sent_by_user.user_metadata.first_name == user.user_metadata.first_name ? 'you' : newChangeInfo.sent_by_user.user_metadata.first_name}
-          </p>
-        }
         {messagesArray.map(props =>
           <TextMessage
-            key={props.user}
-            inspectUserData={() => {
-              setOpenUserToggle(true);
-              setAddGroupToggle(false);
-              setInspectedUser([
-                props.sent_by_user.user_metadata.first_name,
-                props.sent_by_user.id,
-                props.sent_by_user.email,
-                props.sent_by_user.last_sign_in_at,
-                props.sent_by_user.identities[0].last_sign_in_at.split('T')[0],
-                props.sent_by_user.identities[0].last_sign_in_at.split('T')[1],
-              ])
-            }}
-            name={props.sent_by_user.user_metadata.first_name}
+            key={props.message}
+            currentRoom={roomId}
+            name={props.sent_by_user}
             content={props.message}
             time={props.created_at}
           />
         )}
         <p>All messages before {latestMessagedate} (Today) are deleted.</p>
       </div>
-      <form className="shedForm" style={{ marginTop: '1em', position: 'sticky', bottom: '1em' }} onSubmit={handleMessageSubmit}>
+      <form
+        className="shedForm"
+        style={{ marginTop: '1em', position: 'sticky', bottom: '1em', marginTop: 'auto' }} onSubmit={handleMessageSubmit}
+      >
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.5em' }}>
-          <p style={{ margin: 'auto' }}>SHEDLIVE.CO</p>
+          <p style={{ margin: 'auto' }}>SHEDLIVE.VERCEL.APP</p>
           <p style={{ margin: 'auto' }}>{messageByte} Bytes</p>
           <p style={{ margin: 'auto' }}>{messageWordCount} Words</p>
           <ShedButton

@@ -25,18 +25,20 @@
 
 ::-webkit-scrollbar {
 	width: 5px;
+	height: 5px;
 	background: var(--grey4);
-
 }
 ::-webkit-scrollbar-track {
 	margin: 10px;
 	width: 5px;
+	height: 5px;
 	background: var(--grey4);
 
 }
 ::-webkit-scrollbar-thumb {
 	background-color: var(--shedPurple);
 	width: 5px;
+	height: 5px;
 	border-radius: var(--borderRadius);
 }
 ::-webkit-scrollbar-corner {
@@ -146,7 +148,7 @@ td, th {
 }
 
 .loginContainer {
-	border: var(--clearBorder);
+	/* border: var(--clearBorder); */
 	height: fit-content;
 	max-width: 500px;
 	margin: 1em;
@@ -357,7 +359,7 @@ code {
 	height: min-content;
 	overflow-x: scroll;
 	padding: 0 0.3em 0.3em 0.3em;
-	margin: 0;
+	margin: 0 0 1em 0;
 	border-radius: var(--borderRadius);
 }
 .shedLiveTextMessage{
@@ -375,17 +377,24 @@ code {
 	background: var(--grey3);
 	border-radius: 0 var(--borderRadius) var(--borderRadius) 0 ;
 }
-.shedLiveTextMessage:nth-child(1) span::before,
-.shedLiveTextMessage:nth-child(1) div::before,
-.shedLiveTextMessage:nth-child(1) h3::before{
+/* .shedLiveTextMessage:nth-child(1) span::before, */
+.shedLiveTextMessage:nth-child(1) div::before{
+/* .shedLiveTextMessage:nth-child(1) h3::before{ */
 	color: rgb(107, 255, 70);
 	font-size: 16px;
 	font-weight: none;
 	content: "[Newest] ";
 }
+.shedLiveTextMessage div{
+	display: flex;
+	align-items: center;
+	gap: 1em;
+	margin-left: 1em;
+}
 .shedLiveTextMessage span,
-.shedLiveTextMessage div,
-.shedLiveTextMessage h3{
+.shedLiveTextMessage .urlContent,
+.shedLiveTextMessage h3,
+.shedLiveTextMessage details{
 	/* box-shadow:-2px 0px 0px var(--grey2); */
 	font-family: "Share Tech Mono", monospace;
 	color: white;
@@ -393,7 +402,7 @@ code {
 	width:100%;
 	padding-left: 0.5em;
 }
-.shedLiveTextMessage div	{
+.shedLiveTextMessage .urlContent	{
 	display: flex;
 	flex-direction:column;
 }

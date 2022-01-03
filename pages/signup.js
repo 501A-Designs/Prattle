@@ -1,5 +1,5 @@
 import React from 'react'
-import ShedButton from './lib/ShedButton';
+import ShedButton from '../lib/ShedButton';
 import { useRef } from 'react'
 import { supabase } from '../utils/supabaseClient'
 import { VscAccount } from "react-icons/vsc";
@@ -42,7 +42,7 @@ export default function Login() {
                         <a>Jump to main page</a>
                     </Link>
                 </div> :
-                <div className={'centerContainer'}>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                     <div className="loginContainer">
                         <h2>Getting Started</h2>
                         <h3>
