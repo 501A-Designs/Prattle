@@ -124,7 +124,7 @@ export default function Home() {
                                 <div>
                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                         <h4>Generated Room ID:</h4>
-                                        <code style={{ userSelect: 'all' }}>{generateRoom}</code>
+                                        <code>{generateRoom}</code>
                                     </div>
                                     <p>Copy the room ID above and insert it into the input below so that you can join the room you created.</p>
                                 </div>

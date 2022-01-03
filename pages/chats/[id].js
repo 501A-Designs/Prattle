@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { useAppContext } from '../../lib/AppContext';
 import TextMessage from '../../lib/TextMessage'
 import TextMessageNote from '../../lib/TextMessageNote';
 import { supabase } from '../../utils/supabaseClient'
@@ -7,6 +6,7 @@ import Link from 'next/link'
 import ShedButton from '../../lib/ShedButton';
 import Notifier from "react-desktop-notification"
 import { VscMail } from "react-icons/vsc";
+import { useAppContext, AppContextProvider } from '../../lib/AppContext';
 
 
 function IndivisualChat({ roomId }) {
@@ -108,7 +108,7 @@ function IndivisualChat({ roomId }) {
 
   const desktopNotification = (prop) => {
     if (prop.new.sent_by_user !== user.user_metadata.first_name) {
-      Notifier.start("New message", prop.new.message, "https://raw.githubusercontent.com/501A-Designs/ShedLive/main/public/shedlivelogo.png");
+      Notifier.start("New message", prop.new.message, `https://shedlive.vercel.app/chats/${roomId}`, "https://raw.githubusercontent.com/501A-Designs/ShedLive/main/public/shedlivelogo.png");
     }
   }
 
@@ -130,12 +130,28 @@ function IndivisualChat({ roomId }) {
     }
   }
 
+  // const { currentRoomName } = useAppContext();
+
+  function CurrentRoomNameTitle() {
+    // const { currentRoomName } = useAppContext();
+    const { currentRoom, setCurrentRoom } = useAppContext();
+    console.log(currentRoom);
+    return (
+      <>
+        <h2 style={{ margin: '1.5em 0em 0.5em 0em' }}>{currentRoom}</h2>
+      </>
+    )
+  }
+
   return (
     <>
       <Link href="/">
         <a>&lt; Navigate back</a>
       </Link>
-      <h2>ShedLive</h2>
+      <AppContextProvider>
+        <CurrentRoomNameTitle />
+        {/* <h2>{currentRoomName}</h2> */}
+      </AppContextProvider>
       <div className="notesContainer">
         {messagesNotesArray !== undefined ?
           messagesNotesArray.map(props =>

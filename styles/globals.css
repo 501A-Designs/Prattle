@@ -1,5 +1,5 @@
 /* Header font */
-/* @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
 /* Monospace font */
 /* @import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap"); */
@@ -11,7 +11,7 @@
 	--grey2: #414141;
 	--grey3: rgb(48, 48, 48);
 	--grey4: #1f1f1f;
-	--shedPurple: rgb(114, 104, 255);
+	--shedPurple: rgb(105, 94, 255);
 	--borderRadius: 5px;
 	--clearBorder: 1px solid hsla(0, 0%, 80%, 0.3);
 	--grey1Border: 1px solid var(--grey1);
@@ -21,6 +21,24 @@
 	--shePurpleBorder: 1px solid var(--shedPurple);
 	--boxShadow: 0px 1px 30px #5555555d;
 	--aniSpeed: 0.5s;
+}
+
+.gradientText{
+	/* #ff7b00 */
+	width: fit-content;
+	background: linear-gradient(to right, var(--shedPurple) 20%, white 40%, white 60%, var(--shedPurple) 80%);
+    background-clip: text;
+    color: transparent;
+	background-size: 200% auto;
+	animation: gradientTextAni 10s infinite;
+}
+@keyframes gradientTextAni {
+	0%{
+		background-position: 200% center;
+	}
+	100%{
+		background-position: 0% right;
+	}
 }
 
 ::-webkit-scrollbar {
@@ -47,9 +65,11 @@
 
 html,
 body {
-	padding: 0.5em;
 	margin: 0;
 	background-color: var(--grey4);
+}
+body{
+	padding: 2% 10%;
 }
 
 /* Text Styling */
@@ -63,9 +83,11 @@ h3,
 h4,
 h5,
 h6 {
-	/* font-family: "Poppins", sans-serif; */
-	font-family: "Kanit", sans-serif;
-	color: var(--shedPurple);
+	font-family: "Poppins", sans-serif;
+	/* font-family: "Kanit", sans-serif; */
+	/* font-family: helvetica, arial, sans-serif; */
+	/* color: var(--shedPurple); */
+	color: rgb(221, 221, 221);
 }
 
 h1 {
@@ -136,10 +158,6 @@ td, th {
 	cursor: pointer;
 }
 
-/* Containers */
-.container {
-	padding: 4rem;
-}
 .duoGrid {
 	gap: 1em;
 	display: grid;
@@ -224,8 +242,12 @@ code {
 .clickableCard:focus,
 .clickableCard:active {
 	cursor: pointer;
+	box-shadow: var(--boxShadow);
 	border-color: var(--shedPurple);
 	transform: translateY(-5px);
+}
+.clickableCard:hover h3{
+	color: var(--shedPurple);
 }
 
 @media (max-width: 600px) {
@@ -393,6 +415,7 @@ code {
 }
 .shedLiveTextMessage h4{
 	user-select: none;
+	color:var(--shedPurple);
 	font-family: "Share Tech Mono", monospace;
 	width: auto;
 	text-align: right;
