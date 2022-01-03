@@ -19,7 +19,7 @@
 	--grey3Border: 1px solid var(--grey3);
 	--grey4Border: 1px solid var(--grey4);
 	--shePurpleBorder: 1px solid var(--shedPurple);
-	--boxShadow: 0px 1px 15px #6f6e6e9e;
+	--boxShadow: 0px 1px 30px #5555555d;
 	--aniSpeed: 0.5s;
 }
 
@@ -316,41 +316,15 @@ code {
 	box-shadow:-2px 0px 0px var(--shedPurple);
 }
 
-.chatAppContainer{
-	display: grid;
-	gap: 1em;
-}
-/* Extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px) {
-	.chatAppContainer {grid-template-columns: 1fr;}
-  }
-  
-  /* Small devices (portrait tablets and large phones, 600px and up) */
-  @media only screen and (min-width: 600px) {
-	.chatAppContainer {grid-template-columns: 1fr;}
-  }
-  
-  /* Medium devices (landscape tablets, 768px and up) */
-  @media only screen and (min-width: 768px) {
-	.chatAppContainer {grid-template-columns: 1fr;
-	}
-  } 
-  
-  /* Large devices (laptops/desktops, 992px and up) */
-  @media only screen and (min-width: 992px) {
-	.chatAppContainer {grid-template-columns: 1fr 1.5fr 1fr;}
-  } 
-  
-  /* Extra large devices (large laptops and desktops, 1200px and up) */
-  @media only screen and (min-width: 1200px) {
-	.chatAppContainer {grid-template-columns: 1fr 2fr 1fr;}
-  }
-
 .messagesContainer{
 	padding: 0 0.3em;
 	margin: 0;
-	height: 80vh;
+	min-height: 75vh;
+	height: auto;
 	/* box-shadow: inset 0px -35px 10px -10px var(--grey3);  */
+}
+.sendMessageForm{
+	box-shadow: var(--boxShadow);
 }
 .notesContainer{
 	display:flex;
@@ -432,6 +406,7 @@ code {
 }
 
 .note{
+	user-select: none;
 	border: var(--grey3Border);
 	width: 400px;
 	min-width: 300px;
@@ -452,5 +427,6 @@ code {
 	color: var(--grey1);
 }
 .note p{
+	user-select:text;
 	color:white;
 }

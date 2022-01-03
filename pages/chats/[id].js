@@ -5,6 +5,7 @@ import TextMessageNote from '../../lib/TextMessageNote';
 import { supabase } from '../../utils/supabaseClient'
 import Link from 'next/link'
 import ShedButton from '../../lib/ShedButton';
+import Notifier from "react-desktop-notification"
 import { VscMail } from "react-icons/vsc";
 
 
@@ -99,10 +100,17 @@ function IndivisualChat({ roomId }) {
         .from("messages")
         .on("*", (payload) => {
           handleNewMessage(payload);
+          desktopNotification(payload);
         })
         .subscribe();
     }
   };
+
+  const desktopNotification = (prop) => {
+    if (prop.new.sent_by_user !== user.user_metadata.first_name) {
+      Notifier.start("New message", prop.new.message, "https://raw.githubusercontent.com/501A-Designs/ShedLive/main/public/shedlivelogo.png");
+    }
+  }
 
   useEffect(() => {
     eraseMessage();
@@ -158,7 +166,7 @@ function IndivisualChat({ roomId }) {
         <p>All messages before {latestMessagedate} (Today) are deleted.</p>
       </div>
       <form
-        className="shedForm"
+        className="shedForm sendMessageForm"
         style={{ marginTop: '1em', position: 'sticky', bottom: '1em', marginTop: 'auto' }} onSubmit={handleMessageSubmit}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.5em' }}>
