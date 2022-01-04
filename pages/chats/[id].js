@@ -5,11 +5,14 @@ import { supabase } from '../../utils/supabaseClient'
 import Link from 'next/link'
 import ShedButton from '../../lib/ShedButton';
 import Notifier from "react-desktop-notification"
-import { VscMail } from "react-icons/vsc";
+import EmojiButton from '../../lib/EmojiButton';
+import { VscSettingsGear, VscSymbolParameter, VscRocket, VscMail } from "react-icons/vsc";
 import { useAppContext, AppContextProvider } from '../../lib/AppContext';
+import { useRouter } from 'next/router'
 
 
 function IndivisualChat({ roomId }) {
+  const router = useRouter()
   const user = supabase.auth.user();
   const [message, setMessage] = useState();
 
@@ -148,10 +151,31 @@ function IndivisualChat({ roomId }) {
       <Link href="/">
         <a>&lt; Navigate back</a>
       </Link>
-      <AppContextProvider>
-        <CurrentRoomNameTitle />
-        {/* <h2>{currentRoomName}</h2> */}
-      </AppContextProvider>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5em' }}>
+        <AppContextProvider>
+          <CurrentRoomNameTitle />
+          {/* <h2>{currentRoomName}</h2> */}
+        </AppContextProvider>
+        <ShedButton
+          disabled={!roomId}
+          click={(e) => { e.preventDefault(); router.push("/shortcuts"); }}
+          icon={<VscSymbolParameter />}
+          name="Shortcuts Info"
+        />
+        <ShedButton
+          disabled={!roomId}
+          click={(e) => { e.preventDefault(); router.push("/chats"); }}
+          icon={<VscRocket />}
+          name="Join / Create Groups"
+        />
+        {/* <ShedButton
+          disabled={!roomId}
+          // type="submit"
+          // click={handleMessageSubmit}
+          icon={<VscSettingsGear />}
+          name="Chat Settings"
+        /> */}
+      </div>
       <div className="notesContainer">
         {messagesNotesArray !== undefined ?
           messagesNotesArray.map(props =>
@@ -175,20 +199,45 @@ function IndivisualChat({ roomId }) {
             key={props.message}
             currentRoom={roomId}
             name={props.sent_by_user}
-            content={props.message}
+            message={props.message}
             time={props.created_at}
           />
         )}
         <p>All messages before {latestMessagedate} (Today) are deleted.</p>
       </div>
-      <form
-        className="shedForm sendMessageForm"
-        style={{ marginTop: '1em', position: 'sticky', bottom: '1em', marginTop: 'auto' }} onSubmit={handleMessageSubmit}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.5em' }}>
-          <p style={{ margin: 'auto' }}>SHEDLIVE.VERCEL.APP</p>
+      <div className="sendMessageForm">
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.5em', height: '2em' }}>
+          {message ?
+            <section className="emojiButtonContainer">
+              <EmojiButton emoji={'👋'} click={(e) => { e.preventDefault(); setMessage(message + '👋') }} />
+              <EmojiButton emoji={'👌'} click={(e) => { e.preventDefault(); setMessage(message + '👌') }} />
+              <EmojiButton emoji={'👍'} click={(e) => { e.preventDefault(); setMessage(message + '👍') }} />
+              <EmojiButton emoji={'👎'} click={(e) => { e.preventDefault(); setMessage(message + '👎') }} />
+              <EmojiButton emoji={'👏'} click={(e) => { e.preventDefault(); setMessage(message + '👏') }} />
+              <EmojiButton emoji={'🤘'} click={(e) => { e.preventDefault(); setMessage(message + '🤘') }} />
+              <EmojiButton emoji={'😂'} click={(e) => { e.preventDefault(); setMessage(message + '😂') }} />
+              <EmojiButton emoji={'😍'} click={(e) => { e.preventDefault(); setMessage(message + '😍') }} />
+              <EmojiButton emoji={'😝'} click={(e) => { e.preventDefault(); setMessage(message + '😝') }} />
+              <EmojiButton emoji={'😠'} click={(e) => { e.preventDefault(); setMessage(message + '😠') }} />
+              <EmojiButton emoji={'😢'} click={(e) => { e.preventDefault(); setMessage(message + '😢') }} />
+              <EmojiButton emoji={'🤧'} click={(e) => { e.preventDefault(); setMessage(message + '🤧') }} />
+              <EmojiButton emoji={'🤯'} click={(e) => { e.preventDefault(); setMessage(message + '🤯') }} />
+              <EmojiButton emoji={'🤭'} click={(e) => { e.preventDefault(); setMessage(message + '🤭') }} />
+              <EmojiButton emoji={'🤨'} click={(e) => { e.preventDefault(); setMessage(message + '🤨') }} />
+            </section>
+            : <p style={{ margin: 'auto' }}>SHEDLIVE.VERCEL.APP</p>}
           <p style={{ margin: 'auto' }}>{messageByte} Bytes</p>
           <p style={{ margin: 'auto' }}>{messageWordCount} Words</p>
+        </div>
+        <form
+          className="shedAlignedForm"
+          onSubmit={handleMessageSubmit}
+        >
+          <input
+            placeholder="Your message"
+            onChange={handleMessageChange}
+            value={message}
+          />
           <ShedButton
             disabled={!message}
             type="submit"
@@ -196,13 +245,8 @@ function IndivisualChat({ roomId }) {
             icon={<VscMail />}
             name="Send"
           />
-        </div>
-        <input
-          placeholder="Your message"
-          onChange={handleMessageChange}
-          value={message}
-        />
-      </form>
+        </form>
+      </div>
     </>
   )
 }

@@ -13,6 +13,7 @@
 	--grey4: #1f1f1f;
 	--shedPurple: rgb(105, 94, 255);
 	--borderRadius: 5px;
+	--transparentBorder: 1px solid transparent;
 	--clearBorder: 1px solid hsla(0, 0%, 80%, 0.3);
 	--grey1Border: 1px solid var(--grey1);
 	--grey2Border: 1px solid var(--grey2);
@@ -26,7 +27,7 @@
 .gradientText{
 	/* #ff7b00 */
 	width: fit-content;
-	background: linear-gradient(to right, var(--shedPurple) 20%, white 40%, white 60%, var(--shedPurple) 80%);
+	background: linear-gradient(to right, var(--grey1) 20%, white 40%, white 60%, var(--grey1) 80%);
     background-clip: text;
     color: transparent;
 	background-size: 200% auto;
@@ -158,6 +159,38 @@ td, th {
 	cursor: pointer;
 }
 
+.emojiButtonContainer{
+	display: flex;
+	justify-content: space-between;
+	gap: 0.5em;
+	margin-right:3em;
+	animation: emojiButtonContainerAni 1s;
+}
+@keyframes emojiButtonContainerAni {
+	0% {
+		clip-path: circle(0% at 0% 0%);
+		opacity: 50%;
+	}
+	100% {
+		clip-path: circle(100%);
+		opacity: 100%;
+	}	
+}
+.emojiButton{
+	background-color: var(--grey3);
+	border-radius: var(--borderRadius);
+	border: var(--grey2Border);
+	color: white;
+	padding: 0.3em 1em;
+	cursor: pointer;
+	outline: none;
+	user-select: none;
+	transition: 0.3s;
+}
+.emojiButton:hover {
+	background-color: var(--grey4);
+}
+
 .duoGrid {
 	gap: 1em;
 	display: grid;
@@ -186,19 +219,14 @@ td, th {
 }
 
 header,footer {
-	width: 100%;
-	height: 100px;
-	border-top: var(--grey3Border);
 	display: flex;
-	justify-content: center;
 	align-items: center;
-}
-
-footer a {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-grow: 1;
+	gap: 1em;
+	margin-bottom: 2em;
+	border: var(--grey3Border);
+	padding: 0.1em 1em;
+	border-radius:calc(var(--borderRadius)*2);
+	box-shadow: var(--boxShadow);
 }
 
 .title {
@@ -231,23 +259,27 @@ code {
 .card,
 .clickableCard {
 	padding: 1.5rem;
-	border: var(--grey1Border);
 	border-radius: 10px;
 	text-decoration: none;
-	color: inherit;
+	color: var(--grey1);
 	transition: 0.5s;
+	border: var(--grey3Border);
 }
 
 .clickableCard:hover,
 .clickableCard:focus,
 .clickableCard:active {
 	cursor: pointer;
+	border: var(--grey1Border);
 	box-shadow: var(--boxShadow);
-	border-color: var(--shedPurple);
 	transform: translateY(-5px);
 }
+.clickableCard h3{
+	color: var(--grey1);
+}
+
 .clickableCard:hover h3{
-	color: var(--shedPurple);
+	color: white;
 }
 
 @media (max-width: 600px) {
@@ -257,6 +289,14 @@ code {
 	}
 }
 
+.shedAlignedForm{
+	display: grid;
+	grid-template-columns:9fr 1fr;
+	gap: 0.5em;
+	background-color: var(--grey4);
+	margin-top: 0.5em;
+}
+
 .shedForm {
 	display: grid;
 	grid-template-columns: 1fr;
@@ -264,10 +304,11 @@ code {
 	margin-bottom: 0.5em;
 	background-color: var(--grey4);
 	border: var(--grey2Border);
-	border-radius: var(--borderRadius);
+	border-radius: calc(var(--borderRadius)*2);
 	padding: 0.5em;
 }
 .shedForm input,
+.shedAlignedForm input,
 .shedForm textArea {
 	font-family: "Kanit", sans-serif;
 	border-radius: 5px;
@@ -346,7 +387,14 @@ code {
 	/* box-shadow: inset 0px -35px 10px -10px var(--grey3);  */
 }
 .sendMessageForm{
+	position: sticky;
+	bottom: 1em;
+	margin-top: auto;
+	background-color: var(--grey4);
+	border: var(--grey3Border);
+	border-radius: calc(var(--borderRadius)*2);
 	box-shadow: var(--boxShadow);
+	padding: 0.5em;
 }
 .notesContainer{
 	display:flex;
@@ -387,7 +435,7 @@ code {
 	gap: 1em;
 	margin-left: 1em;
 }
-.shedLiveTextMessage span,
+.shedLiveTextMessage p,
 .shedLiveTextMessage .urlContent,
 .shedLiveTextMessage h3,
 .shedLiveTextMessage details{
@@ -395,8 +443,9 @@ code {
 	font-family: "Share Tech Mono", monospace;
 	color: white;
 	text-align:left;
+	margin: 0;
 	width:100%;
-	padding-left: 0.5em;
+	/* padding-left: 0.5em; */
 }
 .shedLiveTextMessage .urlContent	{
 	display: flex;
@@ -427,6 +476,27 @@ code {
 	border-radius:0 var(--borderRadius) var(--borderRadius) 0;
 	box-shadow:-2px 0px 0px var(--shedPurple);
 }
+.tag{
+	background-color: var(--shedPurple);
+	color: var(--grey4);
+	border-radius:var(--borderRadius);
+	padding: 0em 0.3em;
+}
+.colorful{
+	color: white;
+	animation: colorfulAni 1s 10;
+}
+@keyframes colorfulAni{
+	0% {color: #39f;}
+	15% {color: #8bc5d1;}
+	30% {color: #f8cb4a;}
+	45% {color: #95b850;}
+	60% {color: #944893;}
+	75% {color: #c71f00;}
+	90% {color: #bdb280;}
+   	100% {color: #39f;}
+}
+
 
 .note{
 	user-select: none;
