@@ -46,7 +46,7 @@ export default function about() {
                 </tr>
                 <tr>
                     <td>#</td>
-                    <td>Have your message tagged as either 'important', 'work' or 'question'. This informs the urgancy of your message.</td>
+                    <td>Have your message tagged as either [important], [work] or [question]. This informs the urgancy of your message.</td>
                     <td>#important Hello world</td>
                 </tr>
             </table>
