@@ -8,8 +8,8 @@ export default function about() {
         <div className="container">
             <div className="grid">
                 <div>
-                    <h1>About ShedLive</h1>
-                    <h2>Get to know ShedLive</h2>
+                    <h1>About Prattle</h1>
+                    <h2>Get to know Prattle</h2>
                     <div className="grid" style={{ width: '80%' }}>
                         <ClickableCard
                             name="Get Started"
@@ -25,19 +25,19 @@ export default function about() {
                 <div>
                     <Card
                         name="What is it?"
-                        content="ShedLive is a cyber-esque chat app application that lets you communicate with your friends and family. Each message sent on shedlive is inserted in as a new column in the messages table. Users can input commands such as $colorname to specify the color of the message they send, and use the * to make their messages appear larger."
+                        content="Prattle is a chat app/social media application that lets you communicate and share ideas with your friends and family. Each message (prate) sent on Prattle is inserted in as a new column in a PostGres table. Users can input commands such as $colorname to specify the color of the message they send, and use the * to make their messages appear larger. Learn more about shortcuts at prattle.vercel.app/shortcuts"
                     />
                     <Card
                         name="Technologies"
-                        content="ShedLive is built on top of the Next.Js framework. It also uses Supabase as a backend as a service. Supabase is a PostGreSQL based database that is anticipated to become an opensource Firebase alternative. In the new future, ShedLive aims to advance the key commands for a more customized way of communicating."
+                        content="Prattle is built on top of the Next.Js framework. Next.Js allows Prattle to show Prattle rooms in unique seperate domains. It uses Supabase for its backend. Because Supabase is a PostGreSQL based database, it allows Prattle to make advanced querys enabling you as the user to access relational data quickly and securly."
                     />
                     <Card
                         name="Development"
-                        content="ShedLive has been originally developed as a live streaming service. However, due to the over saturation in the market with new applications such as Clubhouse, its development goals have shifted into building a chat application that values the conversations autheticity."
+                        content="Prattle originally known as ShedLive, has been initially developed as a live streaming service. However, due to the over saturation in the market with new applications such as Clubhouse, its development goals have shifted into building a chat/social media application that values the conversations, and the effective sharing of information."
                     />
                     <Card
                         name="Terms & Services"
-                        content="Logging into ShedLive requires your email address. You can set your own username, however, it is important to note that any group you join on ShedLive other users will be able to view your credentials (username, email). In terms of your chat messages, ShedLive deletes your messages in a day, this is not only to keep the authenticity of the conversation (hence the name 'Live') but it is also to keep your conversations private and secure. Your messages are deleted at the database level so if you wish to have your messages stay, consider using the notes feature that can be activated in any ShedLive group."
+                        content="Logging into Prattle requires your email address. You can set your own username, however, it is important to note that any group you join on Prattle other users will be able to view your credentials (username, email). In terms of your chat messages, Prattle deletes your messages in a day, this is not only to keep the authenticity of the conversation (hence the name 'Live') but it is also to keep your conversations private and secure. Your messages are deleted at the database level so if you wish to have your messages stay, consider using the notes feature that can be activated in any Prattle room."
                     />
                     <div>
                         <table>

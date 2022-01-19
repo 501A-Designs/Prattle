@@ -3,7 +3,7 @@ import Card from '../lib/Card'
 import ClickableCard from '../lib/ClickableCard'
 
 
-export default function about() {
+export default function shortcuts() {
     return (
         <div>
             <h1>ShedLive Shortcuts</h1>

@@ -6,7 +6,8 @@ import Link from 'next/link'
 import ShedButton from '../../lib/ShedButton';
 import Notifier from "react-desktop-notification"
 import EmojiButton from '../../lib/EmojiButton';
-import { VscSettingsGear, VscSymbolParameter, VscRocket, VscMail } from "react-icons/vsc";
+// VscSettingsGear
+import { VscHome, VscSymbolParameter, VscRocket, VscMail } from "react-icons/vsc";
 import { useAppContext, AppContextProvider } from '../../lib/AppContext';
 import { useRouter } from 'next/router'
 
@@ -111,7 +112,7 @@ function IndivisualChat({ roomId }) {
 
   const desktopNotification = (prop) => {
     if (prop.new.sent_by_user !== user.user_metadata.first_name) {
-      Notifier.start("New message", prop.new.message, `https://shedlive.vercel.app/chats/${roomId}`, "https://raw.githubusercontent.com/501A-Designs/ShedLive/main/public/shedlivelogo.png");
+      Notifier.start("New message", prop.new.message, `https://prattle.vercel.app/chats/${roomId}`, "https://raw.githubusercontent.com/501A-Designs/Prattle/main/public/shedlivelogo.png");
     }
   }
 
@@ -148,14 +149,17 @@ function IndivisualChat({ roomId }) {
 
   return (
     <>
-      <Link href="/">
-        <a>&lt; Navigate back</a>
-      </Link>
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5em' }}>
         <AppContextProvider>
           <CurrentRoomNameTitle />
           {/* <h2>{currentRoomName}</h2> */}
         </AppContextProvider>
+        <ShedButton
+          disabled={!roomId}
+          click={(e) => { e.preventDefault(); router.push("/"); }}
+          icon={<VscHome />}
+          name="Main Page"
+        />
         <ShedButton
           disabled={!roomId}
           click={(e) => { e.preventDefault(); router.push("/shortcuts"); }}
@@ -164,7 +168,7 @@ function IndivisualChat({ roomId }) {
         />
         <ShedButton
           disabled={!roomId}
-          click={(e) => { e.preventDefault(); router.push("/chats"); }}
+          click={(e) => { e.preventDefault(); router.push("/rooms"); }}
           icon={<VscRocket />}
           name="Join / Create Groups"
         />
@@ -197,6 +201,7 @@ function IndivisualChat({ roomId }) {
         {messagesArray.map(props =>
           <TextMessage
             key={props.message}
+            messageId={props.id}
             currentRoom={roomId}
             name={props.sent_by_user}
             message={props.message}
@@ -225,11 +230,12 @@ function IndivisualChat({ roomId }) {
               <EmojiButton emoji={'🤭'} click={(e) => { e.preventDefault(); setMessage(message + '🤭') }} />
               <EmojiButton emoji={'🤨'} click={(e) => { e.preventDefault(); setMessage(message + '🤨') }} />
             </section>
-            : <p style={{ margin: 'auto' }}>SHEDLIVE.VERCEL.APP</p>}
+            : <p style={{ margin: 'auto' }}>Get your conversation going!</p>}
           <p style={{ margin: 'auto' }}>{messageByte} Bytes</p>
           <p style={{ margin: 'auto' }}>{messageWordCount} Words</p>
         </div>
         <form
+          style={{ marginTop: '0.5em' }}
           className="shedAlignedForm"
           onSubmit={handleMessageSubmit}
         >

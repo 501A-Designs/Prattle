@@ -82,7 +82,7 @@ export default function Home() {
                 <IconContext.Provider value={{ className: 'icons' }}>
                     <VscActivateBreakpoints />
                 </IconContext.Provider>
-                <span>Join Group</span>
+                <span>Join Room</span>
             </button>
         )
     }
@@ -112,14 +112,14 @@ export default function Home() {
                     <br />
                     <h2>Join / Create a new room</h2>
                     <p>
-                        This page [chats] is a directory containing your chat groups. If you have already joined a group, you can add you group id after this url with a back slash to jump to your intended chat group as seen below.
+                        This page [rooms] is a directory containing your chat rooms. If you have already joined a room, you can add you room id after this url with a back slash to jump to your intended chat room as seen below.
                     </p>
                     <code>
-                        shed-live.vercel.app/chats/[chat group id]
+                        prattle.vercel.app/rooms/[room id]
                     </code>
                     <div className="duoGrid">
                         <div>
-                            <h4 style={{ marginBottom: '0.5em' }}>Join a Shed</h4>
+                            <h4 style={{ marginBottom: '0.5em' }}>Join a Room</h4>
                             {generateRoom &&
                                 <div>
                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -134,10 +134,10 @@ export default function Home() {
                                 style={{ marginTop: '1em' }}
                                 onSubmit={handleCreateGroup}
                             >
-                                <p>Join an existing shedlive group. When you insert the group ID make sure the group name is the group your intend to join.</p>
+                                <p>Join an existing prattle room. When you insert the room ID make sure the room name is the room you intend to join.</p>
                                 {joinGroupInput &&
                                     <p>
-                                        Searching for group . . .
+                                        Searching for room . . .
                                         <br />
                                         {fetchedRoomName && `Found group name: ${fetchedRoomName}`}
                                     </p>
@@ -157,9 +157,9 @@ export default function Home() {
                                 style={{ marginTop: '1em' }}
                                 onSubmit={handleCreateGroup}
                             >
-                                <p>Name your new shedlive group. You can add emojis and be creative ;)</p>
+                                <p>Name your new prattle room. You can add emojis and be creative ;)</p>
                                 <input
-                                    placeholder="New group name"
+                                    placeholder="New room name"
                                     onChange={(e) => setGroupNameInput(e.target.value)}
                                     value={groupNameInput}
                                 />
