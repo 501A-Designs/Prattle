@@ -1,0 +1,23 @@
+.clickableCard {
+	padding: 1.5rem;
+	border-radius: 10px;
+	text-decoration: none;
+	transition: 0.5s;
+    color: black;
+	border: var(--baseBorder1);
+}
+.clickableCard:hover,
+.clickableCard:focus,
+.clickableCard:active {
+	cursor: pointer;
+	border: var(--baseBorder2);
+	box-shadow: var(--boxShadow);
+	transform: translateY(-5px);
+}
+.clickableCard h3{
+	color: var(--grey1);
+}
+
+.clickableCard:hover h3{
+	color: var(--txtColor0);
+}

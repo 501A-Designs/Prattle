@@ -1,0 +1,43 @@
+.contactsChip {
+	font-family: "Share Tech Mono", monospace;
+	display: flex;
+	align-items: center;
+	justify-content: left;
+	gap: 1.5em;
+	border: 1px solid transparent;
+	background-color: transparent;
+    border-radius: 5px;
+	color: var(--txtColor0);
+	padding: 0.7em 1em;
+	text-decoration: none;
+	cursor: pointer;
+	outline: 2px solid transparent;
+	user-select: none;
+	transition: 0.3s;
+}
+.contactsChip:focus{
+	outline-color: var(--prattleColor0);
+}
+.contactsChip div{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.contactsChip h4{
+	font-size: 1.2em;
+	width: max-content;
+	margin: 0;
+	padding: 0;
+}
+.contactsChip p{
+	width: max-content;
+	margin: 0;
+	padding: 0;
+}
+.contactsChip:hover{
+	cursor: pointer;
+	background-color: var(--baseColor1);
+	border-radius:0 var(--borderRadius) var(--borderRadius) 0;
+	box-shadow:-2px 0px 0px var(--prattleColor0);
+}

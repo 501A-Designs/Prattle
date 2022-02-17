@@ -4,35 +4,47 @@
 /* Monospace font */
 /* @import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap"); */
 
-@import url("https://fonts.googleapis.com/css2?family=Kanit&family=Share+Tech+Mono&display=swap");
+/* TECHSTYLE FONT */
+/* @import url("https://fonts.googleapis.com/css2?family=Kanit&family=Share+Tech+Mono&display=swap"); */
+
+/* Open Colors Package */
+/* @import 'path/open-color.css'; */
+
 
 :root {
 	/* dark mode */
-	--grey1: #5f5f5f;
+	--baseColor0: white;
+	--baseColor1: rgb(240, 240, 240);
+	--baseColor2: rgb(220, 220, 220);
+	--baseColor3: rgb(200, 200, 200);
+	--baseColor4: rgb(180, 180, 180);
+	--baseColor5: rgb(160, 160, 160);
+	/* --grey1: #5f5f5f;
 	--grey2: #414141;
 	--grey3: rgb(48, 48, 48);
 	--grey3-5: rgb(36, 36, 36);
 	--grey4: #1f1f1f;
-	--txtColor0: white;
+	--txtColor0: white; */
 
 	/* --prattleColor: rgb(105, 94, 255); */
-	--prattleColor: #9966FF;
+	--prattleColor0: #ffc266;
+	--prattleColor1: #ffb648;
 	--borderRadius: 5px;
 	--transparentBorder: 1px solid transparent;
 	--clearBorder: 1px solid hsla(0, 0%, 80%, 0.3);
-	--grey1Border: 1px solid var(--grey1);
-	--grey2Border: 1px solid var(--grey2);
-	--grey3Border: 1px solid var(--grey3);
-	--grey4Border: 1px solid var(--grey4);
-	--shePurpleBorder: 1px solid var(--prattleColor);
-	--boxShadow: 0px 1px 30px #5555555d;
+	--baseBorder1: 1px solid var(--baseColor1);
+	--baseBorder2: 1px solid var(--baseColor2);
+	--baseBorder3: 1px solid var(--baseColor3);
+	--baseBorder4: 1px solid var(--baseColor4);
+	--prattleBorder: 1px solid var(--prattleColor);
+	--boxShadow: 0px 1px 20px var(--baseColor2);
 	--aniSpeed: 0.5s;
 }
 
 .gradientText{
 	/* #ff7b00 */
 	width: fit-content;
-	background: linear-gradient(to right, var(--prattleColor) 20%, var(--txtColor0) 40%, var(--txtColor0) 60%, var(--prattleColor) 80%);
+	background: linear-gradient(to right, var(--prattleColor0) 20%, var(--prattleColor1) 40%, var(--prattleColor1) 60%, var(--prattleColor0) 80%);
     background-clip: text;
     color: transparent;
 	background-size: 200% auto;
@@ -72,7 +84,7 @@
 html,
 body {
 	margin: 0;
-	background-color: var(--grey4);
+	background-color: var(--baseColor0);
 }
 body{
 	padding: 2% 10%;
@@ -83,17 +95,14 @@ a {
 	color: inherit;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+* {
 	font-family: "Poppins", sans-serif;
 	/* font-family: "Kanit", sans-serif; */
 	/* font-family: helvetica, arial, sans-serif; */
 	/* color: var(--prattleColor); */
-	color: var(--grey1);
+
+	/* testing */
+	/* color: var(--grey1); */
 }
 
 h1 {
@@ -118,7 +127,6 @@ ol,
 ul,
 table {
 	width: 100%;
-	font-family: "Share Tech Mono", monospace;
 	color: var(--grey1);
 	border-collapse: collapse;
 	outline: 2px solid transparent;
@@ -148,7 +156,7 @@ td, th {
 .iconButton {
 	background-color: transparent;
 	border-radius: 5px;
-	border: var(--grey2Border);
+	border: var(--baseBorder2);
 	color: var(--txtColor0);
 	padding: 0.7em 1em;
 	text-decoration: none;
@@ -207,7 +215,6 @@ td, th {
 	gap: 1em;
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-
 }
 
 .loginContainer {
@@ -268,30 +275,13 @@ code {
 .card {
 	margin-bottom: 1rem;
 }
-.card,
-.clickableCard {
+.card{
 	padding: 1.5rem;
 	border-radius: 10px;
 	text-decoration: none;
 	color: var(--grey1);
 	transition: 0.5s;
 	border: var(--grey3Border);
-}
-
-.clickableCard:hover,
-.clickableCard:focus,
-.clickableCard:active {
-	cursor: pointer;
-	border: var(--grey1Border);
-	box-shadow: var(--boxShadow);
-	transform: translateY(-5px);
-}
-.clickableCard h3{
-	color: var(--grey1);
-}
-
-.clickableCard:hover h3{
-	color: var(--txtColor0);
 }
 
 @media (max-width: 600px) {
@@ -321,25 +311,20 @@ code {
 .shedForm input,
 .shedAlignedForm input,
 .shedForm textArea {
-	font-family: "Kanit", sans-serif;
 	border-radius: 5px;
-	background-color: var(--grey3);
-	/* outline: 2px solid transparent; */
+	background-color: var(--baseColor1);
 	outline:none;
 	padding: 0.7em 1em;
-	color: var(--prattleColor);
-	border: var(--grey2Border);
+	color: var(--prattleColor1);
+	border: var(--baseBorder2);
 }
 .shedForm textArea{
 	resize: vertical;
 }
 .shedForm input:focus,
 .shedForm textArea:focus {
-	
-	/* border-color: var(--prattleColor); */
-	background-color: var(--grey4);
-	/* outline-color: var(--prattleColor); */
-	border: var(--shePurpleBorder);
+	background-color: var(--baseColor0);
+	border: var(--baseBorder2);
 }
 
 .chatContacts {
@@ -351,50 +336,6 @@ code {
     overflow-x: hidden;
     overflow-y: scroll;
 	border-radius: 5px;
-
-}
-.contactsChip {
-	font-family: "Share Tech Mono", monospace;
-	display: flex;
-	align-items: center;
-	justify-content: left;
-	gap: 1.5em;
-	border: 1px solid transparent;
-	background-color: transparent;
-    border-radius: 5px;
-	color: var(--txtColor0);
-	padding: 0.7em 1em;
-	text-decoration: none;
-	cursor: pointer;
-	outline: 2px solid transparent;
-	user-select: none;
-	transition: 0.3s;
-}
-.contactsChip:focus{
-	outline-color: var(--prattleColor);
-}
-.contactsChip div{
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-.contactsChip h4{
-	font-size: 1.2em;
-	width: max-content;
-	margin: 0;
-	padding: 0;
-}
-.contactsChip p{
-	width: max-content;
-	margin: 0;
-	padding: 0;
-}
-.contactsChip:hover{
-	cursor: pointer;
-	background-color: var(--grey3);
-	border-radius:0 var(--borderRadius) var(--borderRadius) 0;
-	box-shadow:-2px 0px 0px var(--prattleColor);
 }
 
 .messagesContainer{
@@ -408,8 +349,8 @@ code {
 	position: sticky;
 	bottom: 1em;
 	margin-top: auto;
-	background-color: var(--grey4);
-	border: var(--grey3Border);
+	background-color: var(--baseColor0);
+	border: var(--baseBorder2);
 	border-radius: calc(var(--borderRadius)*2);
 	box-shadow: var(--boxShadow);
 	padding: 0.5em;
@@ -425,10 +366,10 @@ code {
 	border-radius: var(--borderRadius);
 }
 .shedLiveTextMessage{
-	font-family: "Share Tech Mono", monospace;
 	gap: 1em;
-	color: var(--grey1);
+	color: var(--txtColor0);
 	padding: 0.5em;
+	border: 1px solid transparent;
 	display:flex;
 	justify-content: space-between;
 	align-items: start;
@@ -445,9 +386,8 @@ code {
 }
 .shedLiveTextMessage .threadContainer{
 	margin-top: 0.5em;
-	border-radius:0 var(--borderRadius) var(--borderRadius) 0;
 	padding: 0.5em 0.2em;
-	box-shadow:-2px 0px 0px var(--grey1);
+	box-shadow:-2px 0px 0px var(--baseColor3);
 }
 .shedLiveTextMessage .threadContainer{
 	display: grid;
@@ -458,8 +398,6 @@ code {
 .shedLiveTextMessage .urlContent,
 .shedLiveTextMessage h3,
 details{
-	/* box-shadow:-2px 0px 0px var(--grey2); */
-	font-family: "Share Tech Mono", monospace;
 	color: var(--txtColor0);
 	text-align:left;
 	margin: 0;
@@ -484,21 +422,21 @@ details{
 .shedLiveTextMessage h4{
 	user-select: none;
 	color:var(--prattleColor);
-	font-family: "Share Tech Mono", monospace;
 	width: auto;
 	text-align: right;
 	margin: 0;
 }
 .shedLiveTextMessage:hover{
-	/* cursor: pointer; */
-	background-color: var(--grey3-5);
-	border-radius:0 var(--borderRadius) var(--borderRadius) 0;
-	box-shadow:-2px 0px 0px var(--prattleColor);
+	cursor: pointer;
+	background-color: var(--baseColor1);
+	border: var(--baseBorder1);
+	border-radius:var(--borderRadius);
+	/* box-shadow:var(--boxShadow); */
 }
 
 .tag{
-	background-color: var(--prattleColor);
-	color: var(--grey4);
+	background-color: var(--prattleColor1);
+	color: var(--baseColor0);
 	border-radius:var(--borderRadius);
 	padding: 0em 0.3em;
 }
@@ -524,7 +462,6 @@ details{
 	width: 400px;
 	min-width: 300px;
 	padding:0.5em;
-	font-family: "Share Tech Mono", monospace;
 	border-radius:var(--borderRadius);
 
 }
