@@ -7,10 +7,15 @@ import ShedButton from '../../lib/ShedButton';
 import { VscSignOut, VscActivateBreakpoints } from "react-icons/vsc";
 import { IconContext } from "react-icons";
 import { AppContextProvider, useAppContext } from '../../lib/AppContext';
-
 import { v4 as uuidv4 } from 'uuid';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Home() {
+    const copyRoomId = () => {
+        navigator.clipboard.writeText(generateRoom);
+        toast("Copied room code")
+    };
     const user = supabase.auth.user();
 
     const [groupNameInput, setGroupNameInput] = useState();
@@ -92,6 +97,17 @@ export default function Home() {
         <>
             {user ?
                 <AppContextProvider>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                />
                     <div>
                         <h2>Get Started</h2>
                         <ol>
@@ -124,9 +140,11 @@ export default function Home() {
                                 <div>
                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                         <h4>Generated Room ID:</h4>
-                                        <code>{generateRoom}</code>
+                                        <code onClick={copyRoomId}>{generateRoom}</code>
                                     </div>
-                                    <p>Copy the room ID above and insert it into the input below so that you can join the room you created.</p>
+                                    <p>
+                                        Copy the room ID by clicking the above and insert it into the input below so that you can join the room you created.
+                                    </p>
                                 </div>
                             }
                             <form
@@ -134,7 +152,9 @@ export default function Home() {
                                 style={{ marginTop: '1em' }}
                                 onSubmit={handleCreateGroup}
                             >
-                                <p>Join an existing prattle room. When you insert the room ID make sure the room name is the room you intend to join.</p>
+                                <p>
+                                    Join an existing prattle room. When you insert the room ID make sure the room name is the room you intend to join.
+                                </p>
                                 {joinGroupInput &&
                                     <p>
                                         Searching for room . . .

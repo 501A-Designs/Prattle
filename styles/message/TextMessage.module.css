@@ -1,0 +1,51 @@
+.textMessage{
+	gap: 1em;
+	color: var(--txtColor0);
+	padding: 0.5em;
+	border: 1px solid transparent;
+	display:flex;
+	justify-content: space-between;
+	align-items: start;
+	transition: 0.3s;
+}
+.textMessage:focus{
+	outline: auto;
+}
+.messageContainer{
+	display: flex;
+	align-items: start;
+	gap: 0.6em;
+	margin-left: 1em;
+}
+
+.messageContent,
+.urlContent{
+	color: var(--txtColor0);
+	text-align:left;
+	margin: 0;
+	width:100%;
+}
+.urlContent	{
+	display: flex;
+	flex-direction:column;
+}
+.shedLiveTextMessage a{
+	color: var(--prattleColor);
+}
+
+.messageSender{
+	user-select: none;
+	color:var(--prattleColor);
+	width: auto;
+	text-align: right;
+	margin: 0;
+}
+.shedLiveTextMessage:hover{
+	cursor: pointer;
+}
+.tag{
+	background-color: var(--prattleColor1);
+	color: var(--baseColor0);
+	border-radius:var(--borderRadius);
+	padding: 0em 0.3em;
+}

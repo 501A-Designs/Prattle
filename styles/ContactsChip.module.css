@@ -1,5 +1,4 @@
 .contactsChip {
-	font-family: "Share Tech Mono", monospace;
 	display: flex;
 	align-items: center;
 	justify-content: left;
@@ -38,6 +37,5 @@
 .contactsChip:hover{
 	cursor: pointer;
 	background-color: var(--baseColor1);
-	border-radius:0 var(--borderRadius) var(--borderRadius) 0;
-	box-shadow:-2px 0px 0px var(--prattleColor0);
+	border-radius: var(--borderRadius);
 }
