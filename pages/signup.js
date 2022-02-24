@@ -11,15 +11,14 @@ export default function Login() {
 
     const userEmail = useRef()
     const userPassword = useRef()
-    const userName = useRef()
+    const [userName,setUserName] = useState()
     const user = supabase.auth.user();
-    const [generatingAccount, setGeneratingAccount] = useState('false')
+    const [generatingAccount, setGeneratingAccount] = useState(1)
     
     const handleSubmit = async (e) => {
         e.preventDefault();
         const email = userEmail.current.value;
         const password = userPassword.current.value;
-        const username = userName.current.value;
         console.log(email + ' : ' + password + ' : ' + username);
         await supabase.auth.signUp(
             {
@@ -34,38 +33,8 @@ export default function Login() {
                 }
             }
         )
-        setGeneratingAccount('true');
-        // let myPromise = new Promise((loadedAuthUserInfo, haventLoadedAuthUserInfo) => {
-        //     if (user.id) {
-        //         loadedAuthUserInfo("OK");
-        //     } else {
-        //         haventLoadedAuthUserInfo("Error");
-        //     }
-        //   });
-        // myPromise.then(
-        //     function(value) {
-        //         alert(value + user.id);
-        //     },
-        //     function(error) {
-        //         alert(error);
-        //     }
-        // );
-        // insertUserInfo();
+        setGeneratingAccount(3);
     }
-
-    // const insertUserInfo = async () => {
-    //         const { data, error } = await supabase
-    //         .from('users')
-    //         .insert([{
-    //             user_id: user.id,
-    //             user_name: user.user_metadata.first_name,
-    //             user_mail: user.email,
-    //             user_profile: `Hi! I'm ${user.user_metadata.first_name}`,
-    //             user_image: `https://avatars.dicebear.com/api/croodles/${user.user_metadata.first_name}.svg`
-    //         },])
-    //         alert('bruh');
-    //         setGeneratingAccount('done');
-    //     }
 
     return (
         <>
@@ -79,29 +48,36 @@ export default function Login() {
                 </div> :
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                     <div className="loginContainer">
-                        <h2>Getting Started</h2>
-                        <h3>
-                            Start right away with a few easy steps
-                        </h3>
-                        <p>
-                            Thanks for trying out Shed Live! For starters, Shed Live is a web based chat platform that lets you communicate with your friends and family.
-                            <br />
-                            Think of it like Twitch x Clubhouse.
-                            <ol>
-                                <li>Input credetials to create an account</li>
-                                <li>Copy your user ID</li>
-                                <li>Invite your friends and family and share each others user ID&apos;s so that you can add each other.</li>
-                                <li>Start chatting in the shed!</li>
-                            </ol>
-                        </p>                                
-                        {generatingAccount === 'true' ?
-                            <>
-                                <p>Finalizing your account...</p>
-                            </>
-                            :<form className="shedForm">
+                        {generatingAccount === 1 && <>
+                            <h2>Getting Started</h2>
+                            <h3>
+                                Start right away with a few easy steps
+                            </h3>
+                            <p>
+                                Thanks for trying out Prattle! For starters, Prattle is a web based platform that lets you prate your random thoughts. You can think of it as a digital jounral or scrapbook. Btw, its open source ;)
+                                <ol>
+                                    <li>Create an account</li>
+                                    <li>Create a room</li>
+                                    <li>Prate your random thoughts and ideas</li>
+                                    <li>Start sharing it to your friends and family!</li>
+                                </ol>
+                            </p>
+                            <Button
+                                click={()=>setGeneratingAccount(2)}
+                                icon={<VscAccount />}
+                                name="Start Creating Your Account"
+                            /> 
+                        </>}          
+                        {generatingAccount === 2 && <form className="shedForm">
+                                <img className="profileImage" src={userName ? `https://avatars.dicebear.com/api/croodles/${userName}.svg`:'https://www.poynter.org/wp-content/uploads/2021/09/shutterstock_1563012205.png'}/>
                                 <input placeholder="Email" type="email" ref={userEmail} />
                                 <input placeholder="Password" type="password" ref={userPassword} />
-                                <input placeholder="Prattle Username (no spaces)" type="text" ref={userName} />
+                                <input
+                                    placeholder="Prattle Username (no spaces)"
+                                    type="text"
+                                    value={userName}
+                                    onChange={(e) => setUserName(e.target.value)}
+                                />
                                 <Button
                                     click={handleSubmit}
                                     icon={<VscAccount />}
@@ -109,9 +85,10 @@ export default function Login() {
                                 /> 
                             </form>
                         }
-                        {generatingAccount === 'done' &&
+                        {generatingAccount === 3 &&
                             <>
                                 <h3>Your account has been created!</h3>
+                                <p>Check your email to verify your account.</p>
                                 <ul>
                                     <li onClick={()=> rounters.push('/')}>Your dashboard</li>
                                     <li onClick={()=> rounters.push('/profile')}>Your profile</li>

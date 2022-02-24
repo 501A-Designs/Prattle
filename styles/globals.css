@@ -421,3 +421,11 @@ iframe	{
 	border-left: var(--baseBorder4);
 	border-bottom: var(--baseBorder4);
 }
+
+.profileImage{
+	height: 100px;
+	width: 100px;
+	object-fit: cover;
+	margin: 0px auto 1em auto;
+	border-radius:calc(var(--borderRadius)*50)
+}
