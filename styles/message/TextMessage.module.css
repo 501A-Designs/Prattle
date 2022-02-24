@@ -1,12 +1,12 @@
 .textMessage{
 	gap: 1em;
-	color: var(--txtColor0);
 	padding: 0.5em;
 	border: 1px solid transparent;
 	display:flex;
 	justify-content: space-between;
 	align-items: start;
 	transition: 0.3s;
+	border-radius: 0px var(--borderRadius) var(--borderRadius) 0px;
 }
 .textMessage:focus{
 	outline: auto;
@@ -14,8 +14,7 @@
 .messageContainer{
 	display: flex;
 	align-items: start;
-	gap: 0.6em;
-	margin-left: 1em;
+	gap: 0.5em;
 }
 
 .messageContent,
@@ -33,15 +32,21 @@
 	color: var(--prattleColor);
 }
 
-.messageSender{
+.messageSender,
+.messageTime{
 	user-select: none;
-	color:var(--prattleColor);
+	color:var(--baseColor5);
 	width: auto;
 	text-align: right;
 	margin: 0;
+	font-size: 0.7em;
 }
+.messageTime{
+	font-family: "Share Tech Mono", monospace;
+}
+
 .shedLiveTextMessage:hover{
-	cursor: pointer;
+	background-color: var(--baseColor3);
 }
 .tag{
 	background-color: var(--prattleColor1);

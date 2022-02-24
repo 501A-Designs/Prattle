@@ -2,7 +2,7 @@
     margin-top: 0.5em;
     margin-left: 1em;
     padding: 0.5em 0.2em;
-    box-shadow:-2px 0px 0px var(--baseColor3);
+    box-shadow:-1px 0px 0px var(--baseColor3);
 }
 .threadContainer{
     display: grid;

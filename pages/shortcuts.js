@@ -5,7 +5,7 @@ import ClickableCard from '../lib/ClickableCard'
 
 export default function shortcuts() {
     return (
-        <div>
+        <div className="bodyPadding">
             <h1>ShedLive Shortcuts</h1>
             <h2>Utilize ShedLive to its fullist</h2>
             <table>

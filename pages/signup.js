@@ -1,17 +1,20 @@
-import React from 'react'
-import ShedButton from '../lib/ShedButton';
+import React,{ useState } from 'react'
+import Button from '../lib/Button';
 import { useRef } from 'react'
 import { supabase } from '../utils/supabaseClient'
 import { VscAccount } from "react-icons/vsc";
 import Link from 'next/link'
-
+import { useRouter } from "next/router";
 
 export default function Login() {
+    const router = useRouter();
+
     const userEmail = useRef()
     const userPassword = useRef()
     const userName = useRef()
     const user = supabase.auth.user();
-
+    const [generatingAccount, setGeneratingAccount] = useState('false')
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         const email = userEmail.current.value;
@@ -25,12 +28,44 @@ export default function Login() {
             },
             {
                 data: {
-                    first_name: username
+                    first_name: username,
+                    user_image: `https://avatars.dicebear.com/api/croodles/${username}.svg`,
+                    user_profile: `Hi, I'm ${username}`
                 }
             }
         )
-        // alert(`Hey ${username}! Check your email inbox for a link to active your ShedLive account! (make sure to close this tab since you wont be using it.)`)
+        setGeneratingAccount('true');
+        // let myPromise = new Promise((loadedAuthUserInfo, haventLoadedAuthUserInfo) => {
+        //     if (user.id) {
+        //         loadedAuthUserInfo("OK");
+        //     } else {
+        //         haventLoadedAuthUserInfo("Error");
+        //     }
+        //   });
+        // myPromise.then(
+        //     function(value) {
+        //         alert(value + user.id);
+        //     },
+        //     function(error) {
+        //         alert(error);
+        //     }
+        // );
+        // insertUserInfo();
     }
+
+    // const insertUserInfo = async () => {
+    //         const { data, error } = await supabase
+    //         .from('users')
+    //         .insert([{
+    //             user_id: user.id,
+    //             user_name: user.user_metadata.first_name,
+    //             user_mail: user.email,
+    //             user_profile: `Hi! I'm ${user.user_metadata.first_name}`,
+    //             user_image: `https://avatars.dicebear.com/api/croodles/${user.user_metadata.first_name}.svg`
+    //         },])
+    //         alert('bruh');
+    //         setGeneratingAccount('done');
+    //     }
 
     return (
         <>
@@ -58,17 +93,31 @@ export default function Login() {
                                 <li>Invite your friends and family and share each others user ID&apos;s so that you can add each other.</li>
                                 <li>Start chatting in the shed!</li>
                             </ol>
-                        </p>
-                        <form className="shedForm">
-                            <input placeholder="Email" type="email" ref={userEmail} />
-                            <input placeholder="Password" type="password" ref={userPassword} />
-                            <input placeholder="ShedLive Username (no spaces)" type="text" ref={userName} />
-                            <ShedButton
-                                click={handleSubmit}
-                                icon={<VscAccount />}
-                                name="Sign Up"
-                            />
-                        </form>
+                        </p>                                
+                        {generatingAccount === 'true' ?
+                            <>
+                                <p>Finalizing your account...</p>
+                            </>
+                            :<form className="shedForm">
+                                <input placeholder="Email" type="email" ref={userEmail} />
+                                <input placeholder="Password" type="password" ref={userPassword} />
+                                <input placeholder="Prattle Username (no spaces)" type="text" ref={userName} />
+                                <Button
+                                    click={handleSubmit}
+                                    icon={<VscAccount />}
+                                    name="Sign Up"
+                                /> 
+                            </form>
+                        }
+                        {generatingAccount === 'done' &&
+                            <>
+                                <h3>Your account has been created!</h3>
+                                <ul>
+                                    <li onClick={()=> rounters.push('/')}>Your dashboard</li>
+                                    <li onClick={()=> rounters.push('/profile')}>Your profile</li>
+                                </ul>
+                            </>
+                        }
                         <p>
                             *Sign up for those who do not have an account.
                             <br />

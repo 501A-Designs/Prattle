@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import ShedButton from '../lib/ShedButton';
+import Button from '../lib/Button';
 import Link from 'next/link'
 
 import { useRouter } from "next/router";
@@ -60,7 +60,7 @@ export default function Login() {
                         <form className="shedForm">
                             <input style={inputStatus} placeholder="Email" type="email" ref={userEmail} />
                             <input style={inputStatus} placeholder="Password" type="password" ref={userPassword} />
-                            <ShedButton
+                            <Button
                                 click={handleSubmit}
                                 icon={<VscSignIn />}
                                 name="Get Me Back In!"

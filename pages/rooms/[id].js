@@ -1,64 +1,88 @@
 import React, { useState, useEffect } from 'react'
-import TextMessage from '../../lib/TextMessage'
-import TextMessageNote from '../../lib/TextMessageNote';
+import TextMessage from '../../lib/room-component/TextMessage'
+import TextMessageNote from '../../lib/room-component/TextMessageNote';
 import { supabase } from '../../utils/supabaseClient'
 import Link from 'next/link'
-import ShedButton from '../../lib/ShedButton';
+import Button from '../../lib/Button';
 import PrateButton from '../../lib/PrateButton';
-import Notifier from "react-desktop-notification"
-// VscSettingsGear
-import { VscHome, VscSymbolParameter, VscRocket, VscMail,VscNote,VscComment } from "react-icons/vsc";
-import { useAppContext, AppContextProvider } from '../../lib/AppContext';
+import EmojiButton from '../../lib/EmojiButton';
+// import Notifier from "react-desktop-notification"
+
+import { VscHome, VscSymbolParameter, VscRocket,VscCommentDiscussion,VscSettingsGear,VscComment,VscMail,VscClose,VscDebugRestart,VscNote } from "react-icons/vsc";
+
 import { useRouter } from 'next/router'
 import AlignItems from '../../lib/style-component/AlignItems';
 import StickyBottom from '../../lib/style-component/StickyBottom';
 
+import SmallButton from '../../lib/SmallButton';
+import StylizedBanner from '../../lib/room-component/StylizedBanner';
 
-function IndivisualChat({ roomId }) {
-  const router = useRouter()
+Modal.setAppElement('#__next');
+import Modal from 'react-modal';
+import GridItems from '../../lib/style-component/GridItems';
+
+function IndivisualPrateRoom({ roomId }) {
   const user = supabase.auth.user();
-  const [message, setMessage] = useState();
+
+  const [gridStatus, setGridStatus] = useState('1fr');
+  let sideBarContainer ={
+    borderRight:'var(--baseBorder2)',
+    padding: '1em',
+    height: '100vh',
+    position: 'sticky',
+    top: '0',
+    overflowY: 'auto'
+  }
+
+  const emojiData = ['👋','👌','👍','👎','👏','🤘','😂','😍','😝','😠','😢','🤧','🤯','🤭','🤨']
+
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const openModal =()=> {
+    setIsOpen(true);
+  }
+  function closeModal() {
+    setIsOpen(false);
+  }
+  let modalStyle = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        width: '500px',
+        transform: 'translate(-50%, -50%)',
+        backgroundColor: 'var(--baseColor0)',
+        border: 'var(--baseBorder2)',
+        borderRadius: 'calc(var(--borderRadius)*2)',
+        boxShadow: 'var(--boxShadow)',
+        padding: '1em',
+    },
+  }
+
+  const router = useRouter()
+  const [message, setMessage] = useState('');
+
+  const [roomInfo, setRoomInfo] = useState('');
+  const [loadingMessage, setLoadingMessage] = useState('');
+
 
   const [messagesArray, setMessagesArray] = useState([]);
   const [messagesNotesArray, setMessagesNotesArray] = useState();
-  const [latestMessagedate, setLatestMessageDate] = useState();
 
   const [messageByte, setMessageByte] = useState(0);
   const [messageWordCount, setMessageWordCount] = useState(0);
 
-  let messageSubscription = null;
-
-  useEffect(() => {
-    getMessagesAndSubscribe();
-    return () => {
-      supabase.removeSubscription();
-    };
-  }, []);
-
-  // Sent message
-  const handleMessageSubmit = async (e) => {
-    e.preventDefault();
-    let timeStamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
-    const { data, error } = await supabase
-      .from('messages')
-      .insert([{
-        created_at: timeStamp,
-        message: message,
-        sent_by_user: user.user_metadata.first_name,
-        room_id: roomId
-      },])
-    console.log(message);
-    setMessage('');
-    setMessageByte(0);
-    setMessageWordCount(0);
+  const fetchRoomInfo = async () => {
+      let { data: roomsInfo, error } = await supabase
+        .from('rooms')
+        .select('*')
+        .eq('room_id', roomId);
+      setRoomInfo(roomsInfo[0]);
   }
 
-  const handleNewMessage = (payload) => {
-    setMessagesArray((prevMessages) => [payload.new, ...prevMessages]);
-  };
-
-  const fetchMessages = async (prop) => {
-    console.log(prop);
+  const fetchMessages = async () => {
+    console.log('bruh')
     if (!messagesArray.length) {
       let { data: messages, error } = await supabase
         .from('messages')
@@ -68,8 +92,8 @@ function IndivisualChat({ roomId }) {
       setMessagesArray(messages);
     }
   }
-  const fetchMessageNotes = async (prop) => {
-    console.log(prop)
+  const fetchMessageNotes = async () => {
+    console.log('bruh')
     let { data: notes, error } = await supabase
       .from('notes')
       .select('*')
@@ -77,157 +101,190 @@ function IndivisualChat({ roomId }) {
       .order('id', { ascending: false });
     setMessagesNotesArray(notes);
   }
-  const fetchLatestMessageDate = async (prop) => {
-    let { data: messages, error } = await supabase
-      .from('messages')
-      .select('*')
-      .eq('room_id', prop)
-      .order('id', { ascending: true });
-    setLatestMessageDate(messages[0].created_at.split('T')[0])
-  }
-  // Deleting messages
-  const eraseMessage = async () => {
-    let timeStamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }).split(' ')[0];
-    let reFormattedDate = `${timeStamp.split('/')[0]}-${timeStamp.split('/')[1]}-${timeStamp.split('/')[2]}`;
-    if (latestMessagedate != reFormattedDate) {
-      console.log('keep')
-    } else {
-      const { data, error } = await supabase
-        .from('messages')
-        .delete()
-      console.log('delete')
-    }
-  }
-
-  const getMessagesAndSubscribe = async () => {
-    if (!messageSubscription) {
-      fetchMessages();
-      messageSubscription = supabase
-        .from("messages")
-        .on("*", (payload) => {
-          handleNewMessage(payload);
-          desktopNotification(payload);
-        })
-        .subscribe();
-    }
-  };
-
-  const desktopNotification = (prop) => {
-    if (prop.new.sent_by_user !== user.user_metadata.first_name) {
-      Notifier.start("New message", prop.new.message, `https://prattle.vercel.app/chats/${roomId}`, "https://raw.githubusercontent.com/501A-Designs/Prattle/main/public/shedlivelogo.png");
-    }
-  }
 
   useEffect(() => {
-    eraseMessage();
-    fetchLatestMessageDate(roomId);
-    fetchMessages(roomId);
-    fetchMessageNotes(roomId);
-  }, [roomId])
+    fetchRoomInfo();
+    fetchMessages();
+    fetchMessageNotes();  
+  },[])
 
-  // Send Message
-  const handleMessageChange = (e) => {
-    setMessage(e.target.value);
-    setMessageByte(e.target.value.split('').length);
-    setMessageWordCount(e.target.value.split(' ').length);
-    if (e.target.value === '') {
+  // () => setLoadingMessage('Loading prates');
+  // () => setLoadingMessage('This room is private');
+  
+  // Sent message
+  // if(user.id === roomInfo){
+    const [messageSentNumber, setMessageSentNumber] = useState(0);
+    const handleMessageSubmit = async (e) => {
+      e.preventDefault();
+      let timeStamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
+      const { data, error } = await supabase
+        .from('messages')
+        .insert([{
+          created_at: timeStamp,
+          message: message,
+          sent_by_user: user.user_metadata.first_name,
+          room_id: roomId
+        },])
+      console.log(message);
+      setMessage('');
       setMessageByte(0);
       setMessageWordCount(0);
+      setMessageSentNumber(messageSentNumber + 1);
     }
-  }
-
-  // const { currentRoomName } = useAppContext();
-
-  function CurrentRoomNameTitle() {
-    // const { currentRoomName } = useAppContext();
-    const { currentRoom, setCurrentRoom } = useAppContext();
-    console.log(currentRoom);
-    return (
-      <>
-        <h2 style={{ margin: '1.5em 0em 0.5em 0em' }}>{currentRoom}</h2>
-      </>
-    )
-  }
-
+    const handleMessageChange = (e) => {
+      setMessage(e.target.value);
+      setMessageByte(e.target.value.split('').length);
+      setMessageWordCount(e.target.value.split(' ').length);
+      if (e.target.value === '') {
+        setMessageByte(0);
+        setMessageWordCount(0);
+      }
+    }
+  // }
   return (
-    <>
-      <AlignItems>
-        <AppContextProvider>
-          <CurrentRoomNameTitle />
-          {/* <h2>{currentRoomName}</h2> */}
-        </AppContextProvider>
-        <ShedButton
-          disabled={!roomId}
-          click={(e) => { e.preventDefault(); router.push("/"); }}
-          icon={<VscHome />}
-          name="Main Page"
-        />
-        <ShedButton
-          disabled={!roomId}
-          click={(e) => { e.preventDefault(); router.push("/shortcuts"); }}
-          icon={<VscSymbolParameter />}
-          name="Shortcuts Info"
-        />
-        <ShedButton
-          disabled={!roomId}
-          click={(e) => { e.preventDefault(); router.push("/rooms"); }}
-          icon={<VscRocket />}
-          name="Join / Create Groups"
-        />
-        <ShedButton
-          disabled={!roomId}
-          click={(e) => { e.preventDefault(); router.push("/rooms"); }}
-          icon={<VscNote />}
-          name="Show Notes"
-        />
-        {/* <ShedButton
-          disabled={!roomId}
-          // type="submit"
-          // click={handleMessageSubmit}
-          icon={<VscSettingsGear />}
-          name="Chat Settings"
-        /> */}
-      </AlignItems>
-      <div className="notesContainer">
-        {messagesNotesArray !== undefined ?
-          messagesNotesArray.map(props =>
-            <TextMessageNote
-              key={props.message}
-              setBy={props.set_by}
-              whoSaid={props.who_said}
-              message={props.message}
-            />
-          ) :
-          <p>
-            ShedLive cannot save more than 20 Notes.
-            <br />
-            (notes that are not shown are automatically delete).
-          </p>
-        }
-      </div>
-      <div className="messagesContainer">
-        {messagesArray.map(props =>
-          <TextMessage
-            key={props.message}
-            messageId={props.id}
-            currentRoom={roomId}
-            name={props.sent_by_user}
-            message={props.message}
-            time={props.created_at}
-          />
-        )}
-        <p>All messages before {latestMessagedate} (Today) are deleted.</p>
-      </div>
-      <StickyBottom>
-        <PrateButton
-          disabled={!roomId}
-          click={(e) => { e.preventDefault(); router.push("/rooms"); }}
-          icon={<VscComment />}
-          name="Prate"
-        />
-      </StickyBottom>
-
-    </>
+            <GridItems grid={gridStatus}>
+            {gridStatus != '1fr' && <div style={sideBarContainer}>
+              <GridItems grid={'1fr'}>
+                <Button
+                  disabled={!roomId}
+                  click={(e) => { e.preventDefault(); router.push("/browse"); }}
+                  icon={<VscCommentDiscussion />}
+                  name="Browse Other Rooms"
+                />
+                {user.id === roomInfo.room_creator &&    
+                  <>
+                    <Button
+                      disabled={!roomId}
+                      click={(e) => { e.preventDefault(); router.push("/shortcuts"); }}
+                      icon={<VscSymbolParameter />}
+                      name="Shortcuts Info"
+                    />
+                    <Button
+                      disabled={!roomId}
+                      click={(e) => { e.preventDefault(); router.push("/rooms"); }}
+                      icon={<VscRocket />}
+                      name="Join / Create"
+                    />
+                  </>
+                }
+                <h3 style={{marginBottom: 0}}>Notes</h3>
+                <div className="notesContainer">
+                  {messagesNotesArray.length !== 0 ?
+                    messagesNotesArray.map(props =>
+                      <TextMessageNote
+                        key={props.message}
+                        setBy={props.set_by}
+                        whoSaid={props.who_said}
+                        message={props.message}
+                      />
+                    ) :
+                    <p>
+                      ShedLive cannot save more than 20 Notes.
+                      <br />
+                      (notes that are not shown are automatically delete).
+                    </p>
+                  }
+                </div>
+              </GridItems>
+            </div>}
+            <div className={'bodyPadding'}>
+              <AlignItems>
+                <Button
+                  disabled={!roomId}
+                  click={(e) => { e.preventDefault(); router.push("/"); }}
+                  icon={<VscHome />}
+                  name="Main Page"
+                />
+                <Button
+                  disabled={!roomId}
+                  // type="submit"
+                  click={()=>{gridStatus === '1fr' ? setGridStatus('1fr 4fr'): setGridStatus('1fr')}}
+                  icon={<VscNote />}
+                  name="Chat Notes"
+                />
+              </AlignItems>
+              <Modal
+                isOpen={modalIsOpen}
+                style={modalStyle}
+              >
+                <SmallButton
+                  click={() => closeModal()}
+                  icon={<VscClose />}
+                  right={true}
+                />
+                <h3>Compose a new Prate</h3>
+                  <p>View the <a>shortcuts</a> page for a more enhanced prate</p>
+                  <AlignItems scroll={true}>
+                      {emojiData.map(emoji =>
+                        <EmojiButton
+                          key={emoji}
+                          emoji={emoji}
+                          click={(e) => { e.preventDefault(); setMessage(message + emoji) }}
+                        />
+                      )}
+                  </AlignItems>
+                  <form
+                    style={{ marginTop: '0.5em' }}
+                    className="shedAlignedForm"
+                    onSubmit={handleMessageSubmit}
+                  >
+                    <input
+                      placeholder="Your message"
+                      onChange={handleMessageChange}
+                      value={message}
+                    />
+                    <Button
+                      disabled={!message}
+                      type="submit"
+                      click={handleMessageSubmit}
+                      icon={<VscMail />}
+                      name="Post"
+                    />
+                  </form>
+                  {message &&
+                    <AlignItems>
+                      <p style={{width:'fit-content'}}>{messageByte} Bytes</p>
+                      <p style={{width:'fit-content'}}>{messageWordCount} Words</p>
+                    </AlignItems>
+                  }
+              </Modal>
+              <StylizedBanner
+                backgroundImage={roomInfo.background_image}
+                roomName={roomInfo.room_name}
+                roomCode={roomInfo.room_id}
+                authorId={roomInfo.room_creator}
+              />
+              {loadingMessage && <p>{loadingMessage}</p>}
+              {messageSentNumber != 0 && 
+                  <p style={{textAlign: 'center'}}>{messageSentNumber} new added to your room</p>
+              }
+              <div className="messagesContainer">
+                {messagesArray.map(props =>
+                  <TextMessage
+                    key={props.message}
+                    messageId={props.id}
+                    currentRoom={roomId}
+                    name={props.sent_by_user}
+                    message={props.message}
+                    time={props.created_at}
+                    roomCreator={roomInfo.room_creator}
+                  />
+                )}
+              </div>
+              {user.id === roomInfo.room_creator &&    
+                <StickyBottom>
+                  <PrateButton
+                    disabled={!roomId}
+                    click={() => {
+                      openModal();
+                    }}
+                    icon={<VscComment />}
+                    name="Compose Prate"
+                  />
+                </StickyBottom>
+              }
+            </div>
+          </GridItems>
   )
 }
 
@@ -238,4 +295,4 @@ export async function getServerSideProps({ params }) {
   }
 }
 
-export default IndivisualChat
+export default IndivisualPrateRoom
