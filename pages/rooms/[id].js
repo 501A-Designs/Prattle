@@ -6,7 +6,6 @@ import Link from 'next/link'
 import Button from '../../lib/Button';
 import PrateButton from '../../lib/PrateButton';
 import EmojiButton from '../../lib/EmojiButton';
-// import Notifier from "react-desktop-notification"
 
 import { VscHome, VscSymbolParameter, VscRocket,VscCommentDiscussion,VscSettingsGear,VscComment,VscMail,VscClose,VscDebugRestart,VscNote } from "react-icons/vsc";
 
@@ -29,6 +28,7 @@ function IndivisualPrateRoom({ roomId }) {
     borderRight:'var(--baseBorder2)',
     padding: '1em',
     height: '100vh',
+    minWidth: '250px',
     position: 'sticky',
     top: '0',
     overflowY: 'auto'
@@ -112,7 +112,6 @@ function IndivisualPrateRoom({ roomId }) {
   // () => setLoadingMessage('This room is private');
   
   // Sent message
-  // if(user.id === roomInfo){
     const [messageSentNumber, setMessageSentNumber] = useState(0);
     const handleMessageSubmit = async (e) => {
       e.preventDefault();
@@ -140,7 +139,7 @@ function IndivisualPrateRoom({ roomId }) {
         setMessageWordCount(0);
       }
     }
-  // }
+
   return (
             <GridItems grid={gridStatus}>
             {gridStatus != '1fr' && <div style={sideBarContainer}>
@@ -151,21 +150,23 @@ function IndivisualPrateRoom({ roomId }) {
                   icon={<VscCommentDiscussion />}
                   name="Browse Other Rooms"
                 />
-                {user.id === roomInfo.room_creator &&    
-                  <>
+                {user &&
+                <>
+                  {user.id === roomInfo.room_creator && <>
                     <Button
                       disabled={!roomId}
                       click={(e) => { e.preventDefault(); router.push("/shortcuts"); }}
                       icon={<VscSymbolParameter />}
                       name="Shortcuts Info"
-                    />
+                      />
                     <Button
                       disabled={!roomId}
                       click={(e) => { e.preventDefault(); router.push("/rooms"); }}
                       icon={<VscRocket />}
                       name="Join / Create"
-                    />
-                  </>
+                      />
+                  </>}
+                </>
                 }
                 <h3 style={{marginBottom: 0}}>Notes</h3>
                 <div className="notesContainer">
@@ -271,17 +272,21 @@ function IndivisualPrateRoom({ roomId }) {
                   />
                 )}
               </div>
-              {user.id === roomInfo.room_creator &&    
-                <StickyBottom>
-                  <PrateButton
-                    disabled={!roomId}
-                    click={() => {
-                      openModal();
-                    }}
-                    icon={<VscComment />}
-                    name="Compose Prate"
-                  />
-                </StickyBottom>
+              {user &&               
+                <>
+                {user.id === roomInfo.room_creator &&    
+                  <StickyBottom>
+                    <PrateButton
+                      disabled={!roomId}
+                      click={() => {
+                        openModal();
+                      }}
+                      icon={<VscComment />}
+                      name="Compose Prate"
+                    />
+                  </StickyBottom>
+                }
+                </>
               }
             </div>
           </GridItems>

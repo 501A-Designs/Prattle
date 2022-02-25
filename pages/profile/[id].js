@@ -28,7 +28,6 @@ function IndivisualProfile({ profileId }) {
 
     return (
         <div className="bodyPadding">
-            <h4>Profile Information</h4>
             <ProfileInfo profileId={profileId}/>
             <h3>Rooms made by this person</h3>
             <GridItems grid={'1fr 1fr 1fr'}>

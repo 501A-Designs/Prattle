@@ -224,15 +224,21 @@ td, th {
 	align-items: center;
 }
 
-header,footer {
+header {
+	position: sticky;
+	top: 0;
+	width: 100%;
+	z-index: 1;
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 	gap: 1em;
 	margin-bottom: 2em;
-	border: var(--baseBorder2);
-	padding: 0.1em 1em;
-	border-radius:calc(var(--borderRadius)*2);
+	border-bottom: var(--baseBorder2);
+	background-color: var(--baseColor0);
+	padding: 1em;
 	box-shadow: var(--boxShadow);
+	opacity: 95%;
 }
 
 code {
@@ -251,33 +257,6 @@ hr{
 	background: var(--baseColor2);
 	border: var(--baseBorder2);
 	border-radius: var(--borderRadius)
-}
-
-.grid {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	/* max-width: 800px; */
-	gap: 1em;
-	/* margin-top: 3rem; */
-}
-
-.card {
-	margin-bottom: 1rem;
-}
-.card{
-	padding: 1.5rem;
-	border-radius: 10px;
-	text-decoration: none;
-	color: var(--grey1);
-	transition: 0.5s;
-	border: var(--grey3Border);
-}
-
-@media (max-width: 600px) {
-	.grid {
-		width: 100%;
-		grid-template-columns: 1fr;
-	}
 }
 
 .shedAlignedForm{
