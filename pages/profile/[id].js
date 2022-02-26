@@ -37,6 +37,7 @@ function IndivisualProfile({ profileId }) {
                             backgroundImage={props.background_image}
                             roomName={props.room_name}
                             roomCode={props.room_id}
+                            description={props.description}
                         />
                 })}
             </GridItems>

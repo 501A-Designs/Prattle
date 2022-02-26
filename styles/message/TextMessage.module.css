@@ -1,12 +1,11 @@
 .textMessage{
-	gap: 1em;
-	padding: 0.5em;
 	border: 1px solid transparent;
 	display:flex;
 	justify-content: space-between;
+	width:100%;
+	padding: 0.5em;
 	align-items: start;
 	transition: 0.3s;
-	border-radius: 0px var(--borderRadius) var(--borderRadius) 0px;
 }
 .textMessage:focus{
 	outline: auto;
@@ -15,6 +14,7 @@
 	display: flex;
 	align-items: start;
 	gap: 0.5em;
+	width: 100%;
 }
 
 .messageContent,
@@ -22,16 +22,16 @@
 	color: var(--txtColor0);
 	text-align:left;
 	margin: 0;
-	width:100%;
+	width:auto;
 }
 .urlContent	{
 	display: flex;
 	flex-direction:column;
 }
-.shedLiveTextMessage a{
-	color: var(--prattleColor);
+.textMessage a{
+	font-size:0.7em;
+	color: var(--baseColor5);
 }
-
 .messageSender,
 .messageTime{
 	user-select: none;
@@ -45,8 +45,9 @@
 	font-family: "Share Tech Mono", monospace;
 }
 
-.shedLiveTextMessage:hover{
-	background-color: var(--baseColor3);
+.textMessage:hover{
+	background-color: rgb(249, 249, 249);
+	border-radius: var(--borderRadius);
 }
 .tag{
 	background-color: var(--prattleColor1);

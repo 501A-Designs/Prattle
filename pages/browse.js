@@ -31,6 +31,7 @@ export default function Browse() {
                     backgroundImage={props.background_image}
                     roomName={props.room_name}
                     roomCode={props.room_id}
+                    description={props.description}
                     // src={''}
                     // author={'bruhh they'}
                 />

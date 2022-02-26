@@ -348,25 +348,6 @@ iframe	{
 	margin: 0.5em 0 0 0;
 }
 
-.prateButton{
-	background-color: var(--baseColor0);
-	border-radius:  calc(var(--borderRadius)*10);
-	font-size: 1em;
-	border: var(--baseBorder2);
-	color: var(--txtColor0);
-	padding: 0.7em 1.3em;
-	text-decoration: none;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 0.5em;
-	cursor: pointer;
-	outline: 2px solid transparent;
-	user-select: none;
-	transition: 0.3s;
-	box-shadow:var(--boxShadow);
-}
-
 .prateTypeButton{
 	background-color: var(--baseColor0);
 	border-radius:  var(--borderRadius);

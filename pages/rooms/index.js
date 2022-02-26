@@ -10,8 +10,6 @@ import PrateTypeButton from '../../lib/PrateTypeButton';
 import { VscSignOut, VscLock, VscComment, VscCommentDiscussion, VscActivateBreakpoints,VscClose } from "react-icons/vsc";
 
 import { v4 as uuidv4 } from 'uuid';
-// import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import GridItems from '../../lib/style-component/GridItems';
 
 import Modal from 'react-modal';
@@ -22,6 +20,7 @@ Modal.setAppElement('#__next');
 export default function Home() {
     const [modalContent, setModalContent] = useState('');
     const [modalIsOpen, setIsOpen] = useState(false);
+
     const openModal =()=> {
       setIsOpen(true);
     }
@@ -44,10 +43,6 @@ export default function Home() {
             padding: '1em',
         },
     }
-    const copyRoomId = () => {
-        navigator.clipboard.writeText(generateRoom);
-        toast("Copied room code")
-    };
 
     const user = supabase.auth.user();
     const router = useRouter();
@@ -149,12 +144,17 @@ export default function Home() {
                         />
                     </GridItems>
                     <br/>
-                    <p>
-                        This page [rooms] is a directory containing your chat rooms. If you have already joined a room, you can add you room id after this url with a back slash to jump to your intended chat room as seen below.
-                    </p>
-                    <code onClick={()=> copyRoomId()}>
-                        prattle.vercel.app/rooms/[room id]
-                    </code>
+                    <h3>Domain nav</h3>
+                    <GridItems>
+                        <h4 style={{marginBottom:'0.5em'}}>Rooms</h4>
+                        <code>
+                            prattle.vercel.app/rooms/[room id]
+                        </code>
+                        <h4 style={{marginBottom:'0.5em'}}>Profile Info</h4>
+                        <code>
+                            prattle.vercel.app/profile/[profile id]
+                        </code>
+                    </GridItems>
                 </div>
                 </> :
                 <h1>You are logged out</h1>

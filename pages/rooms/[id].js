@@ -160,12 +160,6 @@ function IndivisualPrateRoom({ roomId }) {
       <GridItems grid={gridStatus}>
             {gridStatus != '1fr' && <div style={sideBarContainer}>
               <GridItems grid={'1fr'}>
-                <Button
-                  disabled={!roomId}
-                  click={(e) => { e.preventDefault(); router.push("/browse"); }}
-                  icon={<VscCommentDiscussion />}
-                  name="Browse Other Rooms"
-                />
                 {user &&
                 <>
                   {user.id === roomInfo.room_creator && <>
@@ -207,17 +201,25 @@ function IndivisualPrateRoom({ roomId }) {
             <div className={'bodyPadding'}>
               <AlignItems>
                 <Button
+                  size={'medium'}
                   disabled={!roomId}
                   click={(e) => { e.preventDefault(); router.push("/"); }}
                   icon={<VscHome />}
                   name="Main Page"
                 />
                 <Button
+                  size={'medium'}
                   disabled={!roomId}
-                  // type="submit"
                   click={()=>{gridStatus === '1fr' ? setGridStatus('1fr 4fr'): setGridStatus('1fr')}}
                   icon={<VscNote />}
                   name="Chat Notes"
+                />
+                <Button
+                  size={'medium'}
+                  disabled={!roomId}
+                  click={(e) => { e.preventDefault(); router.push("/browse"); }}
+                  icon={<VscCommentDiscussion />}
+                  name="Browse Other Rooms"
                 />
               </AlignItems>
               <Modal
@@ -270,6 +272,8 @@ function IndivisualPrateRoom({ roomId }) {
                 roomName={roomInfo.room_name}
                 roomCode={roomInfo.room_id}
                 authorId={roomInfo.room_creator}
+                roomPublic={roomInfo.room_public}
+                roomDescription={roomInfo.description}
               />
               {loadingMessage && <p>{loadingMessage}</p>}
               {messageSentNumber != 0 && 
@@ -292,7 +296,8 @@ function IndivisualPrateRoom({ roomId }) {
                 <>
                 {user.id === roomInfo.room_creator &&    
                   <StickyBottom>
-                    <PrateButton
+                    <Button
+                      boxShadow={true}
                       disabled={!roomId}
                       click={() => {
                         openModal();

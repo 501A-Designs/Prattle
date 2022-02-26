@@ -3,8 +3,7 @@
     margin-left: 1em;
     padding: 0.5em 0.2em;
     box-shadow:-1px 0px 0px var(--baseColor3);
-}
-.threadContainer{
+    width:auto;
     display: grid;
     grid-template-columns: 1fr;
 }
