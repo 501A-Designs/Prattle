@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import Head from 'next/head'
+
 import TextMessage from '../../lib/room-component/TextMessage'
 import TextMessageNote from '../../lib/room-component/TextMessageNote';
 import { supabase } from '../../utils/supabaseClient'
@@ -7,7 +9,7 @@ import Button from '../../lib/Button';
 import PrateButton from '../../lib/PrateButton';
 import EmojiButton from '../../lib/EmojiButton';
 
-import { VscHome, VscSymbolParameter, VscRocket,VscCommentDiscussion,VscSettingsGear,VscComment,VscMail,VscClose,VscDebugRestart,VscNote } from "react-icons/vsc";
+import {VscAccount, VscHome, VscSymbolParameter, VscRocket,VscCommentDiscussion,VscSettingsGear,VscComment,VscMail,VscClose,VscDebugRestart,VscNote } from "react-icons/vsc";
 
 import { useRouter } from 'next/router'
 import AlignItems from '../../lib/style-component/AlignItems';
@@ -141,7 +143,21 @@ function IndivisualPrateRoom({ roomId }) {
     }
 
   return (
-            <GridItems grid={gridStatus}>
+    <>
+      <Head>
+        <title>{roomInfo.room_name}</title>
+      </Head>
+      {!user && 
+        <header>
+          <h5 style={{margin:0}}>Create an account to have the full experience.</h5>
+          <Button
+            click={()=> router.push('/signup')}
+            icon={<VscAccount />}
+            name="Sign Up"
+          />
+        </header>
+      }     
+      <GridItems grid={gridStatus}>
             {gridStatus != '1fr' && <div style={sideBarContainer}>
               <GridItems grid={'1fr'}>
                 <Button
@@ -290,6 +306,7 @@ function IndivisualPrateRoom({ roomId }) {
               }
             </div>
           </GridItems>
+    </>
   )
 }
 
