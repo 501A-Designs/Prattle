@@ -9,7 +9,7 @@ import Button from '../../lib/Button';
 import PrateButton from '../../lib/PrateButton';
 import EmojiButton from '../../lib/EmojiButton';
 
-import {VscAccount, VscHome, VscSymbolParameter, VscRocket,VscCommentDiscussion,VscSettingsGear,VscComment,VscMail,VscClose,VscDebugRestart,VscNote } from "react-icons/vsc";
+import {VscAccount, VscHome, VscSymbolParameter, VscRocket,VscCommentDiscussion,VscSettingsGear,VscComment,VscMail,VscClose,VscArrowSwap,VscNote } from "react-icons/vsc";
 
 import { useRouter } from 'next/router'
 import AlignItems from '../../lib/style-component/AlignItems';
@@ -21,6 +21,7 @@ import StylizedBanner from '../../lib/room-component/StylizedBanner';
 Modal.setAppElement('#__next');
 import Modal from 'react-modal';
 import GridItems from '../../lib/style-component/GridItems';
+import ProfileInfo from '../../lib/ProfileInfo';
 
 function IndivisualPrateRoom({ roomId }) {
   const user = supabase.auth.user();
@@ -39,6 +40,7 @@ function IndivisualPrateRoom({ roomId }) {
   const emojiData = ['👋','👌','👍','👎','👏','🤘','😂','😍','😝','😠','😢','🤧','🤯','🤭','🤨']
 
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [modalContent, setModalContent] = useState('');
   const openModal =()=> {
     setIsOpen(true);
   }
@@ -71,6 +73,7 @@ function IndivisualPrateRoom({ roomId }) {
 
   const [messagesArray, setMessagesArray] = useState([]);
   const [messagesNotesArray, setMessagesNotesArray] = useState();
+  const [owner, setOwner] = useState('');
 
   const [messageByte, setMessageByte] = useState(0);
   const [messageWordCount, setMessageWordCount] = useState(0);
@@ -142,11 +145,34 @@ function IndivisualPrateRoom({ roomId }) {
       }
     }
 
+    const handleOwnerTransferSubmit = async (e) => {
+      e.preventDefault();
+      const { data, error } = await supabase
+        .from('rooms')
+        .update({ room_creator : owner })
+        .eq('room_id', roomId)
+      setOwner('');
+      router.push('/');
+    }
+
+    const handleSharingSubmit = async (prop) => {
+      const { data, error } = await supabase
+        .from('rooms')
+        .update({ room_editable : prop })
+        .eq('room_id', roomId);
+      router.push('/')
+    }
+
   return (
     <>
       <Head>
         <title>{roomInfo.room_name}</title>
       </Head>
+      {user && 
+        <>
+          {user.id === roomInfo.room_creator && <header>Room Owned By You</header>}
+        </>
+      }
       {!user && 
         <header>
           <h5 style={{margin:0}}>Create an account to have the full experience.</h5>
@@ -160,24 +186,6 @@ function IndivisualPrateRoom({ roomId }) {
       <GridItems grid={gridStatus}>
             {gridStatus != '1fr' && <div style={sideBarContainer}>
               <GridItems grid={'1fr'}>
-                {user &&
-                <>
-                  {user.id === roomInfo.room_creator && <>
-                    <Button
-                      disabled={!roomId}
-                      click={(e) => { e.preventDefault(); router.push("/shortcuts"); }}
-                      icon={<VscSymbolParameter />}
-                      name="Shortcuts Info"
-                      />
-                    <Button
-                      disabled={!roomId}
-                      click={(e) => { e.preventDefault(); router.push("/rooms"); }}
-                      icon={<VscRocket />}
-                      name="Join / Create"
-                      />
-                  </>}
-                </>
-                }
                 <h3 style={{marginBottom: 0}}>Notes</h3>
                 <div className="notesContainer">
                   {messagesNotesArray.length !== 0 ?
@@ -199,7 +207,7 @@ function IndivisualPrateRoom({ roomId }) {
               </GridItems>
             </div>}
             <div className={'bodyPadding'}>
-              <AlignItems>
+              <AlignItems scroll={true}>
                 <Button
                   size={'medium'}
                   disabled={!roomId}
@@ -221,6 +229,36 @@ function IndivisualPrateRoom({ roomId }) {
                   icon={<VscCommentDiscussion />}
                   name="Browse Other Rooms"
                 />
+                {user &&
+                <>
+                  {user.id === roomInfo.room_creator && <>
+                    <Button
+                      size={'medium'}
+                      disabled={!roomId}
+                      click={(e) => { e.preventDefault(); router.push("/shortcuts"); }}
+                      icon={<VscSymbolParameter />}
+                      name="Shortcuts Info"
+                      />
+                    <Button
+                      size={'medium'}
+                      disabled={!roomId}
+                      click={(e) => { e.preventDefault(); router.push("/rooms"); }}
+                      icon={<VscRocket />}
+                      name="Join / Create"
+                    />
+                    <Button
+                      size={'medium'}
+                      disabled={!roomId}
+                      click={() => {
+                        setModalContent('newMember');
+                        openModal();
+                      }}
+                      icon={<VscSettingsGear />}
+                      name="Room Settings"
+                    />
+                  </>}
+                </>
+                }
               </AlignItems>
               <Modal
                 isOpen={modalIsOpen}
@@ -231,6 +269,8 @@ function IndivisualPrateRoom({ roomId }) {
                   icon={<VscClose />}
                   right={true}
                 />
+                {modalContent === 'newPrate' &&
+                <>
                 <h3>Compose a new Prate</h3>
                   <p>View the <a>shortcuts</a> page for a more enhanced prate</p>
                   <AlignItems scroll={true}>
@@ -266,6 +306,47 @@ function IndivisualPrateRoom({ roomId }) {
                       <p style={{width:'fit-content'}}>{messageWordCount} Words</p>
                     </AlignItems>
                   }
+                </>
+                }
+                {modalContent === 'newMember' &&
+                <>
+                  <h3>Room Settings</h3>
+                  <AlignItems spaceBetween={true}>
+                    <h4 style={{margin:'0.5em 0'}}>Sharing settings</h4>
+                    <span style={{backgroundColor:'var(--baseColor1)',borderRadius:'var(--borderRadius)', fontSize:'0.7em', padding:'0.5em 1em'}}>Current Status: {roomInfo.room_editable === true ? 'Enabled' : 'Disabled'}</span>
+                  </AlignItems>
+                  <p>This classifies whether other people can add on to your prates. (Enabling this allows people to also prate in this room)</p>
+                  <GridItems grid={'1fr 1fr'}>
+                    <Button
+                      name="Enable"
+                      click={()=>{handleSharingSubmit(true);}}
+                    />
+                    <Button
+                      name="Disable"
+                      click={()=>{handleSharingSubmit(false);}}
+                    />
+                  </GridItems>
+                  <h4 style={{marginBottom:'0.5em'}}>Room owner</h4>
+                  <p>Input the user ID for the person you want to transfer the owner ship to.</p>
+                  <form
+                    className="shedAlignedForm"
+                    onSubmit={handleOwnerTransferSubmit}
+                  >
+                    <input
+                      placeholder="User ID"
+                      onChange={(e)=>{setOwner(e.target.value)}}
+                      value={owner}
+                    />
+                    <Button
+                      disabled={!owner}
+                      type="submit"
+                      click={handleOwnerTransferSubmit}
+                      icon={<VscArrowSwap />}
+                      name="Transfer Ownership"
+                    />
+                  </form>
+                </>
+                }
               </Modal>
               <StylizedBanner
                 backgroundImage={roomInfo.background_image}
@@ -289,23 +370,65 @@ function IndivisualPrateRoom({ roomId }) {
                     message={props.message}
                     time={props.created_at}
                     roomCreator={roomInfo.room_creator}
+                    roomEditable={roomInfo.room_editable}
                   />
                 )}
               </div>
               {user &&               
                 <>
                 {user.id === roomInfo.room_creator &&    
-                  <StickyBottom>
-                    <Button
-                      boxShadow={true}
-                      disabled={!roomId}
-                      click={() => {
-                        openModal();
-                      }}
-                      icon={<VscComment />}
-                      name="Compose Prate"
-                    />
-                  </StickyBottom>
+                  <>
+                    {roomInfo.room_editable === true &&                     
+                      <StickyBottom>
+                        <Button
+                          boxShadow={true}
+                          disabled={!roomId}
+                          click={() => {
+                            setModalContent('newPrate');
+                            openModal();
+                          }}
+                          icon={<VscComment />}
+                          name="Compose Prate"
+                        />
+                      </StickyBottom>
+                    }
+                  </>
+                }
+                {user.id !== roomInfo.room_creator &&    
+                  <>
+                    {roomInfo.room_editable === true &&                     
+                      <StickyBottom>
+                        <Button
+                          boxShadow={true}
+                          disabled={!roomId}
+                          click={() => {
+                            setModalContent('newPrate');
+                            openModal();
+                          }}
+                          icon={<VscComment />}
+                          name="Compose Prate"
+                        />
+                      </StickyBottom>
+                    }
+                  </>
+                }
+                {user.id === roomInfo.room_creator &&    
+                  <>
+                    {roomInfo.room_editable !== true &&                     
+                      <StickyBottom>
+                        <Button
+                          boxShadow={true}
+                          disabled={!roomId}
+                          click={() => {
+                            setModalContent('newPrate');
+                            openModal();
+                          }}
+                          icon={<VscComment />}
+                          name="Compose Prate"
+                        />
+                      </StickyBottom>
+                    }
+                  </>
                 }
                 </>
               }
