@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
-import { toast } from 'react-toastify';
 
 import { supabase } from '../../utils/supabaseClient'
 import { useRouter } from "next/router";
 import Button from '../../lib/Button';
 import PrateTypeButton from '../../lib/PrateTypeButton';
 
-import { VscSignOut, VscLock, VscComment, VscCommentDiscussion, VscActivateBreakpoints,VscClose } from "react-icons/vsc";
+import { VscComment, VscCommentDiscussion, VscActivateBreakpoints,VscClose } from "react-icons/vsc";
 
 import { v4 as uuidv4 } from 'uuid';
 import GridItems from '../../lib/style-component/GridItems';
@@ -134,7 +133,7 @@ export default function Home() {
                                         checked={roomPublic}
                                         onChange={()=>setRoomPublic(toggleRoomPublic)}
                                     />
-                                    <label>Enable <a target="_blank" href="/usage">public sharing</a></label>
+                                    <label>Enable <Link target="_blank" href="/usage">public sharing</Link></label>
                                 </AlignItems>
                                 <AlignItems>
                                     <input
@@ -142,7 +141,7 @@ export default function Home() {
                                         checked={roomEditable}
                                         onChange={()=>{setRoomEditable(toggleRoomEditable)}}
                                     />
-                                    <label>Show room in the <a target="_blank" href="/browse">browse page</a></label>
+                                    <label>Show room in the <Link target="_blank" href="/browse">browse page</Link></label>
                                 </AlignItems>
                                 <Button
                                     disabled={!groupNameInput}
