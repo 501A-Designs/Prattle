@@ -36,10 +36,6 @@ export default function about() {
                         name="Development"
                         content="Prattle originally known as ShedLive, has been initially developed as a live streaming service. However, due to the over saturation in the market with new applications such as Clubhouse, its development goals have shifted into building a chat/social media application that values the conversations, and the effective sharing of information."
                     />
-                    <Card
-                        name="Terms & Services"
-                        content="Logging into Prattle requires your email address. You can set your own username, however, it is important to note that any group you join on Prattle other users will be able to view your credentials (username, email). In terms of your chat messages, Prattle deletes your messages in a day, this is not only to keep the authenticity of the conversation (hence the name 'Live') but it is also to keep your conversations private and secure. Your messages are deleted at the database level so if you wish to have your messages stay, consider using the notes feature that can be activated in any Prattle room."
-                    />
                 </GridItems>
             </GridItems>
         </div>

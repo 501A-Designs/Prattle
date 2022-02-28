@@ -6,7 +6,6 @@ import TextMessageNote from '../../lib/room-component/TextMessageNote';
 import { supabase } from '../../utils/supabaseClient'
 import Link from 'next/link'
 import Button from '../../lib/Button';
-import PrateButton from '../../lib/PrateButton';
 import EmojiButton from '../../lib/EmojiButton';
 
 import {VscAccount, VscHome, VscSymbolParameter, VscRocket,VscCommentDiscussion,VscSettingsGear,VscComment,VscMail,VscClose,VscArrowSwap,VscNote } from "react-icons/vsc";
@@ -22,6 +21,7 @@ Modal.setAppElement('#__next');
 import Modal from 'react-modal';
 import GridItems from '../../lib/style-component/GridItems';
 import ProfileInfo from '../../lib/ProfileInfo';
+import VisibilityTag from '../../lib/VisibilityTag';
 
 function IndivisualPrateRoom({ roomId }) {
   const user = supabase.auth.user();
@@ -208,6 +208,10 @@ function IndivisualPrateRoom({ roomId }) {
             </div>}
             <div className={'bodyPadding'}>
               <AlignItems scroll={true}>
+                <VisibilityTag
+                  user={user}
+                  isEditable={roomInfo.room_editable}
+                />
                 <Button
                   size={'medium'}
                   disabled={!roomId}

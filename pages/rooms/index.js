@@ -15,6 +15,7 @@ import GridItems from '../../lib/style-component/GridItems';
 import Modal from 'react-modal';
 import SmallButton from '../../lib/SmallButton';
 import Card from '../../lib/Card';
+import AlignItems from '../../lib/style-component/AlignItems';
 Modal.setAppElement('#__next');
 
 export default function Home() {
@@ -51,7 +52,15 @@ export default function Home() {
     const [groupNameInput, setGroupNameInput] = useState();
     const [groupImageInput, setGroupImageInput] = useState();
     const [groupDescriptionInput, setGroupDescriptionInput] = useState();
-    const [status, setStatus] = useState('')
+    const [roomPublic, setRoomPublic] = useState(false);
+    const [roomEditable, setRoomEditable] = useState(false);
+    function toggleRoomPublic(value){
+        return !value;
+    }
+    function toggleRoomEditable(value){
+        return !value;
+    }
+    const [status, setStatus] = useState('');
 
     // Create Group
     const handleCreateGroup = async (e) => {
@@ -65,8 +74,9 @@ export default function Home() {
                     room_id: roomIdValue,
                     background_image: groupImageInput,
                     room_creator:user.id,
-                    room_public: true,
+                    room_public: roomPublic,
                     description:groupDescriptionInput,
+                    room_editable: roomEditable,
                 },]
             )
         setStatus('Loading...')
@@ -94,7 +104,10 @@ export default function Home() {
                                 style={{ marginTop: '1em' }}
                                 onSubmit={handleCreateGroup}
                             >
-                                <p>Name your new prattle room. You can add emojis and be creative ;)</p>
+                                <p>Name your new prattle room. You can add emojis and be creative ;)
+                                    <br />
+                                    *Note, descriptions cannot be no longer than 40 characters long.
+                                </p>
                                 <input
                                     placeholder="New room name"
                                     onChange={(e) => setGroupNameInput(e.target.value)}
@@ -110,6 +123,27 @@ export default function Home() {
                                     onChange={(e)=> setGroupDescriptionInput(e.target.value)}
                                     value={groupDescriptionInput}
                                 />
+                                {groupDescriptionInput &&
+                                    <>
+                                        {groupDescriptionInput.split('').length > 40 && <p style={{color: 'red'}}>Description exceeds character limit!</p>}
+                                    </>
+                                }
+                                <AlignItems>
+                                    <input
+                                        type="checkbox"
+                                        checked={roomPublic}
+                                        onChange={()=>setRoomPublic(toggleRoomPublic)}
+                                    />
+                                    <label>Enable <a target="_blank" href="/usage">public sharing</a></label>
+                                </AlignItems>
+                                <AlignItems>
+                                    <input
+                                        type="checkbox"
+                                        checked={roomEditable}
+                                        onChange={()=>{setRoomEditable(toggleRoomEditable)}}
+                                    />
+                                    <label>Show room in the <a target="_blank" href="/browse">browse page</a></label>
+                                </AlignItems>
                                 <Button
                                     disabled={!groupNameInput}
                                     type="submit"
@@ -124,7 +158,7 @@ export default function Home() {
                     }
                 </Modal>
                 <div>
-                    <h1>Join / Create a new room</h1>
+                    <h1>Create</h1>
                     <h3>Get started</h3>
                     <GridItems grid={'1fr 1fr'}>
                         <PrateTypeButton

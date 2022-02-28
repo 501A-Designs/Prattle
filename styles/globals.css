@@ -138,6 +138,9 @@ table {
 	outline: 2px solid transparent;
 	border-radius: 2px;
 }
+label{
+	font-size: 0.8em;
+}
 a:focus,
 .shedLiveTextMessage:focus,
 .iconButton:focus{
