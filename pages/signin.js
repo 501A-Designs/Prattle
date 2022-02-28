@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { useRef, useState } from 'react'
 import { supabase } from '../utils/supabaseClient'
 import { VscSignIn } from "react-icons/vsc";
+import StaticScreen from '../lib/scene-component/StaticScreen';
 
 
 export default function Login() {
@@ -35,14 +36,9 @@ export default function Login() {
     return (
         <>
             {user ?
-                <div style={{ textAlign: 'center' }}>
-                    <h1>Your In!</h1>
-                    <br />
-                    <Link href="/">
-                        <a>Jump to main page</a>
-                    </Link>
-
-                </div> :
+                <StaticScreen
+                    type="loggedIn"
+                />:
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                     <div className="loginContainer">
                         <h2>Sign In</h2>

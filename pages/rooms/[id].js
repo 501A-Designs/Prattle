@@ -22,6 +22,7 @@ import Modal from 'react-modal';
 import GridItems from '../../lib/style-component/GridItems';
 import ProfileInfo from '../../lib/ProfileInfo';
 import VisibilityTag from '../../lib/VisibilityTag';
+import StaticScreen from '../../lib/scene-component/StaticScreen';
 
 function IndivisualPrateRoom({ roomId }) {
   const user = supabase.auth.user();
@@ -68,7 +69,6 @@ function IndivisualPrateRoom({ roomId }) {
   const [message, setMessage] = useState('');
 
   const [roomInfo, setRoomInfo] = useState('');
-  const [loadingMessage, setLoadingMessage] = useState('');
 
 
   const [messagesArray, setMessagesArray] = useState([]);
@@ -112,9 +112,6 @@ function IndivisualPrateRoom({ roomId }) {
     fetchMessages();
     fetchMessageNotes();  
   },[])
-
-  // () => setLoadingMessage('Loading prates');
-  // () => setLoadingMessage('This room is private');
   
   // Sent message
     const [messageSentNumber, setMessageSentNumber] = useState(0);
@@ -162,12 +159,21 @@ function IndivisualPrateRoom({ roomId }) {
         .eq('room_id', roomId);
       router.push('/')
     }
+    const handleDiscoverabilitySubmit = async (prop) => {
+      const { data, error } = await supabase
+        .from('rooms')
+        .update({ room_public : prop })
+        .eq('room_id', roomId);
+      router.push('/')
+    }
 
   return (
     <>
       <Head>
         <title>{roomInfo.room_name}</title>
       </Head>
+      {roomInfo && messagesArray && messagesNotesArray ?
+      <>
       {user && 
         <>
           {user.id === roomInfo.room_creator && <header>Room Owned By You</header>}
@@ -208,10 +214,20 @@ function IndivisualPrateRoom({ roomId }) {
             </div>}
             <div className={'bodyPadding'}>
               <AlignItems scroll={true}>
-                <VisibilityTag
-                  user={user}
-                  isEditable={roomInfo.room_editable}
-                />
+                {user ?
+                  <>
+                    {user.id !== roomInfo.room_creator &&
+                      <VisibilityTag
+                        user={user.id}
+                        isEditable={roomInfo.room_editable}
+                      />
+                    }
+                  </>:
+                  <VisibilityTag
+                    user={user}
+                    isEditable={roomInfo.room_editable}
+                  />
+                }
                 <Button
                   size={'medium'}
                   disabled={!roomId}
@@ -254,7 +270,7 @@ function IndivisualPrateRoom({ roomId }) {
                       size={'medium'}
                       disabled={!roomId}
                       click={() => {
-                        setModalContent('newMember');
+                        setModalContent('roomSettings');
                         openModal();
                       }}
                       icon={<VscSettingsGear />}
@@ -312,14 +328,14 @@ function IndivisualPrateRoom({ roomId }) {
                   }
                 </>
                 }
-                {modalContent === 'newMember' &&
+                {modalContent === 'roomSettings' &&
                 <>
                   <h3>Room Settings</h3>
                   <AlignItems spaceBetween={true}>
-                    <h4 style={{margin:'0.5em 0'}}>Sharing settings</h4>
+                    <h4 style={{margin:'0.5em 0'}}>Public Sharing</h4>
                     <span style={{backgroundColor:'var(--baseColor1)',borderRadius:'var(--borderRadius)', fontSize:'0.7em', padding:'0.5em 1em'}}>Current Status: {roomInfo.room_editable === true ? 'Enabled' : 'Disabled'}</span>
                   </AlignItems>
-                  <p>This classifies whether other people can add on to your prates. (Enabling this allows people to also prate in this room)</p>
+                  <p>Enabling this allows people to also prate in this room. More information in the <Link href={'/usage'}>usage page.</Link></p>
                   <GridItems grid={'1fr 1fr'}>
                     <Button
                       name="Enable"
@@ -328,6 +344,22 @@ function IndivisualPrateRoom({ roomId }) {
                     <Button
                       name="Disable"
                       click={()=>{handleSharingSubmit(false);}}
+                    />
+                  </GridItems>
+                  <br/>
+                  <AlignItems spaceBetween={true}>
+                    <h4 style={{margin:'0.5em 0'}}>Discoverability</h4>
+                    <span style={{backgroundColor:'var(--baseColor1)',borderRadius:'var(--borderRadius)', fontSize:'0.7em', padding:'0.5em 1em'}}>Current Status: {roomInfo.room_public === true ? 'Enabled' : 'Disabled'}</span>
+                  </AlignItems>
+                  <p>Enabling this will make this room show up in the <Link href="/browse">browse page</Link> and your <Link href={`/profile/${user.id}`}>profile page.</Link></p>
+                  <GridItems grid={'1fr 1fr'}>
+                    <Button
+                      name="Enable"
+                      click={()=>{handleDiscoverabilitySubmit(true);}}
+                    />
+                    <Button
+                      name="Disable"
+                      click={()=>{handleDiscoverabilitySubmit(false);}}
                     />
                   </GridItems>
                   <h4 style={{marginBottom:'0.5em'}}>Room owner</h4>
@@ -360,7 +392,6 @@ function IndivisualPrateRoom({ roomId }) {
                 roomPublic={roomInfo.room_public}
                 roomDescription={roomInfo.description}
               />
-              {loadingMessage && <p>{loadingMessage}</p>}
               {messageSentNumber != 0 && 
                   <p style={{textAlign: 'center'}}>{messageSentNumber} new added to your room</p>
               }
@@ -438,6 +469,8 @@ function IndivisualPrateRoom({ roomId }) {
               }
             </div>
           </GridItems>
+        </>:<StaticScreen type="loading"><h2>Currently loading room</h2></StaticScreen>
+        }
     </>
   )
 }

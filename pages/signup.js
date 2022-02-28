@@ -5,6 +5,7 @@ import { supabase } from '../utils/supabaseClient'
 import { VscAccount } from "react-icons/vsc";
 import Link from 'next/link'
 import { useRouter } from "next/router";
+import StaticScreen from '../lib/scene-component/StaticScreen';
 
 export default function Login() {
     const router = useRouter();
@@ -40,13 +41,9 @@ export default function Login() {
     return (
         <>
             {user ?
-                <div style={{ textAlign: 'center' }}>
-                    <h1>Hey! Your already in so no worries ;)</h1>
-                    <br />
-                    <Link href="/">
-                        <a>Jump to main page</a>
-                    </Link>
-                </div> :
+                <StaticScreen
+                    type="loggedIn"
+                />:
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                     <div className="loginContainer">
                         {generatingAccount === 1 && <>

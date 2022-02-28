@@ -11,6 +11,7 @@ import ProfileInfo from '../../lib/ProfileInfo';
 
 function IndivisualProfile({ profileId }) {
     const router = useRouter()
+    const user = supabase.auth.user();
     const [rooms, setRooms] = useState('');
 
     const fetchRooms = async () => {
@@ -38,6 +39,8 @@ function IndivisualProfile({ profileId }) {
                             roomName={props.room_name}
                             roomCode={props.room_id}
                             description={props.description}
+                            user={user}
+                            isEditable={props.room_editable}
                         />
                 })}
             </GridItems>
