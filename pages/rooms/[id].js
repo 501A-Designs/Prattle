@@ -176,23 +176,23 @@ function IndivisualPrateRoom({ roomId }) {
       <>
       {user && 
         <>
-          {user.id === roomInfo.room_creator && <header>Room Owned By You</header>}
+          {user.id === roomInfo.room_creator && <header>あなたの部屋</header>}
         </>
       }
       {!user && 
         <header>
-          <h5 style={{margin:0}}>Create an account to have the full experience.</h5>
+          <h5 style={{margin:0}}>Prattle をフルで体験するにはアカウントが必要となります</h5>
           <Button
             click={()=> router.push('/signup')}
             icon={<VscAccount />}
-            name="Sign Up"
+            name="新規登録"
           />
         </header>
       }     
       <GridItems grid={gridStatus}>
             {gridStatus != '1fr' && <div style={sideBarContainer}>
               <GridItems grid={'1fr'}>
-                <h3 style={{marginBottom: 0}}>Notes</h3>
+                <h3 style={{marginBottom: 0}}>Memo</h3>
                 <div className="notesContainer">
                   {messagesNotesArray.length !== 0 ?
                     messagesNotesArray.map(props =>
@@ -204,9 +204,7 @@ function IndivisualPrateRoom({ roomId }) {
                       />
                     ) :
                     <p>
-                      ShedLive cannot save more than 20 Notes.
-                      <br />
-                      (notes that are not shown are automatically delete).
+                      ピン留めした Prate (メッセージ) は全てメモはとしてこちらで表示されます。
                     </p>
                   }
                 </div>
@@ -233,21 +231,21 @@ function IndivisualPrateRoom({ roomId }) {
                   disabled={!roomId}
                   click={(e) => { e.preventDefault(); router.push("/"); }}
                   icon={<VscHome />}
-                  name="Main Page"
+                  name="Main"
                 />
                 <Button
                   size={'medium'}
                   disabled={!roomId}
                   click={()=>{gridStatus === '1fr' ? setGridStatus('1fr 4fr'): setGridStatus('1fr')}}
                   icon={<VscNote />}
-                  name="Chat Notes"
+                  name="Memo"
                 />
                 <Button
                   size={'medium'}
                   disabled={!roomId}
                   click={(e) => { e.preventDefault(); router.push("/browse"); }}
                   icon={<VscCommentDiscussion />}
-                  name="Browse Other Rooms"
+                  name="Browse"
                 />
                 {user &&
                 <>
@@ -257,14 +255,14 @@ function IndivisualPrateRoom({ roomId }) {
                       disabled={!roomId}
                       click={(e) => { e.preventDefault(); router.push("/shortcuts"); }}
                       icon={<VscSymbolParameter />}
-                      name="Shortcuts Info"
+                      name="Shortcut"
                       />
                     <Button
                       size={'medium'}
                       disabled={!roomId}
                       click={(e) => { e.preventDefault(); router.push("/rooms"); }}
                       icon={<VscRocket />}
-                      name="Join / Create"
+                      name="Create Room"
                     />
                     <Button
                       size={'medium'}
@@ -274,7 +272,7 @@ function IndivisualPrateRoom({ roomId }) {
                         openModal();
                       }}
                       icon={<VscSettingsGear />}
-                      name="Room Settings"
+                      name="Settings"
                     />
                   </>}
                 </>
@@ -332,44 +330,44 @@ function IndivisualPrateRoom({ roomId }) {
                 <>
                   <h3>Room Settings</h3>
                   <AlignItems spaceBetween={true}>
-                    <h4 style={{margin:'0.5em 0'}}>Public Sharing</h4>
-                    <span style={{backgroundColor:'var(--baseColor1)',borderRadius:'var(--borderRadius)', fontSize:'0.7em', padding:'0.5em 1em'}}>Current Status: {roomInfo.room_editable === true ? 'Enabled' : 'Disabled'}</span>
+                    <h4 style={{margin:'0.5em 0'}}>パブリックシェアリング</h4>
+                    <span style={{backgroundColor:'var(--baseColor1)',borderRadius:'var(--borderRadius)', fontSize:'0.7em', padding:'0.5em 1em'}}>現在のステータス: {roomInfo.room_editable === true ? '有効' : '無効'}</span>
                   </AlignItems>
-                  <p>Enabling this allows people to also prate in this room. More information in the <Link href={'/usage'}>usage page.</Link></p>
+                  <p>有効化することで、他の人もこの部屋で会話できるようになります。詳細は <Link href={'/usage'}>Usage</Link> のページからアクセスできます。</p>
                   <GridItems grid={'1fr 1fr'}>
                     <Button
-                      name="Enable"
+                      name="有効化"
                       click={()=>{handleSharingSubmit(true);}}
                     />
                     <Button
-                      name="Disable"
+                      name="無効化"
                       click={()=>{handleSharingSubmit(false);}}
                     />
                   </GridItems>
                   <br/>
                   <AlignItems spaceBetween={true}>
-                    <h4 style={{margin:'0.5em 0'}}>Discoverability</h4>
-                    <span style={{backgroundColor:'var(--baseColor1)',borderRadius:'var(--borderRadius)', fontSize:'0.7em', padding:'0.5em 1em'}}>Current Status: {roomInfo.room_public === true ? 'Enabled' : 'Disabled'}</span>
+                    <h4 style={{margin:'0.5em 0'}}>Prattle 内で部屋を表示</h4>
+                    <span style={{backgroundColor:'var(--baseColor1)',borderRadius:'var(--borderRadius)', fontSize:'0.7em', padding:'0.5em 1em'}}>現在のステータス: {roomInfo.room_public === true ? '有効' : '無効'}</span>
                   </AlignItems>
-                  <p>Enabling this will make this room show up in the <Link href="/browse">browse page</Link> and your <Link href={`/profile/${user.id}`}>profile page.</Link></p>
+                  <p>本設定を有効化する事で <Link href="/browse">browse</Link> や <Link href={`/profile/${user.id}`}>profile</Link> ページへ部屋が表示されるようになります。</p>
                   <GridItems grid={'1fr 1fr'}>
                     <Button
-                      name="Enable"
+                      name="有効化"
                       click={()=>{handleDiscoverabilitySubmit(true);}}
                     />
                     <Button
-                      name="Disable"
+                      name="無効化"
                       click={()=>{handleDiscoverabilitySubmit(false);}}
                     />
                   </GridItems>
-                  <h4 style={{marginBottom:'0.5em'}}>Room owner</h4>
-                  <p>Input the user ID for the person you want to transfer the owner ship to.</p>
+                  <h4 style={{marginBottom:'0.5em'}}>部屋のオーナー</h4>
+                  <p>オーナーシップを移行したい相手のユーザーIDを以下のフォームに入力する必要があります。</p>
                   <form
                     className="shedAlignedForm"
                     onSubmit={handleOwnerTransferSubmit}
                   >
                     <input
-                      placeholder="User ID"
+                      placeholder="ユーザーID"
                       onChange={(e)=>{setOwner(e.target.value)}}
                       value={owner}
                     />
@@ -378,7 +376,7 @@ function IndivisualPrateRoom({ roomId }) {
                       type="submit"
                       click={handleOwnerTransferSubmit}
                       icon={<VscArrowSwap />}
-                      name="Transfer Ownership"
+                      name="オーナーを移行"
                     />
                   </form>
                 </>
@@ -393,7 +391,7 @@ function IndivisualPrateRoom({ roomId }) {
                 roomDescription={roomInfo.description}
               />
               {messageSentNumber != 0 && 
-                  <p style={{textAlign: 'center'}}>{messageSentNumber} new added to your room</p>
+                  <p style={{textAlign: 'center'}}>{messageSentNumber} 通追加済み</p>
               }
               <div className="messagesContainer">
                 {messagesArray.map(props =>
@@ -423,7 +421,7 @@ function IndivisualPrateRoom({ roomId }) {
                             openModal();
                           }}
                           icon={<VscComment />}
-                          name="Compose Prate"
+                          name="新規作成"
                         />
                       </StickyBottom>
                     }
@@ -441,7 +439,7 @@ function IndivisualPrateRoom({ roomId }) {
                             openModal();
                           }}
                           icon={<VscComment />}
-                          name="Compose Prate"
+                          name="新規作成"
                         />
                       </StickyBottom>
                     }
@@ -459,7 +457,7 @@ function IndivisualPrateRoom({ roomId }) {
                             openModal();
                           }}
                           icon={<VscComment />}
-                          name="Compose Prate"
+                          name="新規作成"
                         />
                       </StickyBottom>
                     }
@@ -469,7 +467,7 @@ function IndivisualPrateRoom({ roomId }) {
               }
             </div>
           </GridItems>
-        </>:<StaticScreen type="loading"><h2>Currently loading room</h2></StaticScreen>
+        </>:<StaticScreen type="loading"><h2>現在ルーム取得中</h2></StaticScreen>
         }
     </>
   )

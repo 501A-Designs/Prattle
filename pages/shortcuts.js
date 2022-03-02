@@ -6,22 +6,22 @@ import ClickableCard from '../lib/ClickableCard'
 export default function shortcuts() {
     return (
         <div className="bodyPadding">
-            <h1>ShedLive Shortcuts</h1>
-            <h2>Utilize ShedLive to its fullist</h2>
+            <h1>Shortcuts</h1>
+            <h2>Utilize Prattle to its fullist</h2>
             <table>
                 <tr>
                     <th>Shortcut</th>
                     <th>Action</th>
-                    <th>Example Usage</th>
+                    <th>Example</th>
                 </tr>
                 <tr>
                     <td>*</td>
-                    <td>Large text, allowing you to emphasize your messages.</td>
+                    <td>ご指定のテキストを大きく表示</td>
                     <td>*Hello world</td>
                 </tr>
                 <tr>
                     <td>/</td>
-                    <td>Italisizes the text messages you send.</td>
+                    <td>ご指定のテキストをイタリック体に</td>
                     <td>/Hello world</td>
                 </tr>
                 <tr>

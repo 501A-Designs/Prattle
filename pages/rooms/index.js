@@ -103,7 +103,7 @@ export default function Home() {
                                 style={{ marginTop: '1em' }}
                                 onSubmit={handleCreateGroup}
                             >
-                                <p>Name your new prattle room. You can add emojis and be creative ;)
+                                <p>部屋の名前を指定してください。絵文字等を使用してクリエイティブになろう ;)
                                     <br />
                                     *概要は40字以上入力できません
                                 </p>

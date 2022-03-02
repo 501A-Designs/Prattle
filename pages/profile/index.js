@@ -121,7 +121,7 @@ export default function Home() {
                                         disabled={!userImage}
                                         type="submit"
                                         icon={<VscSave />}
-                                        name="Save Image URL"
+                                        name="Save"
                                     />
                                 </form>
                             </>
@@ -129,11 +129,11 @@ export default function Home() {
                     </Modal>
                     <AlignItems>
                         <Button
-                            click={(e) => { e.preventDefault(); router.push("/"); }}
+                            click={(e) => { e.preventDefault(); router.push(`/${user.id}`); }}
                             icon={<VscHome />}
                             name="Main Page"
                         />
-                        <Button name="View how people see your profile"/>
+                        <Button name="他の人にどう見られているかを閲覧"/>
                     </AlignItems>
                     <br></br>
                     <h1>Your Profile</h1>
@@ -169,7 +169,7 @@ export default function Home() {
                                             setEditType('img');
                                         }}
                                         size="medium"
-                                        name="Edit image URL"
+                                        name="画像URLを編集"
                                     />
                                     {user.user_metadata.user_image}
                                 </AlignItems>
@@ -185,7 +185,7 @@ export default function Home() {
                                             setEditType('bio');
                                         }}
                                         size="medium"
-                                        name="Edit bio / description"
+                                        name="編集"
                                     />
                                     {user.user_metadata.user_profile}
                                 </AlignItems>
