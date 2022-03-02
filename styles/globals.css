@@ -6,7 +6,7 @@
 
 /* TECHSTYLE FONT */
 @import url("https://fonts.googleapis.com/css2?family=Kanit&family=Share+Tech+Mono&display=swap");
-
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New&display=swap');
 /* Open Colors Package */
 /* @import 'path/open-color.css'; */
 
@@ -100,11 +100,8 @@ a {
 }
 
 * {
-	font-family: "Poppins", sans-serif;
-
-
+	font-family: "Poppins", 'Zen Kaku Gothic New', sans-serif;
 	/* font-family: "Kanit", sans-serif; */
-	/* font-family: helvetica, arial, sans-serif; */
 	/* color: var(--prattleColor); */
 
 	/* testing */

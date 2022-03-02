@@ -1,34 +1,28 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+![Prattle logo](./public//prattlebanner.png)
 
-## Getting Started
+# Prattle
+誰もが簡単に作成できるブログ・掲示板プラットフォーム
 
-First, run the development server:
+##  Twitterの速さとブログの一貫性の両方を持ったウェブプラットフォーム
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+このウェブアプリ(Prattle)はTwitterやNote等のような情報共有を目的としてプラットフォームとして開発されたものです。
+Prattleに関する詳しい情報は後々公開する予定のZennの記事に全て記載されます。
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 現在搭載せれている機能
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+- シンプルなUI
+- Email アカウントでのログイン
+- いくつもの新規部屋の作成・保存可
+- 部屋の閲覧・書き込み設定の変更
+- 部屋のバナー画像の指定可
+- [詳しくはこちらへ！](https://prattle.vercel.app/)
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## 現在検討中の機能
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- プライベートルームの作成
+- シュートカットの追加
+- 画像をアップロード可能にする
 
-## Learn More
+## 開発について
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Prattleはオープンソース！開発の進捗状況やアップデート情報は[こちらから](https://prattle.vercel.app/rooms/0d047e1f-e3ce-46df-815d-a54a480968d9)

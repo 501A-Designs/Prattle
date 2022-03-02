@@ -24,21 +24,21 @@ export default function Browse() {
   return (
     <div className="bodyPadding">
         <h1>Prattle Rooms</h1>
-        <h4>View what other people are doing by popping into different rooms.</h4>
+        <h4>他の人がどうしてるを確認してみよう</h4>
         <GridItems>
           <AlignItems>
             <VisibilityTag
               size={'small'}
               isEditable={true}
             />
-            <label>Rooms where you can add your own prates</label>
+            <label>自分も会話に参加できる部屋</label>
           </AlignItems>
           <AlignItems>
             <VisibilityTag
               size={'small'}
               isEditable={false}
             />
-            <label>Rooms that are view only</label>
+            <label>閲覧のみの部屋</label>
           </AlignItems>
         </GridItems>
         <hr/>

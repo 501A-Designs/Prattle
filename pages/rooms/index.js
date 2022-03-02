@@ -96,7 +96,7 @@ export default function Home() {
                         right={true}
                     />
                     {modalContent === 'create' && <div>
-                        <h3>Create A Room</h3>
+                        <h3>Create</h3>
                         {!status ? 
                             <form
                                 className="shedForm"
@@ -105,26 +105,26 @@ export default function Home() {
                             >
                                 <p>Name your new prattle room. You can add emojis and be creative ;)
                                     <br />
-                                    *Note, descriptions cannot be no longer than 40 characters long.
+                                    *概要は40字以上入力できません
                                 </p>
                                 <input
-                                    placeholder="New room name"
+                                    placeholder="部屋名"
                                     onChange={(e) => setGroupNameInput(e.target.value)}
                                     value={groupNameInput}
                                 />
                                 <input
-                                    placeholder="Room banner image URL *Optional"
+                                    placeholder="バナー画像URL *任意"
                                     onChange={(e) => setGroupImageInput(e.target.value)}
                                     value={groupImageInput}
                                 />
                                 <input
-                                    placeholder="Room description *Optional"
+                                    placeholder="部屋の概要 *任意"
                                     onChange={(e)=> setGroupDescriptionInput(e.target.value)}
                                     value={groupDescriptionInput}
                                 />
                                 {groupDescriptionInput &&
                                     <>
-                                        {groupDescriptionInput.split('').length > 40 && <p style={{color: 'red'}}>Description exceeds character limit!</p>}
+                                        {groupDescriptionInput.split('').length > 40 && <p style={{color: 'red'}}>40字以上です！</p>}
                                     </>
                                 }
                                 <AlignItems>
@@ -133,7 +133,7 @@ export default function Home() {
                                         checked={roomPublic}
                                         onChange={()=>setRoomPublic(toggleRoomPublic)}
                                     />
-                                    <label>Enable <Link target="_blank" href="/usage">public sharing</Link></label>
+                                    <label><Link target="_blank" href="/usage">パブリックシェア</Link>を有効化</label>
                                 </AlignItems>
                                 <AlignItems>
                                     <input
@@ -141,7 +141,7 @@ export default function Home() {
                                         checked={roomEditable}
                                         onChange={()=>{setRoomEditable(toggleRoomEditable)}}
                                     />
-                                    <label>Show room in the <Link target="_blank" href="/browse">browse page</Link></label>
+                                    <label>部屋を<Link target="_blank" href="/browse">ブラウズページ</Link>やプロフィールに表示化</label>
                                 </AlignItems>
                                 <Button
                                     disabled={!groupNameInput}

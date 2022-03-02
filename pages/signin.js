@@ -43,14 +43,14 @@ export default function Login() {
                     <div className="loginContainer">
                         <h2>Sign In</h2>
                         <h3>
-                            Glad your back!
+                            おかえりなさい
                         </h3>
                         {inputStatus ?
                             <p style={{ color: 'red' }}>
-                                Invalid sign in credetials
+                                入力された情報をもう一度確認してください
                             </p> :
                             <p>
-                                Thanks for signing back into Shed Live!
+                                Thanks for signing back into Prattle!
                             </p>
                         }
                         <form className="shedForm">
@@ -63,10 +63,10 @@ export default function Login() {
                             />
                         </form>
                         <p>
-                            *Sign in for those who already have an exisiting account.
+                            *アカウントを既にお持ちである方
                             <br />
                             <Link href="/signup">
-                                <a>Don&apos;t have an account?</a>
+                                <a>アカウントはまだお持ちでないですか？</a>
                             </Link>
                         </p>
                     </div>

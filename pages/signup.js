@@ -54,16 +54,16 @@ export default function Login() {
                             <p>
                                 Thanks for trying out Prattle! For starters, Prattle is a web based platform that lets you prate your random thoughts. You can think of it as a digital jounral or scrapbook. Btw, its open source ;)
                                 <ol>
-                                    <li>Create an account</li>
-                                    <li>Create a room</li>
+                                    <li>アカウントを作成</li>
+                                    <li>ルーム（部屋）を作成</li>
                                     <li>Prate your random thoughts and ideas</li>
-                                    <li>Start sharing it to your friends and family!</li>
+                                    <li>家族や友達に共有しよう！</li>
                                 </ol>
                             </p>
                             <Button
                                 click={()=>setGeneratingAccount(2)}
                                 icon={<VscAccount />}
-                                name="Start Creating Your Account"
+                                name="新規登録"
                             /> 
                         </>}          
                         {generatingAccount === 4 && <h4>Loading...</h4>}

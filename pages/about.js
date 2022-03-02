@@ -14,12 +14,13 @@ export default function about() {
                     <GridItems grid={'1fr 1fr'}>
                         <ClickableCard
                             name="Get Started"
-                            content="Sign up using your email account and try out ShedLive!"
+                            content="お持ちのEmailアカウントでPrattleを始めよう！"
                             href="signup"
                         />
                         <ClickableCard
-                            name="Visit GitHub"
+                            name="GitHub"
                             content="View our source code to see how ShedLive functions under the hood."
+                            href="https://github.com/501A-Designs/Prattle"
                         />
                     </GridItems>
                 </div>
