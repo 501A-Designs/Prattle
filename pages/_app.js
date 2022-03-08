@@ -2,7 +2,6 @@ import '../styles/globals.css'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { supabase } from '../utils/supabaseClient'
-import Button from '../lib/Button';
 import { useRouter } from "next/router";
 import { isMobile } from 'react-device-detect';
 

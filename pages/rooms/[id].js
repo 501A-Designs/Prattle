@@ -5,16 +5,16 @@ import TextMessage from '../../lib/room-component/TextMessage'
 import TextMessageNote from '../../lib/room-component/TextMessageNote';
 import { supabase } from '../../utils/supabaseClient'
 import Link from 'next/link'
-import Button from '../../lib/Button';
-import EmojiButton from '../../lib/EmojiButton';
+import Button from '../../lib/button-component/Button';
+import EmojiButton from '../../lib/button-component/EmojiButton';
 
-import {VscAccount, VscHome, VscSymbolParameter, VscRocket,VscCommentDiscussion,VscSettingsGear,VscComment,VscMail,VscClose,VscArrowSwap,VscNote } from "react-icons/vsc";
+import {VscAccount, VscHome, VscSymbolParameter, VscRocket,VscCommentDiscussion,VscSettingsGear,VscComment,VscMail,VscClose,VscArrowSwap,VscNote,VscBold,VscItalic,VscSymbolColor,VscSearch,VscLocation} from "react-icons/vsc";
 
 import { useRouter } from 'next/router'
 import AlignItems from '../../lib/style-component/AlignItems';
 import StickyBottom from '../../lib/style-component/StickyBottom';
 
-import SmallButton from '../../lib/SmallButton';
+import SmallButton from '../../lib/button-component/SmallButton';
 import StylizedBanner from '../../lib/room-component/StylizedBanner';
 
 Modal.setAppElement('#__next');
@@ -38,7 +38,14 @@ function IndivisualPrateRoom({ roomId }) {
     overflowY: 'auto'
   }
 
-  const emojiData = ['👋','👌','👍','👎','👏','🤘','😂','😍','😝','😠','😢','🤧','🤯','🤭','🤨']
+  const emojiData = ['👋','👌','👍','👎','👏','🤘','😂','😍','😝','😠','😢','🤧','🤯','🤭','🤨'];
+  const shortcutsData = [
+    {sc:'*',name:'Bold',icon:<VscBold/>},
+    {sc:'/',name:'Italic',icon:<VscItalic/>},
+    {sc:'$colorname ',name:'Colored Text',icon:<VscSymbolColor/>},
+    {sc:'>',name:'Google Search',icon:<VscSearch/>},
+    {sc:'?',name:'Google Maps Pin',icon:<VscLocation/>},
+  ];
 
   const [modalIsOpen, setIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState('');
@@ -297,6 +304,17 @@ function IndivisualPrateRoom({ roomId }) {
                           key={emoji}
                           emoji={emoji}
                           click={(e) => { e.preventDefault(); setMessage(message + emoji) }}
+                        />
+                      )}
+                  </AlignItems>
+                  <AlignItems scroll={true}>
+                      {shortcutsData.map(data =>
+                        <Button
+                          key={data.sc}
+                          name={data.name}
+                          size={'medium'}
+                          icon={data.icon}
+                          click={(e) => { e.preventDefault(); setMessage(data.sc) }}
                         />
                       )}
                   </AlignItems>

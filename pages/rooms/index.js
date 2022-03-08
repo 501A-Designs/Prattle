@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 import { supabase } from '../../utils/supabaseClient'
 import { useRouter } from "next/router";
-import Button from '../../lib/Button';
+import Button from '../../lib/button-component/Button';
 import PrateTypeButton from '../../lib/PrateTypeButton';
 
 import { VscComment, VscCommentDiscussion, VscActivateBreakpoints,VscClose } from "react-icons/vsc";
@@ -12,7 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 import GridItems from '../../lib/style-component/GridItems';
 
 import Modal from 'react-modal';
-import SmallButton from '../../lib/SmallButton';
+import SmallButton from '../../lib/button-component/SmallButton';
 import Card from '../../lib/Card';
 import AlignItems from '../../lib/style-component/AlignItems';
 import { MobileView } from 'react-device-detect';

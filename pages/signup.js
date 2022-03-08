@@ -1,5 +1,5 @@
 import React,{ useState } from 'react'
-import Button from '../lib/Button';
+import Button from '../lib/button-component/Button';
 import { useRef } from 'react'
 import { supabase } from '../utils/supabaseClient'
 import { VscAccount } from "react-icons/vsc";

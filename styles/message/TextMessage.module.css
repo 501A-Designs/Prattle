@@ -17,18 +17,13 @@
 	width: 100%;
 }
 
-.messageContent,
-.urlContent{
+.messageContent p{
 	color: var(--txtColor0);
 	text-align:left;
 	margin: 0;
 	width:auto;
 }
-.urlContent	{
-	display: flex;
-	flex-direction:column;
-}
-.textMessage a{
+.messageContent a{
 	font-size:0.7em;
 	color: var(--baseColor5);
 }

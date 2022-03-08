@@ -60,21 +60,21 @@
 }
 
 ::-webkit-scrollbar {
-	width: 5px;
-	height: 5px;
-	background: var(--baseColor1);
+	width: 3px;
+	height: 3px;
+	/* background: var(--baseColor1); */
 	border-radius: var(--borderRadius);
 }
 ::-webkit-scrollbar-track {
-	margin: 10px;
-	width: 5px;
-	height: 5px;
-	background: var(--baseColor1);
+	margin: 3px;
+	width: 3px;
+	height: 3px;
+	/* background: var(--baseColor1); */
 }
 ::-webkit-scrollbar-thumb {
 	background-color: var(--baseColor2);
-	width: 5px;
-	height: 5px;
+	width: 3px;
+	height: 3px;
 	border-radius: var(--borderRadius);
 	cursor: pointer;
 
