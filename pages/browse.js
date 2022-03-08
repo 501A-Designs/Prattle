@@ -5,6 +5,7 @@ import RoomThumbNail from '../lib/RoomThumbNail'
 import GridItems from '../lib/style-component/GridItems'
 import VisibilityTag from '../lib/VisibilityTag';
 import AlignItems from '../lib/style-component/AlignItems';
+import { MobileView } from 'react-device-detect';
 
 export default function Browse() {
     const user = supabase.auth.user();
@@ -43,7 +44,7 @@ export default function Browse() {
         </GridItems>
         <hr/>
         <br/>
-        <GridItems grid={'1fr 1fr 1fr'}>
+        <GridItems grid={MobileView ? '1fr' : '1fr 1fr 1fr'}>
             {allPublicRooms && allPublicRooms.map(props=>
                 <RoomThumbNail
                     key={props.room_id}

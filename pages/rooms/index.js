@@ -15,6 +15,7 @@ import Modal from 'react-modal';
 import SmallButton from '../../lib/SmallButton';
 import Card from '../../lib/Card';
 import AlignItems from '../../lib/style-component/AlignItems';
+import { MobileView } from 'react-device-detect';
 Modal.setAppElement('#__next');
 
 export default function Home() {
@@ -34,7 +35,7 @@ export default function Home() {
             right: 'auto',
             bottom: 'auto',
             marginRight: '-50%',
-            width: '500px',
+            width: 'auto',
             transform: 'translate(-50%, -50%)',
             backgroundColor: 'var(--baseColor0)',
             border: 'var(--baseBorder2)',
@@ -159,7 +160,7 @@ export default function Home() {
                 <div>
                     <h1>Create</h1>
                     <h3>Get started</h3>
-                    <GridItems grid={'1fr 1fr'}>
+                    <GridItems grid={MobileView ? '1fr':'1fr 1fr'}>
                         <PrateTypeButton
                             click={() => {
                                 openModal();

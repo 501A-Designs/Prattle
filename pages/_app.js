@@ -11,7 +11,8 @@ function MyApp({ Component, pageProps }) {
   // const router = useRouter();
 
   return <>
-    {!isMobile ? <>
+    {/* {!isMobile ?  */}
+    <>
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -24,7 +25,8 @@ function MyApp({ Component, pageProps }) {
         pauseOnHover
       />
       <Component {...pageProps} />
-    </>:<h1>Prattle is not supported on mobile yet.<br/><br/>Sorry :(</h1>}
+    </>
+    {/* :<h1>Prattle is not supported on mobile yet.<br/><br/>Sorry :(</h1>} */}
   </>
 }
 
