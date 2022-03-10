@@ -1,16 +1,9 @@
-import React, { useState, useEffect,useRef } from 'react'
-import Link from 'next/link'
-
+import React, { useState} from 'react'
 import { supabase } from '../../utils/supabaseClient'
 import { useRouter } from "next/router";
 import Button from '../../lib/button-component/Button';
-import SmallButton from '../../lib/button-componenT/SmallButton';
-
-
-import { VscHome,VscSave,VscSignOut, VscLock, VscComment, VscCommentDiscussion, VscActivateBreakpoints,VscClose } from "react-icons/vsc";
-
-import { v4 as uuidv4 } from 'uuid';
-import GridItems from '../../lib/style-component/GridItems';
+import SmallButton from '../../lib/button-component/SmallButton';
+import { VscHome,VscSave,VscClose } from "react-icons/vsc";
 import AlignItems from '../../lib/style-component/AlignItems';
 import Modal from 'react-modal/lib/components/Modal';
 
