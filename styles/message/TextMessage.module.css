@@ -1,7 +1,5 @@
 .textMessage{
 	border: 1px solid transparent;
-	display:flex;
-	justify-content: space-between;
 	width:100%;
 	padding: 0.5em;
 	align-items: start;
@@ -15,6 +13,18 @@
 	align-items: start;
 	gap: 0.5em;
 	width: 100%;
+}
+@media screen and (max-width: 700px){
+	.textMessage{
+		display: grid;
+		grid-template-columns: 1fr;
+	}
+}
+@media screen and (min-width: 701px){
+	.textMessage{
+		display: flex;
+		justify-content: space-between;
+	}
 }
 
 .messageContent p{

@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '../lib/Button'
+import Button from '../lib/button-component/Button'
 import Card from '../lib/Card'
 import { supabase } from '../utils/supabaseClient'
 import { useRouter } from "next/router";

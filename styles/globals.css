@@ -89,11 +89,6 @@ body {
 	background-color: var(--baseColor0);
 }
 
-.bodyPadding{
-	padding: 2% 10%;
-}
-
-
 /* Text Styling */
 a {
 	color: inherit;
@@ -343,9 +338,38 @@ img,
 iframe	{
 	border: var(--baseBorder2);
 	border-radius: var(--borderRadius);
-	width:fit-content;
-	height: 250px;
-	margin: 0.5em 0 0 0;
+}
+
+@media screen and (max-width: 700px){
+	.bodyPadding{
+		padding: 2% 5%;
+	}
+	iframe{
+		width:250px;
+		height: 250px;
+	}
+	img{
+		width: 100%;
+		height: 200px;
+		object-fit: cover;
+	}
+	.autoGrid{
+		grid-template-columns: 1fr;
+	}
+}
+@media screen and (min-width: 701px){
+	.bodyPadding{
+		padding: 2% 10%;
+	}
+	iframe{
+		width:90%;
+		height: 300px;
+	}
+	img{
+		width: 60%;
+		height: 250px;
+		object-fit: cover;
+	}
 }
 
 .prateTypeButton{

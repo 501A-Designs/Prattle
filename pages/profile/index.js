@@ -3,8 +3,8 @@ import Link from 'next/link'
 
 import { supabase } from '../../utils/supabaseClient'
 import { useRouter } from "next/router";
-import Button from '../../lib/Button';
-import SmallButton from '../../lib/SmallButton';
+import Button from '../../lib/button-component/Button';
+import SmallButton from '../../lib/button-componenT/SmallButton';
 
 
 import { VscHome,VscSave,VscSignOut, VscLock, VscComment, VscCommentDiscussion, VscActivateBreakpoints,VscClose } from "react-icons/vsc";
