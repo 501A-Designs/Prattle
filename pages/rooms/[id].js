@@ -23,6 +23,7 @@ import GridItems from '../../lib/style-component/GridItems';
 import ProfileInfo from '../../lib/ProfileInfo';
 import VisibilityTag from '../../lib/VisibilityTag';
 import StaticScreen from '../../lib/scene-component/StaticScreen';
+import { isMobile } from 'react-device-detect';
 
 function IndivisualPrateRoom({ roomId }) {
   const user = supabase.auth.user();
@@ -240,13 +241,15 @@ function IndivisualPrateRoom({ roomId }) {
                   icon={<VscHome />}
                   name="Main"
                 />
-                <Button
-                  size={'medium'}
-                  disabled={!roomId}
-                  click={()=>{gridStatus === '1fr' ? setGridStatus('1fr 4fr'): setGridStatus('1fr')}}
-                  icon={<VscNote />}
-                  name="Memo"
-                />
+                {!isMobile &&
+                  <Button
+                    size={'medium'}
+                    disabled={!roomId}
+                    click={()=>{gridStatus === '1fr' ? setGridStatus('1fr 4fr'): setGridStatus('1fr')}}
+                    icon={<VscNote />}
+                    name="Memo"
+                  />
+                }
                 <Button
                   size={'medium'}
                   disabled={!roomId}

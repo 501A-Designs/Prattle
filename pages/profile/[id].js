@@ -31,7 +31,7 @@ function IndivisualProfile({ profileId }) {
         <div className="bodyPadding">
             <ProfileInfo profileId={profileId}/>
             <h3>作成した部屋</h3>
-            <GridItems grid={'1fr 1fr 1fr'}>
+            <GridItems grid={'1fr'}>
                 {rooms && rooms.map((props) => {
                     return <RoomThumbNail
                             key={props.room_name}

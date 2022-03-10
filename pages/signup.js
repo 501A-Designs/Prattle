@@ -6,6 +6,7 @@ import { VscAccount } from "react-icons/vsc";
 import Link from 'next/link'
 import { useRouter } from "next/router";
 import StaticScreen from '../lib/scene-component/StaticScreen';
+import { isMobile } from 'react-device-detect';
 
 export default function Login() {
     const router = useRouter();
@@ -39,68 +40,75 @@ export default function Login() {
     }
 
     return (
-        <>
-            {user ?
-                <StaticScreen
-                    type="loggedIn"
-                />:
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                    <div className="loginContainer">
-                        {generatingAccount === 1 && <>
-                            <h2>Getting Started</h2>
-                            <h3>
-                                Start right away with a few easy steps
-                            </h3>
-                            <p>
-                                Thanks for trying out Prattle! For starters, Prattle is a web based platform that lets you prate your random thoughts. You can think of it as a digital jounral or scrapbook. Btw, its open source ;)
-                                <ol>
-                                    <li>アカウントを作成</li>
-                                    <li>ルーム（部屋）を作成</li>
-                                    <li>Prate your random thoughts and ideas</li>
-                                    <li>家族や友達に共有しよう！</li>
-                                </ol>
-                            </p>
-                            <Button
-                                click={()=>setGeneratingAccount(2)}
-                                icon={<VscAccount />}
-                                name="新規登録"
-                            /> 
-                        </>}          
-                        {generatingAccount === 4 && <h4>Loading...</h4>}
-                        {generatingAccount === 2 && <form className="shedForm">
-                                <img className="profileImage" src={userName ? `https://avatars.dicebear.com/api/croodles/${userName}.svg`:'https://www.poynter.org/wp-content/uploads/2021/09/shutterstock_1563012205.png'}/>
-                                    <input placeholder="Email" type="email" ref={userEmail} />
-                                    <input placeholder="Password" type="password" ref={userPassword} />
-                                    <input
-                                        placeholder="Prattle Username (no spaces)"
-                                        type="text"
-                                        value={userName}
-                                        onChange={(e) => setUserName(e.target.value)}
+        <>        
+            {isMobile ? 
+                <StaticScreen type="noMobile">
+                    新規登録    
+                </StaticScreen>:
+            <>
+                {user ?
+                    <StaticScreen
+                        type="loggedIn"
+                    />:
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                        <div className="loginContainer">
+                            {generatingAccount === 1 && <>
+                                <h2>Getting Started</h2>
+                                <h3>
+                                    簡単に始める
+                                </h3>
+                                <p>
+                                    Prattle（プラトル）をお試しいただき、ありがとうございます。プラトルは、あなたのランダムな考えを書き留めることができるウェブベースのプラットフォームです。デジタル日記やスクラップブックのようなものと考えてください。ちなみに、オープンソースです！
+                                    <ol>
+                                        <li>アカウントを作成</li>
+                                        <li>ルーム（部屋）を作成</li>
+                                        <li>思いついたことやアイデアを書き留める</li>
+                                        <li>家族や友達に共有しよう！</li>
+                                    </ol>
+                                </p>
+                                <Button
+                                    click={()=>setGeneratingAccount(2)}
+                                    icon={<VscAccount />}
+                                    name="新規登録"
+                                /> 
+                            </>}          
+                            {generatingAccount === 4 && <h4>Loading...</h4>}
+                            {generatingAccount === 2 && <form className="shedForm">
+                                    <img className="profileImage" src={userName ? `https://avatars.dicebear.com/api/croodles/${userName}.svg`:'https://www.poynter.org/wp-content/uploads/2021/09/shutterstock_1563012205.png'}/>
+                                        <input placeholder="Eメール" type="email" ref={userEmail} />
+                                        <input placeholder="パスワード" type="password" ref={userPassword} />
+                                        <input
+                                            placeholder="ユーザー名"
+                                            type="text"
+                                            value={userName}
+                                            onChange={(e) => setUserName(e.target.value)}
+                                            />
+                                        <Button
+                                            click={handleSubmit}
+                                            icon={<VscAccount />}
+                                            name="アカウント作成"
                                         />
-                                    <Button
-                                        click={handleSubmit}
-                                        icon={<VscAccount />}
-                                        name="Sign Up"
-                                    />
-                            </form>
-                        }
-                        {generatingAccount === 3 &&
-                            <>
-                                <h3>Your account has been created!</h3>
-                                <p>View your account or check out other rooms</p>
-                                <ul>
-                                    <li onClick={()=> router.push('/')}>Your dashboard</li>
-                                    <li onClick={()=> router.push('/browse')}>Browse rooms</li>
-                                </ul>
-                            </>
-                        }
-                        <p>
-                            *Sign up for those who do not have an account.
-                            <br />
-                            <a href="signin">Already have an account?</a>
-                        </p>
+                                </form>
+                            }
+                            {generatingAccount === 3 &&
+                                <>
+                                    <h3>アカウントが作成されました！</h3>
+                                    <p>View your account or check out other rooms</p>
+                                    <ul>
+                                        <li onClick={()=> router.push('/')}>ダッシュボード</li>
+                                        <li onClick={()=> router.push('/browse')}>他の部屋を見る</li>
+                                    </ul>
+                                </>
+                            }
+                            <p>
+                                *アカウント無い方用
+                                <br />
+                                <a href="signin">アカウントは既にお持ちですか?</a>
+                            </p>
+                        </div>
                     </div>
-                </div>
+                }
+            </>
             }
         </>
     )

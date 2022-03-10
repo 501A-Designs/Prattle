@@ -16,6 +16,7 @@ import SmallButton from '../../lib/button-component/SmallButton';
 import Card from '../../lib/Card';
 import AlignItems from '../../lib/style-component/AlignItems';
 import { MobileView } from 'react-device-detect';
+import StaticScreen from '../../lib/scene-component/StaticScreen';
 Modal.setAppElement('#__next');
 
 export default function Home() {
@@ -191,7 +192,7 @@ export default function Home() {
                     </GridItems>
                 </div>
                 </> :
-                <h1>You are logged out</h1>
+                <StaticScreen type='notLoggedIn'/>
             }
         </div>
     )
