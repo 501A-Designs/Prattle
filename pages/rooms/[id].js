@@ -24,6 +24,7 @@ import ProfileInfo from '../../lib/ProfileInfo';
 import VisibilityTag from '../../lib/VisibilityTag';
 import StaticScreen from '../../lib/scene-component/StaticScreen';
 import { isMobile } from 'react-device-detect';
+import { GhenInterpreter } from 'ghen';
 
 function IndivisualPrateRoom({ roomId }) {
   const user = supabase.auth.user();
@@ -41,11 +42,11 @@ function IndivisualPrateRoom({ roomId }) {
 
   const emojiData = ['👋','👌','👍','👎','👏','🤘','😂','😍','😝','😠','😢','🤧','🤯','🤭','🤨'];
   const shortcutsData = [
-    {sc:'*',name:'Bold',icon:<VscBold/>},
-    {sc:'/',name:'Italic',icon:<VscItalic/>},
-    {sc:'$colorname ',name:'Colored Text',icon:<VscSymbolColor/>},
-    {sc:'>',name:'Google Search',icon:<VscSearch/>},
-    {sc:'?',name:'Google Maps Pin',icon:<VscLocation/>},
+    {sc:'*',name:'太字',icon:<VscBold/>},
+    {sc:'/',name:'イタリック',icon:<VscItalic/>},
+    {sc:'$色名 ',name:'色',icon:<VscSymbolColor/>},
+    {sc:'>',name:'Google検索',icon:<VscSearch/>},
+    {sc:'?',name:'Google Mapsピン留め',icon:<VscLocation/>},
   ];
 
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -71,6 +72,14 @@ function IndivisualPrateRoom({ roomId }) {
         boxShadow: 'var(--boxShadow)',
         padding: '1em',
     },
+  }
+  let previewContainer ={
+    margin:'1em 0',
+    padding: '1em',
+    backgroundColor: 'var(--baseColor0)',
+    borderRadius: 'calc(var(--borderRadius)*1)',
+    border: 'var(--baseBorder2)',
+    boxShadow: 'var(--boxShadow)',
   }
 
   const router = useRouter()
@@ -239,7 +248,7 @@ function IndivisualPrateRoom({ roomId }) {
                   disabled={!roomId}
                   click={(e) => { e.preventDefault(); router.push("/"); }}
                   icon={<VscHome />}
-                  name="Main"
+                  name="ダッシュボード"
                 />
                 {!isMobile &&
                   <Button
@@ -247,7 +256,7 @@ function IndivisualPrateRoom({ roomId }) {
                     disabled={!roomId}
                     click={()=>{gridStatus === '1fr' ? setGridStatus('1fr 4fr'): setGridStatus('1fr')}}
                     icon={<VscNote />}
-                    name="Memo"
+                    name="メモ"
                   />
                 }
                 <Button
@@ -255,7 +264,7 @@ function IndivisualPrateRoom({ roomId }) {
                   disabled={!roomId}
                   click={(e) => { e.preventDefault(); router.push("/browse"); }}
                   icon={<VscCommentDiscussion />}
-                  name="Browse"
+                  name="ブラウズ"
                 />
                 {user &&
                 <>
@@ -265,14 +274,14 @@ function IndivisualPrateRoom({ roomId }) {
                       disabled={!roomId}
                       click={(e) => { e.preventDefault(); router.push("/shortcuts"); }}
                       icon={<VscSymbolParameter />}
-                      name="Shortcut"
+                      name="ショートカット"
                       />
                     <Button
                       size={'medium'}
                       disabled={!roomId}
                       click={(e) => { e.preventDefault(); router.push("/rooms"); }}
                       icon={<VscRocket />}
-                      name="Create Room"
+                      name="新規部屋作成"
                     />
                     <Button
                       size={'medium'}
@@ -282,7 +291,7 @@ function IndivisualPrateRoom({ roomId }) {
                         openModal();
                       }}
                       icon={<VscSettingsGear />}
-                      name="Settings"
+                      name="設定"
                     />
                   </>}
                 </>
@@ -301,6 +310,11 @@ function IndivisualPrateRoom({ roomId }) {
                 <>
                 <h3>Compose a new Prate</h3>
                   <p>View the <a>shortcuts</a> page for a more enhanced prate</p>
+                  {message && 
+                    <div style={previewContainer}>
+                      <GhenInterpreter inputValue={message}/>
+                    </div>
+                  }
                   <AlignItems scroll={true}>
                       {emojiData.map(emoji =>
                         <EmojiButton

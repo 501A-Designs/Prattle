@@ -13,9 +13,8 @@ import GridItems from '../../lib/style-component/GridItems';
 
 import Modal from 'react-modal';
 import SmallButton from '../../lib/button-component/SmallButton';
-import Card from '../../lib/Card';
 import AlignItems from '../../lib/style-component/AlignItems';
-import { MobileView } from 'react-device-detect';
+import { isMobile, MobileView } from 'react-device-detect';
 import StaticScreen from '../../lib/scene-component/StaticScreen';
 Modal.setAppElement('#__next');
 
@@ -161,7 +160,7 @@ export default function Home() {
                 <div>
                     <h1>Create</h1>
                     <h3>Get started</h3>
-                    <GridItems grid={MobileView ? '1fr':'1fr 1fr'}>
+                    <GridItems grid={isMobile ? '1fr':'1fr 1fr 1fr 1fr'}>
                         <PrateTypeButton
                             click={() => {
                                 openModal();
@@ -175,7 +174,7 @@ export default function Home() {
                                 router.push('/browse')
                             }}
                             icon={<VscCommentDiscussion />}
-                            name={'Browse Public Rooms'}
+                            name={'Browse Rooms'}
                         />
                     </GridItems>
                     <br/>

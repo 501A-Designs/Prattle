@@ -26,28 +26,23 @@ export default function shortcuts() {
                 </tr>
                 <tr>
                     <td>$</td>
-                    <td>Specificies the color of the sent text. (Allows for plain CSS color names such as Hex color codes and RGB values.)</td>
+                    <td>送信するテキストの色を指定します。(HexカラーコードやRGB値など、CSSのプレーンな色名を入力すること)</td>
                     <td>$red Hello world</td>
                 </tr>
                 <tr>
                     <td>&gt;</td>
-                    <td>Shows a Google searched resault of the sent message.</td>
+                    <td>送信されたメッセージのGoogle検索結果を表示します。</td>
                     <td>&gt;Hello world</td>
                 </tr>
                 <tr>
                     <td>+</td>
-                    <td>Have your message be packed in a drop down, in case your messages become too long.</td>
+                    <td>メッセージが長くなっても大丈夫なように、メッセージをドロップダウンでまとめる。</td>
                     <td>+Hello world this a long text message.</td>
                 </tr>
                 <tr>
-                    <td>!</td>
-                    <td>Have your message be sealed. The other users can click a button to open the message.</td>
-                    <td>!Hello world</td>
-                </tr>
-                <tr>
-                    <td>#</td>
-                    <td>Have your message tagged as either [important], [work] or [question]. This informs the urgancy of your message.</td>
-                    <td>#important Hello world</td>
+                    <td>?</td>
+                    <td>場所をグーグルマップのフレームにピン留め。</td>
+                    <td>?Osaka</td>
                 </tr>
             </table>
         </div>

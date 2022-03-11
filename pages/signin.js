@@ -56,16 +56,16 @@ export default function Login() {
                                     入力された情報をもう一度確認してください
                                 </p> :
                                 <p>
-                                    Thanks for signing back into Prattle!
+                                    Prattleに帰ってきてありがとう!
                                 </p>
                             }
                             <form className="shedForm">
-                                <input style={inputStatus} placeholder="Email" type="email" ref={userEmail} />
-                                <input style={inputStatus} placeholder="Password" type="password" ref={userPassword} />
+                                <input style={inputStatus} placeholder="Eメール" type="email" ref={userEmail} />
+                                <input style={inputStatus} placeholder="パスワード" type="password" ref={userPassword} />
                                 <Button
                                     click={handleSubmit}
                                     icon={<VscSignIn />}
-                                    name="Get Me Back In!"
+                                    name="ログイン"
                                 />
                             </form>
                             <p>
