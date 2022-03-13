@@ -42,9 +42,7 @@ export default function Login() {
             </StaticScreen>:
             <>
                 {user ?
-                    <StaticScreen
-                        type="loggedIn"
-                    />:
+                    <StaticScreen type="loggedIn"/>:
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                         <div className="loginContainer">
                             <h2>Sign In</h2>

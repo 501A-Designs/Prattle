@@ -41,7 +41,7 @@ export default function Browse() {
         </GridItems>
         <hr/>
         <br/>
-        <GridItems grid={isMobile ? '1fr' : '1fr 1fr'}>
+        <GridItems grid={isMobile ? '1fr' : '1fr 1fr 1fr'}>
             {allPublicRooms && allPublicRooms.map(props=>
                 <RoomThumbNail
                     key={props.room_id}

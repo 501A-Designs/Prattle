@@ -8,6 +8,7 @@ import Modal from 'react-modal';
 import GridItems from '../../lib/style-component/GridItems';
 import RoomThumbNail from '../../lib/RoomThumbNail';
 import ProfileInfo from '../../lib/ProfileInfo';
+import { isMobile } from 'react-device-detect';
 
 function IndivisualProfile({ profileId }) {
     const router = useRouter()
@@ -31,7 +32,7 @@ function IndivisualProfile({ profileId }) {
         <div className="bodyPadding">
             <ProfileInfo profileId={profileId}/>
             <h3>作成した部屋</h3>
-            <GridItems grid={'1fr'}>
+            <GridItems grid={isMobile ? '1fr' : '1fr 1fr 1fr'}>
                 {rooms && rooms.map((props) => {
                     return <RoomThumbNail
                             key={props.room_name}
