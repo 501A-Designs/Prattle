@@ -1,13 +1,10 @@
 import React from 'react'
-import Card from '../lib/Card'
-import ClickableCard from '../lib/ClickableCard'
-
 
 export default function shortcuts() {
     return (
         <div className="bodyPadding">
             <h1>Shortcuts</h1>
-            <h2>Utilize Prattle to its fullist</h2>
+            <h2>Prattle をフルに活用</h2>
             <table>
                 <tr>
                     <th>Shortcut</th>

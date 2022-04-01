@@ -16,6 +16,7 @@ import SmallButton from '../../lib/button-component/SmallButton';
 import AlignItems from '../../lib/style-component/AlignItems';
 import { isMobile, MobileView } from 'react-device-detect';
 import StaticScreen from '../../lib/scene-component/StaticScreen';
+import CenterAll from '../../lib/style-component/CenterAll';
 Modal.setAppElement('#__next');
 
 export default function Home() {
@@ -84,7 +85,7 @@ export default function Home() {
     }
 
     return (
-        <div className="bodyPadding">
+        <CenterAll>
             {user ?
                 <>
                 <Modal
@@ -158,41 +159,28 @@ export default function Home() {
                     }
                 </Modal>
                 <div>
-                    <h1>Create</h1>
-                    <h3>Get started</h3>
-                    <GridItems grid={isMobile ? '1fr':'1fr 1fr 1fr 1fr'}>
+                    <h3>新規作成</h3>
+                    <GridItems grid={isMobile ? '1fr':'1fr 1fr'}>
                         <PrateTypeButton
                             click={() => {
                                 openModal();
                                 setModalContent('create');
                             }}
                             icon={<VscComment />}
-                            name={'Create A Room'}
+                            name={'新規部屋作成'}
                         />
                         <PrateTypeButton
                             click={() => {
                                 router.push('/browse')
                             }}
                             icon={<VscCommentDiscussion />}
-                            name={'Browse Rooms'}
+                            name={'他の部屋を見る'}
                         />
-                    </GridItems>
-                    <br/>
-                    <h3>Domain nav</h3>
-                    <GridItems>
-                        <h4 style={{marginBottom:'0.5em'}}>Rooms</h4>
-                        <code>
-                            prattle.vercel.app/rooms/[room id]
-                        </code>
-                        <h4 style={{marginBottom:'0.5em'}}>Profile Info</h4>
-                        <code>
-                            prattle.vercel.app/profile/[profile id]
-                        </code>
                     </GridItems>
                 </div>
                 </> :
                 <StaticScreen type='notLoggedIn'/>
             }
-        </div>
+        </CenterAll>
     )
 }

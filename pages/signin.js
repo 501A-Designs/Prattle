@@ -8,6 +8,7 @@ import { supabase } from '../utils/supabaseClient'
 import { VscSignIn } from "react-icons/vsc";
 import StaticScreen from '../lib/scene-component/StaticScreen';
 import { isMobile } from 'react-device-detect';
+import CenterAll from '../lib/style-component/CenterAll';
 
 export default function Login() {
     const userEmail = useRef()
@@ -43,7 +44,7 @@ export default function Login() {
             <>
                 {user ?
                     <StaticScreen type="loggedIn"/>:
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                    <CenterAll>
                         <div className="loginContainer">
                             <h2>Sign In</h2>
                             <h3>
@@ -74,7 +75,7 @@ export default function Login() {
                                 </Link>
                             </p>
                         </div>
-                    </div>
+                    </CenterAll>
                 }
             </>
             }

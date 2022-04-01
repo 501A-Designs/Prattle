@@ -39,7 +39,6 @@ export default function Browse() {
             <label>閲覧のみの部屋</label>
           </AlignItems>
         </GridItems>
-        <hr/>
         <br/>
         <GridItems grid={isMobile ? '1fr' : '1fr 1fr 1fr'}>
             {allPublicRooms && allPublicRooms.map(props=>

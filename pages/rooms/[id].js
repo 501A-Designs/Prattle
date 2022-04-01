@@ -25,6 +25,7 @@ import VisibilityTag from '../../lib/VisibilityTag';
 import StaticScreen from '../../lib/scene-component/StaticScreen';
 import { isMobile } from 'react-device-detect';
 import { GhenInterpreter } from 'ghen';
+import TabComponent from '../../lib/TabComponent';
 
 function IndivisualPrateRoom({ roomId }) {
   const user = supabase.auth.user();
@@ -73,18 +74,10 @@ function IndivisualPrateRoom({ roomId }) {
         padding: '1em',
     },
   }
-  let previewContainer ={
-    margin:'1em 0',
-    padding: '1em',
-    backgroundColor: 'var(--baseColor0)',
-    borderRadius: 'calc(var(--borderRadius)*1)',
-    border: 'var(--baseBorder2)',
-    boxShadow: 'var(--boxShadow)',
-  }
 
   const router = useRouter()
   const [message, setMessage] = useState('');
-
+  const [messageSending, setMessageSending] = useState(false)
   const [roomInfo, setRoomInfo] = useState('');
 
 
@@ -134,6 +127,7 @@ function IndivisualPrateRoom({ roomId }) {
     const [messageSentNumber, setMessageSentNumber] = useState(0);
     const handleMessageSubmit = async (e) => {
       e.preventDefault();
+      setMessageSending(true);
       let timeStamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
       const { data, error } = await supabase
         .from('messages')
@@ -148,6 +142,7 @@ function IndivisualPrateRoom({ roomId }) {
       setMessageByte(0);
       setMessageWordCount(0);
       setMessageSentNumber(messageSentNumber + 1);
+      setMessageSending(false);
     }
     const handleMessageChange = (e) => {
       setMessage(e.target.value);
@@ -309,13 +304,12 @@ function IndivisualPrateRoom({ roomId }) {
                 {modalContent === 'newPrate' &&
                 <>
                 <h3>Compose a new Prate</h3>
-                  <p>View the <a>shortcuts</a> page for a more enhanced prate</p>
                   {message && 
-                    <div style={previewContainer}>
-                      <GhenInterpreter inputValue={message}/>
-                    </div>
+                    <TabComponent icon={<VscComment/>} name={'新しいPrate'}>
+                      {messageSending ? <p>「{roomInfo.room_name}」に送信中...</p>:<GhenInterpreter inputValue={message}/>}
+                    </TabComponent>
                   }
-                  <AlignItems scroll={true}>
+                  {/* <AlignItems scroll={true}>
                       {emojiData.map(emoji =>
                         <EmojiButton
                           key={emoji}
@@ -323,7 +317,7 @@ function IndivisualPrateRoom({ roomId }) {
                           click={(e) => { e.preventDefault(); setMessage(message + emoji) }}
                         />
                       )}
-                  </AlignItems>
+                  </AlignItems> */}
                   <AlignItems scroll={true}>
                       {shortcutsData.map(data =>
                         <Button

@@ -375,24 +375,23 @@ iframe	{
 }
 
 .prateTypeButton{
-	background-color: var(--baseColor0);
+	background-color: var(--baseColor1);
 	border-radius:  var(--borderRadius);
 	font-weight: bold;
-	border: var(--baseBorder2);
+	border: var(--baseBorder1);
 	color: var(--txtColor0);
 	padding: 1.5em 1.5em;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	flex-direction: column;
-	gap: 0.5em;
+	flex-direction: row;
+	gap: 1em;
 	cursor: pointer;
-	outline: 2px solid transparent;
 	user-select: none;
 	transition: 0.3s;
 }
 .prateTypeButton:hover{
-	box-shadow:var(--boxShadow);
+	background-color: var(--baseColor0);
 }
 
 
