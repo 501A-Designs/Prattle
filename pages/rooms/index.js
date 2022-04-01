@@ -88,97 +88,64 @@ export default function Home() {
         <CenterAll>
             {user ?
                 <>
-                <Modal
-                    isOpen={modalIsOpen}
-                    style={modalStyle}
-                >
-                    <SmallButton
-                        click={() => closeModal()}
-                        icon={<VscClose />}
-                        right={true}
-                    />
-                    {modalContent === 'create' && <div>
-                        <h3>Create</h3>
-                        {!status ? 
-                            <form
-                                className="shedForm"
-                                style={{ marginTop: '1em' }}
-                                onSubmit={handleCreateGroup}
-                            >
-                                <p>部屋の名前を指定してください。絵文字等を使用してクリエイティブになろう ;)
-                                    <br />
-                                    *概要は40字以上入力できません
-                                </p>
+                    {!status ? 
+                        <form
+                        className="shedForm"
+                        style={{ marginTop: '1em' }}
+                        onSubmit={handleCreateGroup}
+                        >
+                            <h3>新規作成</h3>
+                            <p>部屋の名前を指定してください。絵文字等を使用してクリエイティブになろう ;)
+                                <br />
+                                *概要は40字以上入力できません
+                            </p>
+                            <input
+                                placeholder="部屋名"
+                                onChange={(e) => setGroupNameInput(e.target.value)}
+                                value={groupNameInput}
+                            />
+                            <input
+                                placeholder="バナー画像URL *任意"
+                                onChange={(e) => setGroupImageInput(e.target.value)}
+                                value={groupImageInput}
+                            />
+                            <input
+                                placeholder="部屋の概要 *任意"
+                                onChange={(e)=> setGroupDescriptionInput(e.target.value)}
+                                value={groupDescriptionInput}
+                            />
+                            {groupDescriptionInput &&
+                                <>
+                                    {groupDescriptionInput.split('').length > 40 && <p style={{color: 'red'}}>40字以上です！</p>}
+                                </>
+                            }
+                            <AlignItems>
                                 <input
-                                    placeholder="部屋名"
-                                    onChange={(e) => setGroupNameInput(e.target.value)}
-                                    value={groupNameInput}
+                                    type="checkbox"
+                                    checked={roomPublic}
+                                    onChange={()=>setRoomPublic(toggleRoomPublic)}
                                 />
+                                <label><Link target="_blank" href="/usage">パブリックシェア</Link>を有効化</label>
+                            </AlignItems>
+                            <AlignItems>
                                 <input
-                                    placeholder="バナー画像URL *任意"
-                                    onChange={(e) => setGroupImageInput(e.target.value)}
-                                    value={groupImageInput}
+                                    type="checkbox"
+                                    checked={roomEditable}
+                                    onChange={()=>{setRoomEditable(toggleRoomEditable)}}
                                 />
-                                <input
-                                    placeholder="部屋の概要 *任意"
-                                    onChange={(e)=> setGroupDescriptionInput(e.target.value)}
-                                    value={groupDescriptionInput}
-                                />
-                                {groupDescriptionInput &&
-                                    <>
-                                        {groupDescriptionInput.split('').length > 40 && <p style={{color: 'red'}}>40字以上です！</p>}
-                                    </>
-                                }
-                                <AlignItems>
-                                    <input
-                                        type="checkbox"
-                                        checked={roomPublic}
-                                        onChange={()=>setRoomPublic(toggleRoomPublic)}
-                                    />
-                                    <label><Link target="_blank" href="/usage">パブリックシェア</Link>を有効化</label>
-                                </AlignItems>
-                                <AlignItems>
-                                    <input
-                                        type="checkbox"
-                                        checked={roomEditable}
-                                        onChange={()=>{setRoomEditable(toggleRoomEditable)}}
-                                    />
-                                    <label>部屋を<Link target="_blank" href="/browse">ブラウズページ</Link>やプロフィールに表示化</label>
-                                </AlignItems>
-                                <Button
-                                    disabled={!groupNameInput}
-                                    type="submit"
-                                    click={handleCreateGroup}
-                                    icon={<VscActivateBreakpoints />}
-                                    name="Create Room"
-                                />
-                            </form>:
-                            <p>{status}</p>
-                        }
-                    </div>
+                                <label>部屋を<Link target="_blank" href="/browse">ブラウズページ</Link>やプロフィールに表示化</label>
+                            </AlignItems>
+                            <Button
+                                disabled={!groupNameInput}
+                                type="submit"
+                                click={handleCreateGroup}
+                                icon={<VscActivateBreakpoints />}
+                                name="Create Room"
+                            />
+                        </form>:
+                        <p>{status}</p>
                     }
-                </Modal>
-                <div>
-                    <h3>新規作成</h3>
-                    <GridItems grid={isMobile ? '1fr':'1fr 1fr'}>
-                        <PrateTypeButton
-                            click={() => {
-                                openModal();
-                                setModalContent('create');
-                            }}
-                            icon={<VscComment />}
-                            name={'新規部屋作成'}
-                        />
-                        <PrateTypeButton
-                            click={() => {
-                                router.push('/browse')
-                            }}
-                            icon={<VscCommentDiscussion />}
-                            name={'他の部屋を見る'}
-                        />
-                    </GridItems>
-                </div>
-                </> :
+                </>:
                 <StaticScreen type='notLoggedIn'/>
             }
         </CenterAll>
