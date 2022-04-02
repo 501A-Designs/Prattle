@@ -105,26 +105,26 @@ export default function Home() {
                             </form>
                         </GridItems>
                     </Modal>
-                    <ProfileInfo profileId={user.id}/>
-                    <AlignItems>
-                        <Button
-                            click={(e) => { e.preventDefault(); router.push(`/`); }}
-                            size="medium"
-                            icon={<VscHome />}
-                            name="Mainに戻る"
-                        />
-                        <Button
-                            click={()=>{openModal();}}
-                            size="medium"
-                            name="プロフィールを編集"
-                        />
-                        <Button
-                            click={signout}
-                            size="medium"
-                            icon={<VscSignOut />}
-                            name="Sign Out"
-                        />
-                    </AlignItems>
+                    <Button
+                        click={(e) => { e.preventDefault(); router.push(`/`); }}
+                        icon={<VscHome />}
+                        name="ダッシュボードに戻る"
+                    />
+                    <ProfileInfo profileId={user.id}>
+                        <AlignItems>
+                            <Button
+                                click={()=>{openModal();}}
+                                size="medium"
+                                name="プロフィールを編集"
+                            />
+                            <Button
+                                click={signout}
+                                size="medium"
+                                icon={<VscSignOut />}
+                                name="ログアウト"
+                            />
+                        </AlignItems>
+                    </ProfileInfo>
                 </> :
                 <StaticScreen type={'notLoggedIn'}/>
             }

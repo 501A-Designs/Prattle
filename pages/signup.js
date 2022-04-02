@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useRouter } from "next/router";
 import StaticScreen from '../lib/scene-component/StaticScreen';
 import { isMobile } from 'react-device-detect';
+import CenterAll from '../lib/style-component/CenterAll';
 
 export default function Login() {
     const router = useRouter();
@@ -50,7 +51,7 @@ export default function Login() {
                     <StaticScreen
                         type="loggedIn"
                     />:
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                    <CenterAll>
                         <div className="loginContainer">
                             {generatingAccount === 1 && <>
                                 <h2>Getting Started</h2>
@@ -106,7 +107,7 @@ export default function Login() {
                                 <a href="signin">アカウントは既にお持ちですか?</a>
                             </p>
                         </div>
-                    </div>
+                    </CenterAll>
                 }
             </>
             }
