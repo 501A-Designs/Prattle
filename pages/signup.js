@@ -3,11 +3,11 @@ import Button from '../lib/button-component/Button';
 import { useRef } from 'react'
 import { supabase } from '../utils/supabaseClient'
 import { VscAccount } from "react-icons/vsc";
-import Link from 'next/link'
 import { useRouter } from "next/router";
 import StaticScreen from '../lib/scene-component/StaticScreen';
 import { isMobile } from 'react-device-detect';
-import CenterAll from '../lib/style-component/CenterAll';
+import AlignItems from '../lib/style-component/AlignItems';
+import Link from 'next/link';
 
 export default function Login() {
     const router = useRouter();
@@ -51,7 +51,7 @@ export default function Login() {
                     <StaticScreen
                         type="loggedIn"
                     />:
-                    <CenterAll>
+                    <AlignItems center={true} className={'fadeIn centerAll'}>
                         <div className="loginContainer">
                             {generatingAccount === 1 && <>
                                 <h2>Getting Started</h2>
@@ -104,10 +104,10 @@ export default function Login() {
                             <p>
                                 *アカウント無い方用
                                 <br />
-                                <a href="signin">アカウントは既にお持ちですか?</a>
+                                <Link href='/signin'>アカウントは既にお持ちですか?</Link>
                             </p>
                         </div>
-                    </CenterAll>
+                    </AlignItems>
                 }
             </>
             }

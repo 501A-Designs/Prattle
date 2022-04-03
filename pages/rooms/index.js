@@ -6,17 +6,13 @@ import { useRouter } from "next/router";
 import Button from '../../lib/button-component/Button';
 import PrateTypeButton from '../../lib/PrateTypeButton';
 
-import { VscComment, VscCommentDiscussion, VscActivateBreakpoints,VscClose } from "react-icons/vsc";
+import { VscActivateBreakpoints } from "react-icons/vsc";
 
 import { v4 as uuidv4 } from 'uuid';
-import GridItems from '../../lib/style-component/GridItems';
 
 import Modal from 'react-modal';
-import SmallButton from '../../lib/button-component/SmallButton';
 import AlignItems from '../../lib/style-component/AlignItems';
-import { isMobile, MobileView } from 'react-device-detect';
 import StaticScreen from '../../lib/scene-component/StaticScreen';
-import CenterAll from '../../lib/style-component/CenterAll';
 Modal.setAppElement('#__next');
 
 export default function Home() {
@@ -85,12 +81,12 @@ export default function Home() {
     }
 
     return (
-        <CenterAll>
+        <AlignItems center={true} className={'fadeIn centerAll'}>
             {user ?
                 <>
                     {!status ? 
                         <form
-                        className="shedForm"
+                        className="shedForm bodyPadding"
                         style={{ marginTop: '1em' }}
                         onSubmit={handleCreateGroup}
                         >
@@ -148,6 +144,6 @@ export default function Home() {
                 </>:
                 <StaticScreen type='notLoggedIn'/>
             }
-        </CenterAll>
+        </AlignItems>
     )
 }

@@ -18,6 +18,7 @@ export default function Browse() {
           .eq('room_public', true);
         setAllPublicRooms(publicRooms);
     }, [])
+    console.log(isMobile + ' tetings')
 
   return (
     <div className="bodyPadding">
@@ -40,7 +41,7 @@ export default function Browse() {
           </AlignItems>
         </GridItems>
         <br/>
-        <GridItems grid={isMobile ? '1fr' : '1fr 1fr 1fr'}>
+        <GridItems grid={isMobile === true ? '1fr' : '1fr 1fr 1fr'}>
             {allPublicRooms && allPublicRooms.map(props=>
                 <RoomThumbNail
                     key={props.room_id}

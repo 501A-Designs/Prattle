@@ -188,17 +188,29 @@ function IndivisualPrateRoom({ roomId }) {
       <>
       {user && 
         <>
-          {user.id === roomInfo.room_creator && <header>あなたの部屋</header>}
+          {user.id === roomInfo.room_creator && 
+            <header>
+              <h5 style={{margin:0}}>あなたの部屋</h5>
+              <Button
+                disabled={!roomId}
+                click={(e) => { e.preventDefault(); router.push("/"); }}
+                icon={<VscHome />}
+                name="ダッシュボード"
+              />
+            </header>
+            }
         </>
       }
       {!user && 
         <header>
           <h5 style={{margin:0}}>Prattle をフルで体験するにはアカウントが必要となります</h5>
-          <Button
-            click={()=> router.push('/signup')}
-            icon={<VscAccount />}
-            name="新規登録"
-          />
+          <div>
+            <Button
+              click={()=> router.push('/signup')}
+              icon={<VscAccount />}
+              name="新規登録"
+            />
+          </div>
         </header>
       }     
       <GridItems grid={gridStatus}>
@@ -241,25 +253,9 @@ function IndivisualPrateRoom({ roomId }) {
                 <Button
                   size={'medium'}
                   disabled={!roomId}
-                  click={(e) => { e.preventDefault(); router.push("/"); }}
-                  icon={<VscHome />}
-                  name="ダッシュボード"
-                />
-                {!isMobile &&
-                  <Button
-                    size={'medium'}
-                    disabled={!roomId}
-                    click={()=>{gridStatus === '1fr' ? setGridStatus('1fr 4fr'): setGridStatus('1fr')}}
-                    icon={<VscNote />}
-                    name="メモ"
-                  />
-                }
-                <Button
-                  size={'medium'}
-                  disabled={!roomId}
-                  click={(e) => { e.preventDefault(); router.push("/browse"); }}
-                  icon={<VscCommentDiscussion />}
-                  name="ブラウズ"
+                  click={()=>{gridStatus === '1fr' ? setGridStatus('1fr 4fr'): setGridStatus('1fr')}}
+                  icon={<VscNote />}
+                  name="メモ"
                 />
                 {user &&
                 <>

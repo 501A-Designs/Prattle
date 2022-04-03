@@ -149,8 +149,6 @@ td, th {
 	padding: 0.4em;
 	color: black;
 }
-  
-
 * {
 	box-sizing: border-box;
 }
@@ -346,7 +344,14 @@ iframe	{
 	}
 }
 
+.centerAll,.fullHeight{
+    height: 100vh;
+}
+
 @media screen and (max-width: 700px){
+	h1{font-size: 2em;}
+	h2{font-size: 1.5em;}
+
 	.bodyPadding{
 		padding: 2% 5%;
 	}
@@ -361,6 +366,10 @@ iframe	{
 	}
 	.autoGrid{
 		grid-template-columns: 1fr;
+	}
+	.centerAll{
+		margin: 5em 0;
+		height: fit-content;
 	}
 }
 @media screen and (min-width: 701px){

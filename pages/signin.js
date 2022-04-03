@@ -7,8 +7,7 @@ import { useRef, useState } from 'react'
 import { supabase } from '../utils/supabaseClient'
 import { VscSignIn } from "react-icons/vsc";
 import StaticScreen from '../lib/scene-component/StaticScreen';
-import { isMobile } from 'react-device-detect';
-import CenterAll from '../lib/style-component/CenterAll';
+import AlignItems from '../lib/style-component/AlignItems';
 
 export default function Login() {
     const userEmail = useRef()
@@ -37,14 +36,9 @@ export default function Login() {
     return (
 
         <>
-            {isMobile ? 
-            <StaticScreen type="noMobile">
-                ログイン
-            </StaticScreen>:
-            <>
                 {user ?
                     <StaticScreen type="loggedIn"/>:
-                    <CenterAll>
+                    <AlignItems center={true} className={'fadeIn centerAll'}>
                         <div className="loginContainer">
                             <h2>Sign In</h2>
                             <h3>
@@ -75,10 +69,8 @@ export default function Login() {
                                 </Link>
                             </p>
                         </div>
-                    </CenterAll>
+                    </AlignItems>
                 }
-            </>
-            }
         </>
     )
 }
