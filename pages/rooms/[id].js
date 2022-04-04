@@ -91,7 +91,6 @@ function IndivisualPrateRoom({ roomId }) {
         .from('rooms')
         .select('*')
         .eq('room_id', roomId);
-        // console.log(roomsInfo)
       setRoomInfo(roomsInfo[0]);
   }
 
@@ -103,7 +102,6 @@ function IndivisualPrateRoom({ roomId }) {
         .eq('room_id', roomId)
         .order('created_at', { ascending: false });
       setMessagesArray(messages);
-      console.log(messages)
     }
   }
   // const fetchMessageNotes = async () => {
@@ -191,13 +189,13 @@ function IndivisualPrateRoom({ roomId }) {
         <>
           {user.id === roomInfo.room_creator && 
             <header>
-              <h5 style={{margin:0}}>あなたの部屋</h5>
               <Button
                 disabled={!roomId}
                 click={(e) => { e.preventDefault(); router.push("/"); }}
                 icon={<VscHome />}
                 name="ダッシュボード"
               />
+              <h5 style={{margin:0}}>あなたの部屋</h5>
             </header>
             }
         </>
@@ -306,15 +304,6 @@ function IndivisualPrateRoom({ roomId }) {
                       {messageSending ? <p>「{roomInfo.room_name}」に送信中...</p>:<GhenInterpreter inputValue={message}/>}
                     </TabComponent>
                   }
-                  {/* <AlignItems scroll={true}>
-                      {emojiData.map(emoji =>
-                        <EmojiButton
-                          key={emoji}
-                          emoji={emoji}
-                          click={(e) => { e.preventDefault(); setMessage(message + emoji) }}
-                        />
-                      )}
-                  </AlignItems> */}
                   <AlignItems scroll={true}>
                       {shortcutsData.map(data =>
                         <Button
