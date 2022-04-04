@@ -134,7 +134,7 @@ function IndivisualPrateRoom({ roomId }) {
         .insert([{
           created_at: timeStamp,
           message: message,
-          sent_by_user: user.user_metadata.first_name,
+          sent_by_user: user.id,
           room_id: roomId
         },])
       console.log(message);
@@ -328,28 +328,30 @@ function IndivisualPrateRoom({ roomId }) {
                   </AlignItems>
                   <form
                     style={{ marginTop: '0.5em' }}
-                    className="shedAlignedForm"
+                    className="shedForm"
                     onSubmit={handleMessageSubmit}
                   >
-                    <input
-                      placeholder="Your message"
+                    <textarea
+                      placeholder='Your long message'
                       onChange={handleMessageChange}
                       value={message}
                     />
-                    <Button
-                      disabled={!message}
-                      type="submit"
-                      click={handleMessageSubmit}
-                      icon={<VscMail />}
-                      name="Post"
-                    />
-                  </form>
-                  {message &&
-                    <AlignItems>
-                      <p style={{width:'fit-content'}}>{messageByte} Bytes</p>
-                      <p style={{width:'fit-content'}}>{messageWordCount} Words</p>
+                    <AlignItems spaceBetween={true}>
+                      {message ?
+                        <AlignItems>
+                          <p style={{width:'fit-content'}}>{messageByte} Bytes</p>
+                          <p style={{width:'fit-content'}}>{messageWordCount} Words</p>
+                        </AlignItems>:<p></p>
+                      }
+                      <Button
+                        disabled={!message}
+                        type="submit"
+                        click={handleMessageSubmit}
+                        icon={<VscMail />}
+                        name="Post"
+                      />
                     </AlignItems>
-                  }
+                  </form>
                 </>
                 }
                 {modalContent === 'roomSettings' &&
@@ -425,7 +427,7 @@ function IndivisualPrateRoom({ roomId }) {
                     key={props.message}
                     messageId={props.id}
                     currentRoom={roomId}
-                    name={props.sent_by_user}
+                    id={props.sent_by_user}
                     message={props.message}
                     time={props.created_at}
                     roomCreator={roomInfo.room_creator}

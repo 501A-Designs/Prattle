@@ -15,8 +15,10 @@ function IndivisualProfile({ profileId }) {
     const user = supabase.auth.user();
     const [rooms, setRooms] = useState('');
     
-    if (user.id === profileId) {
-        router.push('/profile')
+    if (user) {        
+        if (user.id === profileId) {
+            router.push('/profile')
+        }
     }
 
     const fetchRooms = async () => {
@@ -48,6 +50,7 @@ function IndivisualProfile({ profileId }) {
                         />
                 })}
             </GridItems>
+            {rooms && <>{rooms.length === 0 && <p>このユーザーは一般公開されている部屋を作成していません</p>}</>}
         </div>
     )
 }

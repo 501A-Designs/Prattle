@@ -142,6 +142,9 @@ p{
 	margin: 0.4em 0;
 	font-size: 0.8rem;
 }
+p pre{
+	margin: 0
+}
 table, td, th {
 	border: var(--baseBorder4);
 }
@@ -255,8 +258,6 @@ hr{
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: 0.5em;
-	margin-bottom: 0.5em;
-	/* padding: 0.5em; */
 }
 .fullInput,
 .shedForm input,
@@ -273,7 +274,9 @@ hr{
 	width: 100%;
 }
 .shedForm textArea{
-	resize: vertical;
+	resize: none;
+	height: 100px;
+	overflow: scroll;
 }
 .shedForm input:focus,
 .shedForm textArea:focus {
@@ -298,6 +301,11 @@ hr{
 	min-height: 75vh;
 	height: auto;
 	/* box-shadow: inset 0px -35px 10px -10px var(--grey3);  */
+}
+.messagesContainer img{
+	width: 30px;
+	height: 30px;
+	border-radius:calc(var(--borderRadius)*5);
 }
 
 .sideScrollContainer{
@@ -337,10 +345,22 @@ iframe	{
 .bodyPadding,.fadeIn{
 	animation: fadeIn 1s;
 }
+.popOut{
+	animation: popOut 0.4s;
+}
 @keyframes fadeIn {
 	0% {
 		opacity: 0;
 		transform: translateY(-2em)
+	}
+}
+@keyframes popOut {
+	0% {
+		opacity: 0;
+		transform: scale3d(0.5, 0.5, 0.5)
+	}
+	70%{
+		transform: scale3d(1.05, 1.05, 1.05)
 	}
 }
 

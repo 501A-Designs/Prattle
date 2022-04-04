@@ -118,6 +118,11 @@ export default function Home() {
                                 name="プロフィールを編集"
                             />
                             <Button
+                                click={()=>{openModal();}}
+                                size="medium"
+                                name="ユーザーIDをコピー"
+                            />
+                            <Button
                                 click={signout}
                                 size="medium"
                                 icon={<VscSignOut />}
