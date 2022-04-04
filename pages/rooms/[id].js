@@ -20,11 +20,9 @@ import StylizedBanner from '../../lib/room-component/StylizedBanner';
 Modal.setAppElement('#__next');
 import Modal from 'react-modal';
 import GridItems from '../../lib/style-component/GridItems';
-import ProfileInfo from '../../lib/ProfileInfo';
 import VisibilityTag from '../../lib/VisibilityTag';
 import StaticScreen from '../../lib/scene-component/StaticScreen';
-import { isMobile } from 'react-device-detect';
-import { GhenInterpreter } from 'ghen';
+import GhenInterpreter from '../../lib/GhenInterpreter';
 import TabComponent from '../../lib/TabComponent';
 
 function IndivisualPrateRoom({ roomId }) {
@@ -82,7 +80,7 @@ function IndivisualPrateRoom({ roomId }) {
 
 
   const [messagesArray, setMessagesArray] = useState([]);
-  const [messagesNotesArray, setMessagesNotesArray] = useState();
+  const [messagesNotesArray, setMessagesNotesArray] = useState([]);
   const [owner, setOwner] = useState('');
 
   const [messageByte, setMessageByte] = useState(0);
@@ -93,11 +91,11 @@ function IndivisualPrateRoom({ roomId }) {
         .from('rooms')
         .select('*')
         .eq('room_id', roomId);
+        // console.log(roomsInfo)
       setRoomInfo(roomsInfo[0]);
   }
 
   const fetchMessages = async () => {
-    console.log('bruh')
     if (!messagesArray.length) {
       let { data: messages, error } = await supabase
         .from('messages')
@@ -105,22 +103,24 @@ function IndivisualPrateRoom({ roomId }) {
         .eq('room_id', roomId)
         .order('created_at', { ascending: false });
       setMessagesArray(messages);
+      console.log(messages)
     }
   }
-  const fetchMessageNotes = async () => {
-    console.log('bruh')
-    let { data: notes, error } = await supabase
-      .from('notes')
-      .select('*')
-      .eq('room_id', roomId)
-      .order('id', { ascending: false });
-    setMessagesNotesArray(notes);
-  }
+  // const fetchMessageNotes = async () => {
+  //   if (!messagesNotesArray.length) {
+  //     let { data: notes, error } = await supabase
+  //       .from('notes')
+  //       .select('*')
+  //       .eq('room_id', roomId)
+  //       .order('id', { ascending: false });
+  //     setMessagesNotesArray(notes);
+  //   }
+  // }
 
   useEffect(() => {
     fetchRoomInfo();
     fetchMessages();
-    fetchMessageNotes();  
+    // fetchMessageNotes();  
   },[])
   
   // Sent message
@@ -179,12 +179,13 @@ function IndivisualPrateRoom({ roomId }) {
       router.push('/')
     }
 
+    //add messages notes array in if Statement
   return (
     <>
       <Head>
         <title>{roomInfo.room_name}</title>
       </Head>
-      {roomInfo && messagesArray && messagesNotesArray ?
+      {roomInfo && messagesArray ?
       <>
       {user && 
         <>
@@ -217,7 +218,7 @@ function IndivisualPrateRoom({ roomId }) {
             {gridStatus != '1fr' && <div style={sideBarContainer}>
               <GridItems grid={'1fr'}>
                 <h3 style={{marginBottom: 0}}>Memo</h3>
-                <div className="notesContainer">
+                {/* <div className="notesContainer">
                   {messagesNotesArray.length !== 0 ?
                     messagesNotesArray.map(props =>
                       <TextMessageNote
@@ -231,7 +232,7 @@ function IndivisualPrateRoom({ roomId }) {
                       ピン留めした Prate (メッセージ) は全てメモはとしてこちらで表示されます。
                     </p>
                   }
-                </div>
+                </div> */}
               </GridItems>
             </div>}
             <div className={'bodyPadding'}>
