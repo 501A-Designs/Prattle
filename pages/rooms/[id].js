@@ -100,7 +100,8 @@ function IndivisualPrateRoom({ roomId }) {
         .from('messages')
         .select('*')
         .eq('room_id', roomId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(50);
       setMessagesArray(messages);
     }
   }
