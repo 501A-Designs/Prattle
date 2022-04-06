@@ -3,7 +3,7 @@ import { supabase } from '../utils/supabaseClient'
 
 import RoomThumbNail from '../lib/RoomThumbNail'
 import GridItems from '../lib/style-component/GridItems'
-import VisibilityTag from '../lib/VisibilityTag';
+import VisibilityTag from '../lib/tag-component/VisibilityTag';
 import AlignItems from '../lib/style-component/AlignItems';
 import { isMobile } from 'react-device-detect';
 

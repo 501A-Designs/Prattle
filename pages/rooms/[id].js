@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react'
 import Head from 'next/head'
 
 import TextMessage from '../../lib/room-component/TextMessage'
-import TextMessageNote from '../../lib/room-component/TextMessageNote';
+// import TextMessageNote from '../../lib/room-component/TextMessageNote';
 import { supabase } from '../../utils/supabaseClient'
 import Link from 'next/link'
 import Button from '../../lib/button-component/Button';
-import EmojiButton from '../../lib/button-component/EmojiButton';
 
-import {VscAccount, VscHome, VscSymbolParameter, VscRocket,VscCommentDiscussion,VscSettingsGear,VscComment,VscMail,VscClose,VscArrowSwap,VscNote,VscBold,VscItalic,VscSymbolColor,VscSearch,VscLocation} from "react-icons/vsc";
+import {VscAccount, VscHome, VscSymbolParameter, VscRocket,VscSettingsGear,VscComment,VscMail,VscClose,VscArrowSwap,VscNote,VscBold,VscItalic,VscSymbolColor,VscDebugLineByLine,VscLocation} from "react-icons/vsc";
 
 import { useRouter } from 'next/router'
 import AlignItems from '../../lib/style-component/AlignItems';
@@ -20,7 +19,7 @@ import StylizedBanner from '../../lib/room-component/StylizedBanner';
 Modal.setAppElement('#__next');
 import Modal from 'react-modal';
 import GridItems from '../../lib/style-component/GridItems';
-import VisibilityTag from '../../lib/VisibilityTag';
+import VisibilityTag from '../../lib/tag-component/VisibilityTag';
 import StaticScreen from '../../lib/scene-component/StaticScreen';
 import GhenInterpreter from '../../lib/GhenInterpreter';
 import TabComponent from '../../lib/TabComponent';
@@ -44,7 +43,7 @@ function IndivisualPrateRoom({ roomId }) {
     {sc:'*',name:'太字',icon:<VscBold/>},
     {sc:'/',name:'イタリック',icon:<VscItalic/>},
     {sc:'$色名 ',name:'色',icon:<VscSymbolColor/>},
-    {sc:'>',name:'Google検索',icon:<VscSearch/>},
+    {sc:'+',name:'ドロップダウン',icon:<VscDebugLineByLine/>},
     {sc:'?',name:'Google Mapsピン留め',icon:<VscLocation/>},
   ];
 
@@ -299,7 +298,7 @@ function IndivisualPrateRoom({ roomId }) {
                 />
                 {modalContent === 'newPrate' &&
                 <>
-                <h3>Compose a new Prate</h3>
+                <h3>Compose new Prate</h3>
                   {message && 
                     <TabComponent icon={<VscComment/>} name={'新しいPrate'}>
                       {messageSending ? <p>「{roomInfo.room_name}」に送信中...</p>:<GhenInterpreter inputValue={message}/>}

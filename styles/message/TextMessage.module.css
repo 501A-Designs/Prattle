@@ -2,7 +2,7 @@
 	border: 1px solid transparent;
 	width:100%;
 	padding: 0.5em;
-	border-radius: 0 0 var(--borderRadius) var(--borderRadius);
+	border-radius: 0 var(--borderRadius) var(--borderRadius) var(--borderRadius);
 	align-items: start;
 	transition: 0.3s;
 }
@@ -48,16 +48,6 @@
 }
 .messageTime{
 	font-family: "Share Tech Mono", monospace;
-}
-
-/* .textMessage:hover{
-	background-color: rgb(249, 249, 249);
-} */
-.tag{
-	background-color: var(--prattleColor1);
-	color: var(--baseColor0);
-	border-radius:var(--borderRadius);
-	padding: 0em 0.3em;
 }
 
 .userImage{
