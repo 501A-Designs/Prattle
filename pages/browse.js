@@ -41,7 +41,7 @@ export default function Browse() {
           </AlignItems>
         </GridItems>
         <br/>
-        <GridItems grid={isMobile === true ? '1fr' : '1fr 1fr 1fr'}>
+        <div className="grid triGrid">
             {allPublicRooms && allPublicRooms.map(props=>
                 <RoomThumbNail
                     key={props.room_id}
@@ -55,7 +55,7 @@ export default function Browse() {
                     // author={'bruhh they'}
                 />
             )}
-        </GridItems>
+        </div>
     </div>
   )
 }

@@ -135,6 +135,7 @@ p{
 	font-size: 0.8rem;
 }
 p pre{
+	white-space: pre-wrap;
 	margin: 0
 }
 table, td, th {
@@ -213,11 +214,9 @@ header {
 	align-items: center;
 	justify-content: space-between;
 	gap: 1em;
-	margin-bottom: 2em;
+	/* margin-bottom: 2em; */
 	border-bottom: var(--baseBorder2);
 	background-color: var(--baseColor0);
-	padding: 1em;
-	box-shadow: var(--boxShadow);
 	opacity: 95%;
 }
 
@@ -294,13 +293,6 @@ hr{
 	height: auto;
 }
 
-/* .sideScrollContainer{
-	overflow-x: scroll;
-	padding: 0 0.3em 0.3em 0.3em;
-	margin: 0 0 1em 0;
-	border-radius: var(--borderRadius);
-} */
-
 
 .colorful{
 	color: var(--txtColor0);
@@ -350,10 +342,18 @@ iframe	{
     height: 100vh;
 }
 
+.grid{
+	display: grid;
+	gap: 0.5em;
+}
+
 @media screen and (max-width: 700px){
 	h1{font-size: 2em;}
 	h2{font-size: 1.5em;}
 
+	header{
+		padding: 1em 5%;
+	}
 	.bodyPadding{
 		padding: 2% 5%;
 	}
@@ -366,15 +366,19 @@ iframe	{
 		height: 250px;
 		object-fit: cover;
 	}
-	.autoGrid{
+	.grid{
 		grid-template-columns: 1fr;
 	}
 	.centerAll{
 		margin: 5em 0;
 		height: fit-content;
 	}
+
 }
 @media screen and (min-width: 701px){
+	header{
+		padding: 1em 10%;
+	}
 	.bodyPadding{
 		padding: 2% 10%;
 	}
@@ -388,6 +392,12 @@ iframe	{
 		height: 300px;
 		object-fit: cover;
 	}
+	.duoGrid{
+		grid-template-columns: 1fr 1fr;
+	}
+	.triGrid{
+		grid-template-columns: 1fr 1fr 1fr;
+	}
 }
 
 .prateTypeButton{
@@ -400,7 +410,7 @@ iframe	{
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	flex-direction: row;
+	flex-direction: column;
 	gap: 1em;
 	cursor: pointer;
 	user-select: none;

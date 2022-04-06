@@ -7,7 +7,7 @@ import { supabase } from '../../utils/supabaseClient'
 import Link from 'next/link'
 import Button from '../../lib/button-component/Button';
 
-import {VscAccount, VscHome, VscSymbolParameter, VscRocket,VscSettingsGear,VscComment,VscMail,VscClose,VscArrowSwap,VscNote,VscBold,VscItalic,VscSymbolColor,VscDebugLineByLine,VscLocation} from "react-icons/vsc";
+import {VscAccount, VscHome, VscSymbolParameter, VscRocket,VscSettingsGear,VscComment,VscMail,VscClose,VscArrowSwap,VscNote,VscBold,VscItalic,VscSymbolColor,VscDebugLineByLine,VscLocation,VscAdd} from "react-icons/vsc";
 
 import { useRouter } from 'next/router'
 import AlignItems from '../../lib/style-component/AlignItems';
@@ -61,8 +61,8 @@ function IndivisualPrateRoom({ roomId }) {
         left: '50%',
         right: 'auto',
         bottom: 'auto',
-        marginRight: '-50%',
-        width: '500px',
+        maxWidth: '500px',
+        width: '100%',
         transform: 'translate(-50%, -50%)',
         backgroundColor: 'var(--baseColor0)',
         border: 'var(--baseBorder2)',
@@ -437,7 +437,7 @@ function IndivisualPrateRoom({ roomId }) {
                             setModalContent('newPrate');
                             openModal();
                           }}
-                          icon={<VscComment />}
+                          icon={<VscAdd />}
                           name="新規作成"
                         />
                       </StickyBottom>
@@ -455,7 +455,7 @@ function IndivisualPrateRoom({ roomId }) {
                             setModalContent('newPrate');
                             openModal();
                           }}
-                          icon={<VscComment />}
+                          icon={<VscAdd />}
                           name="新規作成"
                         />
                       </StickyBottom>
@@ -473,7 +473,7 @@ function IndivisualPrateRoom({ roomId }) {
                             setModalContent('newPrate');
                             openModal();
                           }}
-                          icon={<VscComment />}
+                          icon={<VscAdd />}
                           name="新規作成"
                         />
                       </StickyBottom>
