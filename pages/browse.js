@@ -19,9 +19,9 @@ export default function Browse() {
 
     let fetchAllRooms = async () => {
       let { data: publicRooms, error } = await supabase
-      .from('rooms')
-      .select('*')
-      .eq('room_public', true);
+        .from('rooms')
+        .select('*')
+        .eq('room_public', true);
       setAllPublicRooms(publicRooms);
       console.log('fetched');
       setSearchedMessages();
@@ -45,7 +45,8 @@ export default function Browse() {
       const { data: messageData, messageError } = await supabase
         .from('messages')
         .select()
-        .textSearch('message', `${searchInput}`);
+        .textSearch('message', `${searchInput}`)
+        .order('created_at', { ascending: false });
       setSearchedMessages(messageData)
       setSearchStatus('executed')
     }

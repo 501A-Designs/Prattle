@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Head from 'next/head'
 
 import TextMessage from '../../lib/room-component/TextMessage'
-// import TextMessageNote from '../../lib/room-component/TextMessageNote';
+import TextMessageNote from '../../lib/room-component/TextMessageNote';
 import { supabase } from '../../utils/supabaseClient'
 import Link from 'next/link'
 import Button from '../../lib/button-component/Button';
@@ -23,6 +23,7 @@ import VisibilityTag from '../../lib/tag-component/VisibilityTag';
 import StaticScreen from '../../lib/scene-component/StaticScreen';
 import GhenInterpreter from '../../lib/GhenInterpreter';
 import TabComponent from '../../lib/TabComponent';
+import { isMobile } from 'react-device-detect'
 
 function IndivisualPrateRoom({ roomId }) {
   const user = supabase.auth.user();
@@ -76,7 +77,7 @@ function IndivisualPrateRoom({ roomId }) {
   const [message, setMessage] = useState('');
   const [messageSending, setMessageSending] = useState(false)
   const [roomInfo, setRoomInfo] = useState('');
-  
+
   const [messagesArray, setMessagesArray] = useState([]);
   const [messagesNotesArray, setMessagesNotesArray] = useState([]);
   const [owner, setOwner] = useState('');
@@ -103,21 +104,11 @@ function IndivisualPrateRoom({ roomId }) {
       setMessagesArray(messages);
     }
   }
-  // const fetchMessageNotes = async () => {
-  //   if (!messagesNotesArray.length) {
-  //     let { data: notes, error } = await supabase
-  //       .from('notes')
-  //       .select('*')
-  //       .eq('room_id', roomId)
-  //       .order('id', { ascending: false });
-  //     setMessagesNotesArray(notes);
-  //   }
-  // }
+  
 
   useEffect(() => {
     fetchRoomInfo();
     fetchMessages();
-    // fetchMessageNotes();  
   },[])
   
   // Sent message
@@ -176,7 +167,15 @@ function IndivisualPrateRoom({ roomId }) {
       router.push('/')
     }
 
-    //add messages notes array in if Statement
+    let notesArray = [];
+    messagesArray.map((prop) => {
+      console.log(prop.noted)
+      if (prop.noted) {
+        notesArray.push(prop)
+      }
+    })
+    console.log(notesArray)
+    
   return (
     <>
       <Head>
@@ -184,61 +183,64 @@ function IndivisualPrateRoom({ roomId }) {
       </Head>
       {roomInfo && messagesArray ?
       <>
-      <header>
-      {user ? 
-        <>
-          {user.id === roomInfo.room_creator ? 
-            <>
-              <Button
-                disabled={!roomId}
-                click={(e) => { e.preventDefault(); router.push("/"); }}
-                icon={<VscHome />}
-                name="ダッシュボード"
-              />
-              <h5 style={{margin:0}}>あなたの部屋</h5>
-            </>:
-            <>
-
-              <Button
-                name="作者のプロフィールを見る"
-                click={()=> router.push('/profile/' + owner)}
-              />
-            </>
-          }
-        </>:
-        <>
-          <h5 style={{margin:0}}>Prattle をフルで体験するにはアカウントが必要となります</h5>
-          <div>
-            <Button
-              click={()=> router.push('/signup')}
-              icon={<VscAccount />}
-              name="新規登録"
-            />
-          </div>
-        </>
-      }
-      </header>
-      <GridItems grid={gridStatus}>
+      <GridItems grid={gridStatus} gap={'0'}>
             {gridStatus != '1fr' && <div style={sideBarContainer}>
               <GridItems grid={'1fr'}>
                 <h3 style={{marginBottom: 0}}>Memo</h3>
-                {/* <div className="notesContainer">
-                  {messagesNotesArray.length !== 0 ?
-                    messagesNotesArray.map(props =>
+                <div className="notesContainer">
+                  {notesArray.length !== 0 ?
+                    notesArray.map(props =>
                       <TextMessageNote
                         key={props.message}
-                        setBy={props.set_by}
-                        whoSaid={props.who_said}
+                        whoSaid={props.sent_by_user}
                         message={props.message}
+                        time={props.created_at}
                       />
                     ) :
                     <p>
                       ピン留めした Prate (メッセージ) は全てメモはとしてこちらで表示されます。
                     </p>
                   }
-                </div> */}
+                </div>
               </GridItems>
             </div>}
+            <div>
+            {!modalIsOpen &&             
+            <header>
+              {user ? 
+                <>
+                  {user.id === roomInfo.room_creator ? 
+                    <>
+                      <Button
+                        disabled={!roomId}
+                        click={(e) => { e.preventDefault(); router.push("/"); }}
+                        icon={<VscHome />}
+                        name="ダッシュボード"
+                      />
+                      <h5 style={{margin:0}}>あなたの部屋</h5>
+                    </>:
+                    <>
+
+                      <Button
+                        name="作者のプロフィールを見る"
+                        click={()=> router.push('/profile/' + owner)}
+                      />
+                    </>
+                  }
+                </>:
+                <>
+                  <h5 style={{margin:0}}>Prattle をフルで体験するにはアカウントが必要となります</h5>
+                  <div>
+                    <Button
+                      click={()=> router.push('/signup')}
+                      icon={<VscAccount />}
+                      name="新規登録"
+                    />
+                  </div>
+                </>
+              }
+            </header>
+            }
             <div className={'bodyPadding'}>
               <AlignItems scroll={true}>
                 {user ?
@@ -255,13 +257,13 @@ function IndivisualPrateRoom({ roomId }) {
                     isEditable={roomInfo.room_editable}
                   />
                 }
-                <Button
+                {!isMobile && <Button
                   size={'medium'}
                   disabled={!roomId}
                   click={()=>{gridStatus === '1fr' ? setGridStatus('1fr 4fr'): setGridStatus('1fr')}}
                   icon={<VscNote />}
                   name="メモ"
-                />
+                />}
                 {user &&
                 <>
                   {user.id === roomInfo.room_creator && <>
@@ -327,7 +329,7 @@ function IndivisualPrateRoom({ roomId }) {
                     onSubmit={handleMessageSubmit}
                   >
                     <textarea
-                      placeholder='Your long message'
+                      placeholder='メッセージ'
                       onChange={handleMessageChange}
                       value={message}
                     />
@@ -343,7 +345,7 @@ function IndivisualPrateRoom({ roomId }) {
                         type="submit"
                         click={handleMessageSubmit}
                         icon={<VscMail />}
-                        name="Post"
+                        name="投稿"
                       />
                     </AlignItems>
                   </form>
@@ -489,6 +491,7 @@ function IndivisualPrateRoom({ roomId }) {
                 }
                 </>
               }
+            </div>
             </div>
           </GridItems>
         </>:<StaticScreen type="loading"><h2>現在ルーム取得中</h2></StaticScreen>
