@@ -76,8 +76,7 @@ function IndivisualPrateRoom({ roomId }) {
   const [message, setMessage] = useState('');
   const [messageSending, setMessageSending] = useState(false)
   const [roomInfo, setRoomInfo] = useState('');
-
-
+  
   const [messagesArray, setMessagesArray] = useState([]);
   const [messagesNotesArray, setMessagesNotesArray] = useState([]);
   const [owner, setOwner] = useState('');
@@ -185,10 +184,11 @@ function IndivisualPrateRoom({ roomId }) {
       </Head>
       {roomInfo && messagesArray ?
       <>
-      {user && 
+      <header>
+      {user ? 
         <>
-          {user.id === roomInfo.room_creator && 
-            <header>
+          {user.id === roomInfo.room_creator ? 
+            <>
               <Button
                 disabled={!roomId}
                 click={(e) => { e.preventDefault(); router.push("/"); }}
@@ -196,12 +196,17 @@ function IndivisualPrateRoom({ roomId }) {
                 name="ダッシュボード"
               />
               <h5 style={{margin:0}}>あなたの部屋</h5>
-            </header>
-            }
-        </>
-      }
-      {!user && 
-        <header>
+            </>:
+            <>
+
+              <Button
+                name="作者のプロフィールを見る"
+                click={()=> router.push('/profile/' + owner)}
+              />
+            </>
+          }
+        </>:
+        <>
           <h5 style={{margin:0}}>Prattle をフルで体験するにはアカウントが必要となります</h5>
           <div>
             <Button
@@ -210,8 +215,9 @@ function IndivisualPrateRoom({ roomId }) {
               name="新規登録"
             />
           </div>
-        </header>
-      }     
+        </>
+      }
+      </header>
       <GridItems grid={gridStatus}>
             {gridStatus != '1fr' && <div style={sideBarContainer}>
               <GridItems grid={'1fr'}>
@@ -413,6 +419,7 @@ function IndivisualPrateRoom({ roomId }) {
               <div className="messagesContainer">
                 {messagesArray.map(props =>
                   <TextMessage
+                    style={{marginBottom: '0.5em'}}
                     key={props.message}
                     messageId={props.id}
                     currentRoom={roomId}

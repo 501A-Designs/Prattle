@@ -8,16 +8,23 @@ import StaticScreen from '../lib/scene-component/StaticScreen';
 import { isMobile } from 'react-device-detect';
 import AlignItems from '../lib/style-component/AlignItems';
 import Link from 'next/link';
-// import Link from 'next/link';
+import { useReward } from 'react-rewards';
 
 export default function Login() {
+    const { reward, isAnimating } = 
+    useReward('rewardId', 'confetti', {
+        lifetime:500,
+        spread:180,
+        elementCount:200
+    });
+
     const router = useRouter();
     const user = supabase.auth.user();
     const userEmail = useRef()
     const userPassword = useRef()
     const [userName,setUserName] = useState()
     const [generatingAccount, setGeneratingAccount] = useState(1)
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setGeneratingAccount(4);
@@ -38,6 +45,9 @@ export default function Login() {
             }
         )
         setGeneratingAccount(3);
+    }
+    if (generatingAccount === 3) {
+        reward();        
     }
     if (user) {
         router.push('/');
@@ -86,7 +96,7 @@ export default function Login() {
                     }
                     {generatingAccount === 3 &&
                         <>
-                            <h3>アカウントが作成されました！</h3>
+                            <h3 id="rewardId">アカウントが作成されました！</h3>
                             <p>View your account or check out other rooms</p>
                             <ul>
                                 <li onClick={()=> router.push('/')}>ダッシュボード</li>
@@ -95,7 +105,7 @@ export default function Login() {
                         </>
                     }
                     <p>
-                        *アカウント無い方用
+                        *アカウントをお持ちで無い方
                         <br />
                         <Link href="/signin">
                             <a>

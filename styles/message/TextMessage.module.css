@@ -1,7 +1,7 @@
 .textMessage{
 	border: 1px solid transparent;
 	width:100%;
-	padding: 0.5em;
+	padding-bottom: 0.5em;
 	align-items: start;
 	transition: 0.3s;
 }
@@ -41,7 +41,7 @@
 .messageTime{
 	user-select: none;
 	color:var(--baseColor5);
-	width: auto;
+	width: max-content;
 	text-align: right;
 	margin: 0;
 	font-size: 0.7em;
@@ -53,6 +53,7 @@
 .userImage{
 	width: 30px;
 	height: 30px;
+	border: var(--baseBorder2);
 	border-radius:calc(var(--borderRadius)*5);
 }
 .placeHolderImage{

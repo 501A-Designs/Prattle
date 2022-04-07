@@ -9,6 +9,7 @@ import GridItems from '../../lib/style-component/GridItems';
 import RoomThumbNail from '../../lib/RoomThumbNail';
 import ProfileInfo from '../../lib/ProfileInfo';
 import { isMobile } from 'react-device-detect';
+import Button from '../../lib/button-component/Button';
 
 function IndivisualProfile({ profileId }) {
     const router = useRouter()
@@ -30,28 +31,43 @@ function IndivisualProfile({ profileId }) {
         setRooms(room);
     }
 
+    const copiedContent = () => {
+        navigator.clipboard.writeText(`${profileId} `);
+        toast('ユーザーIDがコピーされました');
+    }
+
     useEffect(() => {
         fetchRooms();
     }, [profileId])
 
     return (
-        <div className="bodyPadding">
-            <ProfileInfo profileId={profileId}/>
-            <GridItems grid={isMobile ? '1fr' : '1fr 1fr 1fr'}>
-                {rooms && rooms.map((props) => {
-                    return <RoomThumbNail
-                            key={props.room_name}
-                            backgroundImage={props.background_image}
-                            roomName={props.room_name}
-                            roomCode={props.room_id}
-                            description={props.description}
-                            user={user}
-                            isEditable={props.room_editable}
-                        />
-                })}
-            </GridItems>
-            {rooms && <>{rooms.length === 0 && <p>このユーザーは一般公開されている部屋を作成していません</p>}</>}
-        </div>
+        <>
+            <header>
+                {user &&           
+                    <Button
+                        click={()=>{copiedContent();}}
+                        name="ユーザーIDをコピー"
+                    />
+                }
+            </header>
+            <div className="bodyPadding">
+                <ProfileInfo profileId={profileId}/>
+                <GridItems grid={isMobile ? '1fr' : '1fr 1fr 1fr'}>
+                    {rooms && rooms.map((props) => {
+                        return <RoomThumbNail
+                                key={props.room_name}
+                                backgroundImage={props.background_image}
+                                roomName={props.room_name}
+                                roomCode={props.room_id}
+                                description={props.description}
+                                user={user}
+                                isEditable={props.room_editable}
+                            />
+                    })}
+                </GridItems>
+                {rooms && <>{rooms.length === 0 && <p>このユーザーは一般公開されている部屋を作成していません</p>}</>}
+            </div>
+        </>
     )
 }
 

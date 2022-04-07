@@ -14,6 +14,7 @@ export default function Browse() {
     const [allPublicRooms, setAllPublicRooms] = useState();
 
     const [searchInput, setSearchInput] = useState([]);
+    const [searchStatus, setSearchStatus] = useState()
     const [searchedMessages, setSearchedMessages] = useState([]);
 
     let fetchAllRooms = async () => {
@@ -24,6 +25,7 @@ export default function Browse() {
       setAllPublicRooms(publicRooms);
       console.log('fetched');
       setSearchedMessages();
+      setSearchStatus();
     }
     useEffect(() => {
       fetchAllRooms();
@@ -33,6 +35,7 @@ export default function Browse() {
     if (searchInput.length === 0) {()=>{fetchAllRooms()}}
     const handleSearchSubmit = async (e) =>{
       e.preventDefault();
+      setSearchStatus('querying');
       const { data: roomData, roomError } = await supabase
         .from('rooms')
         .select()
@@ -44,8 +47,9 @@ export default function Browse() {
         .select()
         .textSearch('message', `${searchInput}`);
       setSearchedMessages(messageData)
-      console.log(messageData)
+      setSearchStatus('executed')
     }
+    console.log(searchStatus);
 
   return (
     <div className="bodyPadding">
@@ -90,8 +94,25 @@ export default function Browse() {
           <Button click={fetchAllRooms} name="全部屋表示"/>
         </AlignItems>
         
-
         <br/>
+        <AlignItems margin={'0 0 2em 0em'}>
+          {searchStatus == 'querying' && 
+            <>
+              <img src="https://i.gifer.com/ZZ5H.gif" width="30px" height="30px"/>
+              <h2 style={{margin:0}}>Prattle内を検索中...</h2>
+            </>
+          }
+          {searchStatus == 'executed' &&
+            <>
+              {allPublicRooms &&
+                <GridItems>
+                  <h2 style={{margin:0}}>{allPublicRooms.length}件ヒット</h2>
+                  {allPublicRooms.length === 0 && <p>違うキーワードを使ってまた調べてみよう！</p>}
+                </GridItems>
+              }
+            </>
+          }
+        </AlignItems>
         <div className="grid triGrid">
             {allPublicRooms && allPublicRooms.map(props=>
                 <RoomThumbNail
@@ -106,16 +127,15 @@ export default function Browse() {
                     // author={'bruhh they'}
                 />
             )}
-            {allPublicRooms && allPublicRooms.length === 0 && <GridItems><h1>あれ、、</h1><p>何も見つかりませんでした<br/>また違うキーワードを使って見てください</p></GridItems>}
         </div>
         <br/>
         <GridItems>
           {searchedMessages && <>          
-            {searchedMessages.length !== 0 && <h3 style={{marginBottom:'0.5em'}}>Prate投稿</h3>}
+            {searchedMessages.length !== 0 && <h3 style={{marginBottom:'0.5em'}}>Prate投稿{searchedMessages.length}件ヒット</h3>}
               {searchedMessages && searchedMessages.map(props =>
                 <TextMessage
                   hideThread={true}
-                  style={{border:'var(--baseBorder1)',borderRadius:'var(--borderRadius)', boxShadow:'var(--boxShadow)'}}
+                  style={{border:'var(--baseBorder1)',borderRadius:'var(--borderRadius)', boxShadow:'var(--boxShadow)',padding:'0.5em'}}
                   key={props.message}
                   messageId={props.id}
                   // currentRoom={roomId}

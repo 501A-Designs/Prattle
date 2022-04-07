@@ -7,7 +7,6 @@ import { VscSignOut,VscHome,VscSave,VscClose } from "react-icons/vsc";
 import AlignItems from '../../lib/style-component/AlignItems';
 import Modal from 'react-modal/lib/components/Modal';
 import GridItems from '../../lib/style-component/GridItems';
-import ToolTip from '../../lib/ToolTip';
 import ProfileInfo from '../../lib/ProfileInfo';
 import StaticScreen from '../../lib/scene-component/StaticScreen';
 
@@ -23,18 +22,18 @@ export default function Home() {
     }
     let modalStyle = {
       content: {
-          top: '50%',
-          left: '50%',
-          right: 'auto',
-          bottom: 'auto',
-          marginRight: '-50%',
-          width: '500px',
-          transform: 'translate(-50%, -50%)',
-          backgroundColor: 'var(--baseColor0)',
-          border: 'var(--baseBorder2)',
-          borderRadius: 'calc(var(--borderRadius)*2)',
-          boxShadow: 'var(--boxShadow)',
-          padding: '1em',
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        maxWidth: '500px',
+        width: '100%',
+        transform: 'translate(-50%, -50%)',
+        backgroundColor: 'var(--baseColor0)',
+        border: 'var(--baseBorder2)',
+        borderRadius: 'calc(var(--borderRadius)*2)',
+        boxShadow: 'var(--boxShadow)',
+        padding: '1em',
       },
     }
 
@@ -62,77 +61,77 @@ export default function Home() {
     }
 
     return (
-        <div className="bodyPadding">
-            {user ?
-                <>
-                    <Modal
-                        isOpen={modalIsOpen}
-                        style={modalStyle}
-                    >
-                        <SmallButton
-                            click={() => closeModal()}
-                            icon={<VscClose />}
-                            right={true}
-                        />
-                        <h3>Edit profile</h3>
-                        <GridItems grid={'1fr'}>
-                            <form className="shedForm" onSubmit={saveUserProfile}>
-                                <input
-                                    placeholder="Add a bio to your profile"
-                                    type="text"
-                                    value={userBio}
-                                    onChange={(e)=>{
-                                        e.preventDefault();
-                                        setUserBio(e.target.value);
-                                    }}
-                                />
-                                <input
-                                    placeholder="Add an image to your profile"
-                                    type="text"
-                                    value={userImage}
-                                    onChange={(e)=>{
-                                        e.preventDefault();
-                                        setUserImage(e.target.value);
-                                    }}
+        <>
+            <header>
+                <Button
+                    click={(e) => { e.preventDefault(); router.push(`/`); }}
+                    icon={<VscHome />}
+                    name="ダッシュボードに戻る"
+                />
+            </header>
+            <div className="bodyPadding">
+                <h1>Profile</h1>
+                {user ?
+                    <>
+                        <Modal
+                            isOpen={modalIsOpen}
+                            style={modalStyle}
+                        >
+                            <SmallButton
+                                click={() => closeModal()}
+                                icon={<VscClose />}
+                                right={true}
+                            />
+                            <h3>Edit profile</h3>
+                            <GridItems grid={'1fr'}>
+                                <form className="shedForm" onSubmit={saveUserProfile}>
+                                    <input
+                                        placeholder="プロフィール"
+                                        type="text"
+                                        value={userBio}
+                                        onChange={(e)=>{
+                                            e.preventDefault();
+                                            setUserBio(e.target.value);
+                                        }}
+                                    />
+                                    <input
+                                        placeholder="プロフィール画像（画像URLのみ）"
+                                        type="text"
+                                        value={userImage}
+                                        onChange={(e)=>{
+                                            e.preventDefault();
+                                            setUserImage(e.target.value);
+                                        }}
+                                    />
+                                    <Button
+                                        click={saveUserProfile}
+                                        disabled={!userBio}
+                                        type="submit"
+                                        icon={<VscSave />}
+                                        name="保存"
+                                    />
+                                </form>
+                            </GridItems>
+                        </Modal>
+                        <ProfileInfo profileId={user.id}>
+                            <AlignItems>
+                                <Button
+                                    click={()=>{openModal();}}
+                                    size="medium"
+                                    name="プロフィールを編集"
                                 />
                                 <Button
-                                    click={saveUserProfile}
-                                    disabled={!userBio}
-                                    type="submit"
-                                    icon={<VscSave />}
-                                    name="Save"
+                                    click={signout}
+                                    size="medium"
+                                    icon={<VscSignOut />}
+                                    name="ログアウト"
                                 />
-                            </form>
-                        </GridItems>
-                    </Modal>
-                    <Button
-                        click={(e) => { e.preventDefault(); router.push(`/`); }}
-                        icon={<VscHome />}
-                        name="ダッシュボードに戻る"
-                    />
-                    <ProfileInfo profileId={user.id}>
-                        <AlignItems>
-                            <Button
-                                click={()=>{openModal();}}
-                                size="medium"
-                                name="プロフィールを編集"
-                            />
-                            <Button
-                                click={()=>{openModal();}}
-                                size="medium"
-                                name="ユーザーIDをコピー"
-                            />
-                            <Button
-                                click={signout}
-                                size="medium"
-                                icon={<VscSignOut />}
-                                name="ログアウト"
-                            />
-                        </AlignItems>
-                    </ProfileInfo>
-                </> :
-                <StaticScreen type={'notLoggedIn'}/>
-            }
-        </div>
+                            </AlignItems>
+                        </ProfileInfo>
+                    </> :
+                    <StaticScreen type={'notLoggedIn'}/>
+                }
+            </div>
+        </>
     )
 }
