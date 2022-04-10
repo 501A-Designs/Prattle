@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../../utils/supabaseClient'
 import { useRouter } from 'next/router'
-
+import { toast } from 'react-toastify';
 
 Modal.setAppElement('#__next');
 import Modal from 'react-modal';

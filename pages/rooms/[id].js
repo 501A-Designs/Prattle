@@ -223,7 +223,7 @@ function IndivisualPrateRoom({ roomId }) {
 
                       <Button
                         name="作者のプロフィールを見る"
-                        click={()=> router.push('/profile/' + owner)}
+                        click={()=> router.push('/profile/' + roomInfo.room_creator)}
                       />
                     </>
                   }
