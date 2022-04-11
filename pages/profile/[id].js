@@ -42,14 +42,14 @@ function IndivisualProfile({ profileId }) {
 
     return (
         <>
-            <header>
-                {user &&           
+            {user &&           
+                <header>
                     <Button
                         click={()=>{copiedContent();}}
                         name="ユーザーIDをコピー"
                     />
-                }
-            </header>
+                </header>
+            }
             <div className="bodyPadding">
                 <ProfileInfo profileId={profileId}/>
                 <GridItems grid={isMobile ? '1fr' : '1fr 1fr 1fr'}>

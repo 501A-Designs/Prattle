@@ -37,18 +37,6 @@
 .messageContent a{
 	color: var(--baseColor5);
 }
-.messageSender,
-.messageTime{
-	user-select: none;
-	color:var(--baseColor5);
-	width: max-content;
-	text-align: right;
-	margin: 0;
-	font-size: 0.7em;
-}
-.messageTime{
-	font-family: "Share Tech Mono", monospace;
-}
 
 .userImage{
 	width: 30px;

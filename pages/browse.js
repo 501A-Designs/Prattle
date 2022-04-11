@@ -144,7 +144,7 @@ export default function Browse() {
                 {searchedMessages && searchedMessages.map(props =>
                   <TextMessage
                     hideThread={true}
-                    style={{border:'var(--baseBorder1)',borderRadius:'var(--borderRadius)', boxShadow:'var(--boxShadow)',padding:'0.5em'}}
+                    style={{border:'var(--baseBorder2)',borderRadius:'var(--borderRadius)', boxShadow:'var(--boxShadow)',padding:'0.5em'}}
                     key={props.message}
                     messageId={props.id}
                     // currentRoom={roomId}

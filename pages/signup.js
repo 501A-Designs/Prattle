@@ -76,7 +76,7 @@ export default function Login() {
                             name="新規登録"
                         /> 
                     </>}          
-                    {generatingAccount === 4 && <h4>Loading...</h4>}
+                    {generatingAccount === 4 && <h4>少々お待ち下さい...</h4>}
                     {generatingAccount === 2 && <form className="shedForm">
                             <img className="profileImage" src={userName ? `https://avatars.dicebear.com/api/croodles/${userName}.svg`:'https://www.poynter.org/wp-content/uploads/2021/09/shutterstock_1563012205.png'}/>
                                 <input placeholder="Eメール" type="email" ref={userEmail} />
