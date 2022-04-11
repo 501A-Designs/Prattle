@@ -14,23 +14,6 @@ export default function Usage() {
     }
   return (
       <>
-        <header>
-            <Button
-                name="Main Page"
-                click={() =>router.push('/')}
-            />
-            <h4 style={{margin:0}}>Prattle Docs</h4>
-            {user ?
-                <Button
-                    name="Create Room"
-                    click={() =>router.push('/rooms')}
-                />
-                :<Button
-                    name="Browse"
-                    click={() =>router.push('/browse')}
-                />
-            }
-        </header>
         <div className="bodyPadding">
             <h1>Usage</h1>
             <ul>

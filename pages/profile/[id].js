@@ -52,7 +52,7 @@ function IndivisualProfile({ profileId }) {
             }
             <div className="bodyPadding">
                 <ProfileInfo profileId={profileId}/>
-                <GridItems grid={isMobile ? '1fr' : '1fr 1fr 1fr'}>
+                <div className="grid triGrid">
                     {rooms && rooms.map((props) => {
                         return <RoomThumbNail
                                 key={props.room_name}
@@ -64,7 +64,7 @@ function IndivisualProfile({ profileId }) {
                                 isEditable={props.room_editable}
                             />
                     })}
-                </GridItems>
+                </div>
                 {rooms && <>{rooms.length === 0 && <p>このユーザーは一般公開されている部屋を作成していません</p>}</>}
             </div>
         </>

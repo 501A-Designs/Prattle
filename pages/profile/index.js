@@ -115,13 +115,6 @@ export default function Home() {
 
     return (
         <>
-            {!modalIsOpen && <header>
-                <Button
-                    click={(e) => { e.preventDefault(); router.push(`/`); }}
-                    icon={<VscHome />}
-                    name="ダッシュボードに戻る"
-                />
-            </header>}
             <div className="bodyPadding">
                 {/* <h1>Profile</h1> */}
                 {user ?

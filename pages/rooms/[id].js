@@ -205,42 +205,6 @@ function IndivisualPrateRoom({ roomId }) {
               </GridItems>
             </div>}
             <div>
-            {!modalIsOpen &&             
-            <header>
-              {user ? 
-                <>
-                  {user.id === roomInfo.room_creator ? 
-                    <>
-                      <Button
-                        disabled={!roomId}
-                        click={(e) => { e.preventDefault(); router.push("/"); }}
-                        icon={<VscHome />}
-                        name="ダッシュボード"
-                      />
-                      <h5 style={{margin:0}}>あなたの部屋</h5>
-                    </>:
-                    <>
-
-                      <Button
-                        name="作者のプロフィールを見る"
-                        click={()=> router.push('/profile/' + roomInfo.room_creator)}
-                      />
-                    </>
-                  }
-                </>:
-                <>
-                  <h5 style={{margin:0}}>Prattle をフルで体験するにはアカウントが必要となります</h5>
-                  <div>
-                    <Button
-                      click={()=> router.push('/signup')}
-                      icon={<VscAccount />}
-                      name="新規登録"
-                    />
-                  </div>
-                </>
-              }
-            </header>
-            }
             <div className={'bodyPadding'}>
               <AlignItems scroll={true}>
                 {user ?
@@ -267,20 +231,6 @@ function IndivisualPrateRoom({ roomId }) {
                 {user &&
                 <>
                   {user.id === roomInfo.room_creator && <>
-                    <Button
-                      size={'medium'}
-                      disabled={!roomId}
-                      click={(e) => { e.preventDefault(); router.push("/shortcuts"); }}
-                      icon={<VscSymbolParameter />}
-                      name="ショートカット"
-                      />
-                    <Button
-                      size={'medium'}
-                      disabled={!roomId}
-                      click={(e) => { e.preventDefault(); router.push("/rooms"); }}
-                      icon={<VscRocket />}
-                      name="新規部屋作成"
-                    />
                     <Button
                       size={'medium'}
                       disabled={!roomId}
