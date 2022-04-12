@@ -3,6 +3,7 @@ import Button from '../lib/button-component/Button'
 import Card from '../lib/Card'
 import { supabase } from '../utils/supabaseClient'
 import { useRouter } from "next/router";
+import Header from '../lib/Header';
 
 export default function Usage() {
     const user = supabase.auth.user();
@@ -14,6 +15,7 @@ export default function Usage() {
     }
   return (
       <>
+        <Header/>
         <div className="bodyPadding">
             <h1>Usage</h1>
             <ul>

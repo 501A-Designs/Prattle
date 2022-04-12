@@ -19,7 +19,7 @@
 	--baseColor3: rgb(200, 200, 200);
 	--baseColor4: rgb(180, 180, 180);
 	--baseColor5: rgb(160, 160, 160);
-	--prattleColor0: #4e4e4e;
+	--prattleColor0: #575757;
 	--prattleColor1: #3b3b3b;
 	--borderRadius: 5px;
 	--transparentBorder: 1px solid transparent;
@@ -39,7 +39,7 @@
 	background: linear-gradient(to right, var(--prattleColor0) 20%, var(--prattleColor1) 40%, var(--prattleColor1) 60%, var(--prattleColor0) 80%);
     background-clip: text;
     color: transparent;
-	background-size: 200% auto;
+	background-size: 200% auto;;
 	animation: gradientTextAni 10s infinite;
 }
 @keyframes gradientTextAni {
@@ -82,18 +82,8 @@ body {
 }
 
 /* Text Styling */
-a {
-	color: inherit;
-}
-
-* {
-	font-family: "Poppins", 'Zen Kaku Gothic New', sans-serif;
-	/* font-family: "Kanit", sans-serif; */
-	/* color: var(--prattleColor); */
-
-	/* testing */
-	/* color: var(--grey1); */
-}
+a {color: inherit;}
+* {font-family: "Poppins", 'Zen Kaku Gothic New', sans-serif;}
 
 h1 {
 	margin: 0;
@@ -160,25 +150,6 @@ td, th {
 	cursor: pointer;
 }
 
-.iconSmallButton {
-	background-color: var(--baseColor1);
-	border-radius: var(--borderRadius);
-	color: var(--txtColor0);
-	border: none;
-	padding: 0.5em ;
-	text-decoration: none;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 5px;
-	cursor: pointer;
-	outline: 2px solid transparent;
-	user-select: none;
-	transition: 0.3s;
-}
-.iconSmallButton:hover{
-	background-color: var(--baseColor2);
-}
 .emojiButton{
 	background-color: var(--baseColor1);
 	border-radius: var(--borderRadius);
@@ -203,21 +174,6 @@ td, th {
 	padding: 1em;
 	border-radius: calc(var(--borderRadius)*2);
 	background-color: var(--grey4);
-}
-
-header {
-	position: sticky;
-	top: 0;
-	width: 100%;
-	z-index: 1;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 1em;
-	/* margin-bottom: 2em; */
-	border-bottom: var(--baseBorder2);
-	background-color: var(--baseColor0);
-	opacity: 95%;
 }
 
 code {

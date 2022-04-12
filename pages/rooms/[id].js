@@ -24,6 +24,7 @@ import StaticScreen from '../../lib/scene-component/StaticScreen';
 import GhenInterpreter from '../../lib/GhenInterpreter';
 import TabComponent from '../../lib/TabComponent';
 import { isMobile } from 'react-device-detect'
+import Header from '../../lib/Header';
 
 function IndivisualPrateRoom({ roomId }) {
   const user = supabase.auth.user();
@@ -205,6 +206,8 @@ function IndivisualPrateRoom({ roomId }) {
               </GridItems>
             </div>}
             <div>
+            <div>
+              <Header/>
             <div className={'bodyPadding'}>
               <AlignItems scroll={true}>
                 {user ?
@@ -441,6 +444,7 @@ function IndivisualPrateRoom({ roomId }) {
                 }
                 </>
               }
+            </div>
             </div>
             </div>
           </GridItems>

@@ -18,48 +18,6 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
 
   return <>
-      {user ?
-        <header>
-          <Image onClick={() => router.push(`/`)} src={prattleIcon} width={30} height={30}/>
-          <AlignItems>
-            <SmallButton
-              click={() => router.push(`/rooms`)}
-              icon={<VscAdd />}
-              name={'新規部屋作成'}
-            />
-            <SmallButton
-              click={() => router.push(`/profile`)}
-              icon={<VscAccount />}
-              name={'アカウント'}
-            />
-            <SmallButton
-              click={() => router.push(`/browse`)}
-              icon={<VscComment />}
-              name={'他の部屋を見る'}
-            />
-            <SmallButton
-              click={() => router.push(`/usage`)}
-              icon={<VscRepo />}
-              name={'使用上'}
-            />
-            <SmallButton
-              click={() => router.push("/shortcuts")}
-              icon={<VscSymbolParameter />}
-              name="ショートカット"
-            />
-          </AlignItems>
-        </header>:
-        <header>
-          <h5 style={{margin:0}}>Prattle をフルで体験するにはアカウントが必要となります</h5>
-          <div>
-            <Button
-              click={()=> router.push('/signup')}
-              icon={<VscAccount />}
-              name="新規登録"
-            />
-          </div>
-        </header>
-      }
       <ToastContainer
         position="top-right"
         autoClose={5000}

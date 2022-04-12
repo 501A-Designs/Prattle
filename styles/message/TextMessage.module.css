@@ -36,6 +36,8 @@
 }
 .messageContent a{
 	color: var(--baseColor5);
+	white-space: pre-wrap;
+	font-size: 0.8em;
 }
 
 .userImage{

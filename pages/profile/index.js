@@ -8,6 +8,7 @@ import AlignItems from '../../lib/style-component/AlignItems';
 import Modal from 'react-modal/lib/components/Modal';
 import GridItems from '../../lib/style-component/GridItems';
 import StaticScreen from '../../lib/scene-component/StaticScreen';
+import Header from '../../lib/Header';
 
 export default function Home() {
     const user = supabase.auth.user();
@@ -115,6 +116,7 @@ export default function Home() {
 
     return (
         <>
+            <Header/>
             <div className="bodyPadding">
                 {/* <h1>Profile</h1> */}
                 {user ?
@@ -228,12 +230,14 @@ export default function Home() {
                                 </>
                             }
                         </Modal>
+                        {userInfo ? 
                         <AlignItems center={true} flexDirection="column">
                             {/* <GridItems center={true}> */}
                                 <img style={{
+                                    marginTop: '2em',
                                     borderRadius:'calc(var(--borderRadius)*50)',
-                                    width:'10em',
-                                    height:'10em',
+                                    width:'7em',
+                                    height:'7em',
                                     border:'var(--baseBorder2)',
                                     boxShadow:'var(--boxShadow)',
                                 }} src={userInfo && userInfo.profile.user_image}/>
@@ -296,7 +300,8 @@ export default function Home() {
                                     name="ログアウト"
                                 />
                             </AlignItems>
-                        </AlignItems>
+                        </AlignItems>:<StaticScreen type='loading'/>
+                        }
                     </> :
                     <StaticScreen type={'notLoggedIn'}/>
                 }
