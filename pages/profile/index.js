@@ -114,11 +114,15 @@ export default function Home() {
     }
 
 
+    const copyUserId = () => {
+        navigator.clipboard.writeText(`${user.id} `);
+        toast('ユーザーIDがコピーされました。Prattle上で部屋のオーナーシップを移行する際に他の人に共有してください');
+    }
+
     return (
         <>
             <Header/>
             <div className="bodyPadding">
-                {/* <h1>Profile</h1> */}
                 {user ?
                     <>
                         <Modal
@@ -292,6 +296,12 @@ export default function Home() {
                                     icon={<VscEdit/>}
                                     size="medium"
                                     name="プロフィールを編集"
+                                />
+                                <Button
+                                    click={()=>{copyUserId();}}
+                                    icon={<VscEdit/>}
+                                    size="medium"
+                                    name="IDをコピー"
                                 />
                                 <Button
                                     click={signout}
