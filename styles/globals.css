@@ -368,6 +368,28 @@ iframe	{
 	}
 }
 
+
+@media screen and (max-width: 839px) and (min-width: 600px) {
+	.petaGrid{
+		grid-template-columns: 1fr 1fr;
+	}
+}
+@media screen and (max-width: 1114px) and (min-width: 840px) {
+	.petaGrid{
+		grid-template-columns: 1fr 1fr 1fr;
+	}
+}
+@media screen and (max-width: 1349px) and (min-width: 1115px) {
+	.petaGrid{
+		grid-template-columns: 1fr 1fr 1fr 1fr;
+	}
+}
+@media screen and (min-width: 1350px) {
+	.petaGrid{
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	}
+}
+
 .prateTypeButton{
 	background-color: var(--baseColor1);
 	border-radius:  var(--borderRadius);
