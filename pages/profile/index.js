@@ -3,12 +3,16 @@ import { supabase } from '../../utils/supabaseClient'
 import { useRouter } from "next/router";
 import Button from '../../lib/button-component/Button';
 import SmallButton from '../../lib/button-component/SmallButton';
+import IconButton from '../../lib/button-component/IconButton';
+
 import { VscAdd,VscEdit,VscSignOut,VscHome,VscSave,VscClose,VscLink,VscDeviceCamera,VscTwitter,VscSymbolFile,VscVmRunning } from "react-icons/vsc";
 import AlignItems from '../../lib/style-component/AlignItems';
 import Modal from 'react-modal/lib/components/Modal';
 import GridItems from '../../lib/style-component/GridItems';
 import StaticScreen from '../../lib/scene-component/StaticScreen';
 import Header from '../../lib/Header';
+import { modalStyle } from '../../modalStyle';
+import { FiFile, FiInstagram, FiLink, FiPlus, FiTwitter, FiXCircle, FiYoutube } from 'react-icons/fi';
 
 export default function Home() {
     const user = supabase.auth.user();
@@ -16,22 +20,6 @@ export default function Home() {
     const [modalIsOpen, setIsOpen] = useState(false);
     function closeModal() {
       setIsOpen(false);
-    }
-    let modalStyle = {
-      content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        maxWidth: '500px',
-        width: '100%',
-        transform: 'translate(-50%, -50%)',
-        backgroundColor: 'var(--baseColor0)',
-        border: 'var(--baseBorder2)',
-        borderRadius: 'calc(var(--borderRadius)*2)',
-        boxShadow: 'var(--boxShadow)',
-        padding: '1em',
-      },
     }
 
     const [modalView, setModalView] = useState();
@@ -129,14 +117,23 @@ export default function Home() {
                             isOpen={modalIsOpen}
                             style={modalStyle}
                         >
-                            <SmallButton
-                                click={() => closeModal()}
-                                icon={<VscClose />}
-                                right={true}
-                            />
+                            {modalView !== 'loading' &&
+                            
+                                <AlignItems spaceBetween>
+                                    <h3>
+                                        {modalView === 'addLinks' && 'Connect SNS'}
+                                        {modalView === 'addUserInfo' && 'Edit profile'}
+                                    </h3>
+                                    <IconButton
+                                        onClick={() => closeModal()}
+                                        noOutline
+                                    >
+                                        <FiXCircle/>
+                                    </IconButton>
+                                </AlignItems>
+                            }
                             {modalView === 'addLinks' &&
                                 <>
-                                    <h3>Connect SNS</h3>
                                     <GridItems grid={'1fr'}>
                                         <form className="shedForm" onSubmit={saveUserLinks}>
                                             <input
@@ -185,18 +182,17 @@ export default function Home() {
                                                 }}
                                             />
                                             <Button
-                                                click={saveUserLinks}
+                                                onClick={saveUserLinks}
                                                 type="submit"
-                                                icon={<VscSave />}
-                                                name="保存"
-                                            />
+                                            >
+                                                保存
+                                            </Button>
                                         </form>
                                     </GridItems>
                                 </>
                             }
                             {modalView === 'addUserInfo' &&
                                 <>
-                                    <h3>Edit profile</h3>
                                     <GridItems grid={'1fr'}>
                                         <form className="shedForm" onSubmit={saveUserProfile}>
                                             <input
@@ -218,12 +214,12 @@ export default function Home() {
                                                 }}
                                             />
                                             <Button
-                                                click={saveUserProfile}
+                                                onClick={saveUserProfile}
                                                 disabled={!userBio}
                                                 type="submit"
-                                                icon={<VscSave />}
-                                                name="保存"
-                                            />
+                                            >
+                                                保存
+                                            </Button>
                                         </form>
                                     </GridItems>
                                 </>
@@ -239,76 +235,78 @@ export default function Home() {
                             {/* <GridItems center={true}> */}
                                 <img style={{
                                     marginTop: '2em',
-                                    borderRadius:'calc(var(--borderRadius)*50)',
+                                    borderRadius:'var(--borderRadius2)',
                                     width:'7em',
                                     height:'7em',
                                     border:'var(--baseBorder2)',
-                                    boxShadow:'var(--boxShadow)',
+                                    // boxShadow:'var(--boxShadow)',
                                 }} src={userInfo && userInfo.profile.user_image}/>
                                 <h2>{userInfo && userInfo.profile.first_name}</h2>
                                 <AlignItems>
                                     {websiteData &&
-                                        <SmallButton
-                                            icon={<VscLink/>}
-                                            name="リンク"
-                                            click={()=> window.open(`${websiteData}`, "_blank")}
-                                        />
+                                        <IconButton
+                                            onClick={()=> window.open(`${websiteData}`, "_blank")}
+                                            noOutline
+                                        >
+                                            <FiLink/>
+                                        </IconButton>
                                     }
                                     {instagramData &&
-                                        <SmallButton
-                                            icon={<VscDeviceCamera/>}
-                                            name="Instagram"
-                                            click={()=> window.open(`${instagramData}`, "_blank")}
-                                        />
+                                        <IconButton
+                                            onClick={()=> window.open(`${instagramData}`, "_blank")}
+                                            noOutline
+                                        >
+                                            <FiInstagram/>
+                                        </IconButton>
                                     }
                                     {twitterData &&
-                                        <SmallButton
-                                            icon={<VscTwitter/>}
-                                            name="Twitter"
-                                            click={()=> window.open(`${twitterData}`, "_blank")}
-                                        />
+                                        <IconButton
+                                            onClick={()=> window.open(`${twitterData}`, "_blank")}
+                                            noOutline
+                                        >
+                                            <FiTwitter/>
+                                        </IconButton>
                                     }
                                     {noteData &&                                        
-                                        <SmallButton
-                                            icon={<VscSymbolFile/>}
-                                            name="note"
-                                            click={()=> window.open(`${noteData}`, "_blank")}
-                                        />
+                                        <IconButton
+                                            onClick={()=> window.open(`${noteData}`, "_blank")}
+                                            noOutline
+                                        >
+                                            <FiFile/>
+                                        </IconButton>
                                     }
-                                    {youtubeData &&                                        
-                                        <SmallButton
-                                            icon={<VscVmRunning/>}
-                                            name="YouTube"
-                                            click={()=> window.open(`${youtubeData}`, "_blank")}
-                                        />
+                                    {youtubeData &&
+                                        <IconButton
+                                            onClick={()=> window.open(`${youtubeData}`, "_blank")}
+                                            noOutline
+                                        >
+                                            <FiYoutube/>
+                                        </IconButton>
                                     }
-                                    <Button
-                                        click={()=>{openEditProfileLinksModal();}}
-                                        icon={<VscAdd />}
-                                        size="medium"
-                                        name="SNSリンクを追加・消去"
-                                    />
+                                    <IconButton
+                                        onClick={()=>{openEditProfileLinksModal();}}
+                                    >
+                                        <FiPlus />
+                                    </IconButton>
                                 </AlignItems>
                                 <p style={{textAlign:'center'}}>{userBio}</p>
                             <AlignItems center={true}>
-                                <Button
-                                    click={()=>{openEditUserProfileModal();}}
-                                    icon={<VscEdit/>}
-                                    size="medium"
-                                    name="プロフィールを編集"
-                                />
-                                <Button
-                                    click={()=>{copyUserId();}}
-                                    icon={<VscEdit/>}
-                                    size="medium"
-                                    name="IDをコピー"
-                                />
-                                <Button
-                                    click={signout}
-                                    size="medium"
-                                    icon={<VscSignOut />}
-                                    name="ログアウト"
-                                />
+                                <SmallButton
+                                    onClick={()=>{openEditUserProfileModal();}}
+                                >
+                                    プロフィールを編集
+                                </SmallButton>
+                                <SmallButton
+                                    onClick={()=>{copyUserId();}}
+                                >
+                                    IDをコピー
+                                </SmallButton>
+                                <SmallButton
+                                    onClick={signout}
+                                    solid
+                                >
+                                    ログアウト
+                                </SmallButton>
                             </AlignItems>
                         </AlignItems>:<StaticScreen type='loading'/>
                         }

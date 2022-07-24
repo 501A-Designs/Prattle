@@ -5,10 +5,8 @@ import { toast } from 'react-toastify';
 
 Modal.setAppElement('#__next');
 import Modal from 'react-modal';
-import GridItems from '../../lib/style-component/GridItems';
 import RoomThumbNail from '../../lib/RoomThumbNail';
 import ProfileInfo from '../../lib/ProfileInfo';
-import { isMobile } from 'react-device-detect';
 import Button from '../../lib/button-component/Button';
 
 function IndivisualProfile({ profileId }) {
@@ -54,7 +52,8 @@ function IndivisualProfile({ profileId }) {
                 <ProfileInfo profileId={profileId}/>
                 <div className="grid triGrid">
                     {rooms && rooms.map((props) => {
-                        return <RoomThumbNail
+                        return (
+                            <RoomThumbNail
                                 key={props.room_name}
                                 backgroundImage={props.background_image}
                                 roomName={props.room_name}
@@ -63,6 +62,7 @@ function IndivisualProfile({ profileId }) {
                                 user={user}
                                 isEditable={props.room_editable}
                             />
+                        )
                     })}
                 </div>
                 {rooms && <>{rooms.length === 0 && <p>このユーザーは一般公開されている部屋を作成していません</p>}</>}

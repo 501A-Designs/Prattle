@@ -16,32 +16,6 @@ import StaticScreen from '../../lib/scene-component/StaticScreen';
 Modal.setAppElement('#__next');
 
 export default function Home() {
-    const [modalContent, setModalContent] = useState('');
-    const [modalIsOpen, setIsOpen] = useState(false);
-
-    const openModal =()=> {
-      setIsOpen(true);
-    }
-    function closeModal() {
-      setIsOpen(false);
-    }
-    let modalStyle = {
-        content: {
-            top: '50%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            marginRight: '-50%',
-            width: 'auto',
-            transform: 'translate(-50%, -50%)',
-            backgroundColor: 'var(--baseColor0)',
-            border: 'var(--baseBorder2)',
-            borderRadius: 'calc(var(--borderRadius)*2)',
-            boxShadow: 'var(--boxShadow)',
-            padding: '1em',
-        },
-    }
-
     const user = supabase.auth.user();
     const router = useRouter();
 
@@ -51,12 +25,9 @@ export default function Home() {
     const [groupDescriptionInput, setGroupDescriptionInput] = useState();
     const [roomPublic, setRoomPublic] = useState(false);
     const [roomEditable, setRoomEditable] = useState(false);
-    function toggleRoomPublic(value){
-        return !value;
-    }
-    function toggleRoomEditable(value){
-        return !value;
-    }
+    function toggleRoomPublic(value){ return !value }
+    function toggleRoomEditable(value){ return !value }
+
     const [status, setStatus] = useState('');
 
     // Create Group
@@ -132,12 +103,12 @@ export default function Home() {
                                 <label>部屋を<Link target="_blank" href="/browse">ブラウズページ</Link>やプロフィールに表示化</label>
                             </AlignItems>
                             <Button
+                                onClick={handleCreateGroup}
                                 disabled={!groupNameInput}
                                 type="submit"
-                                click={handleCreateGroup}
-                                icon={<VscActivateBreakpoints />}
-                                name="Create Room"
-                            />
+                            >
+                                部屋作成
+                            </Button>
                         </form>:
                         <p>{status}</p>
                     }

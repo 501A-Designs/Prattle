@@ -2,10 +2,7 @@ import React,{ useState } from 'react'
 import Button from '../lib/button-component/Button';
 import { useRef } from 'react'
 import { supabase } from '../utils/supabaseClient'
-import { VscAccount } from "react-icons/vsc";
 import { useRouter } from "next/router";
-import StaticScreen from '../lib/scene-component/StaticScreen';
-import { isMobile } from 'react-device-detect';
 import AlignItems from '../lib/style-component/AlignItems';
 import Link from 'next/link';
 import { useReward } from 'react-rewards';
@@ -46,12 +43,8 @@ export default function Login() {
         )
         setGeneratingAccount(3);
     }
-    if (generatingAccount === 3) {
-        reward();        
-    }
-    if (user) {
-        router.push('/');
-    }
+    if (generatingAccount === 3) reward();
+    if (user) router.push('/');
 
     return (
             <AlignItems center={true} className={'fadeIn centerAll'}>
@@ -71,10 +64,10 @@ export default function Login() {
                             </ol>
                         </p>
                         <Button
-                            click={()=>setGeneratingAccount(2)}
-                            icon={<VscAccount />}
-                            name="新規登録"
-                        /> 
+                            onClick={()=>setGeneratingAccount(2)}
+                        >
+                            新規登録
+                        </Button>
                     </>}          
                     {generatingAccount === 4 && <h4>少々お待ち下さい...</h4>}
                     {generatingAccount === 2 && <form className="shedForm">
@@ -88,10 +81,11 @@ export default function Login() {
                                     onChange={(e) => setUserName(e.target.value)}
                                     />
                                 <Button
-                                    click={handleSubmit}
-                                    icon={<VscAccount />}
-                                    name="アカウント作成"
-                                />
+                                    onClick={handleSubmit}
+                                    solid
+                                >
+                                    アカウント作成
+                                </Button>
                         </form>
                     }
                     {generatingAccount === 3 &&

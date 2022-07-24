@@ -56,10 +56,11 @@ export default function Login() {
                             <input style={inputStatus} placeholder="Eメール" type="email" ref={userEmail} />
                             <input style={inputStatus} placeholder="パスワード" type="password" ref={userPassword} />
                             <Button
-                                click={handleSubmit}
-                                icon={<VscSignIn />}
-                                name="ログイン"
-                            />
+                                onClick={handleSubmit}
+                                solid
+                            >
+                                ログイン
+                            </Button>
                         </form>
                         <p>
                             *アカウントを既にお持ちである方

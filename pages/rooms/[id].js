@@ -10,7 +10,7 @@ import IconButton from '../../lib/button-component/IconButton';
 
 import {FiFileText, FiPlus, FiSettings, FiXCircle} from 'react-icons/fi'
 
-import {VscAccount, VscHome, VscSymbolParameter, VscRocket,VscSettingsGear,VscComment,VscMail,VscClose,VscArrowSwap,VscNote,VscBold,VscItalic,VscSymbolColor,VscDebugLineByLine,VscLocation,VscAdd} from "react-icons/vsc";
+import {VscComment,VscArrowSwap,VscBold,VscItalic,VscSymbolColor,VscDebugLineByLine,VscLocation} from "react-icons/vsc";
 
 import { useRouter } from 'next/router'
 import AlignItems from '../../lib/style-component/AlignItems';
@@ -30,8 +30,6 @@ import { isBrowser, isMobile } from 'react-device-detect'
 import Header from '../../lib/Header';
 import { modalStyle } from '../../modalStyle';
 
-import { getFeed } from "../../lib/rss";
-
 function IndivisualPrateRoom({ roomId }) {
   const user = supabase.auth.user();
 
@@ -46,7 +44,6 @@ function IndivisualPrateRoom({ roomId }) {
     overflowY: 'auto'
   }
 
-  const emojiData = ['👋','👌','👍','👎','👏','🤘','😂','😍','😝','😠','😢','🤧','🤯','🤭','🤨'];
   const shortcutsData = [
     {sc:'*',name:'太字',icon:<VscBold/>},
     {sc:'/',name:'イタリック',icon:<VscItalic/>},
@@ -96,7 +93,6 @@ function IndivisualPrateRoom({ roomId }) {
     }
   }
   
-
   useEffect(() => {
     fetchRoomInfo();
     fetchMessages();
@@ -198,21 +194,7 @@ function IndivisualPrateRoom({ roomId }) {
             <div>
             <Header/>
             <div className={'bodyPadding'}>
-              <AlignItems scroll={true}>
-                {user ?
-                  <>
-                    {user.id !== roomInfo.room_creator &&
-                      <VisibilityTag
-                        user={user.id}
-                        isEditable={roomInfo.room_editable}
-                      />
-                    }
-                  </>:
-                  <VisibilityTag
-                    user={user}
-                    isEditable={roomInfo.room_editable}
-                  />
-                }
+              <AlignItems spaceBetween style={{marginBottom:'1em'}}>
                 {isBrowser && 
                   <IconButton
                     disabled={!roomId}
@@ -231,6 +213,22 @@ function IndivisualPrateRoom({ roomId }) {
                   >
                     <FiSettings/>
                   </IconButton>
+                }
+                {user ?
+                  <>
+                    {user.id !== roomInfo.room_creator &&
+                      <VisibilityTag
+                        largeVisibility
+                        user={user.id}
+                        isEditable={roomInfo.room_editable}
+                      />
+                    }
+                  </>:
+                  <VisibilityTag
+                    largeVisibility
+                    user={user}
+                    isEditable={roomInfo.room_editable}
+                  />
                 }
               </AlignItems>
               <Modal
@@ -290,6 +288,7 @@ function IndivisualPrateRoom({ roomId }) {
                         onClick={handleMessageSubmit}
                         disabled={!message}
                         type="submit"
+                        solid
                       >
                         投稿
                       </Button>
