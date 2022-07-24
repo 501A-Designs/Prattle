@@ -9,7 +9,7 @@ export let modalStyle = {
         transform: 'translate(-50%, -50%)',
         backgroundColor: 'var(--baseColor0)',
         border: 'var(--baseBorder2)',
-        borderRadius: 'calc(var(--borderRadius)*2)',
+        borderRadius: 'var(--borderRadius2)',
         boxShadow: 'var(--boxShadow)',
         padding: '1em',
     },

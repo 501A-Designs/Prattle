@@ -8,9 +8,12 @@ import GridItems from '../lib/style-component/GridItems'
 import VisibilityTag from '../lib/tag-component/VisibilityTag';
 import AlignItems from '../lib/style-component/AlignItems';
 import { isMobile } from 'react-device-detect';
-import Button from '../lib/button-component/Button';
+import IconButton from '../lib/button-component/IconButton';
 import TextMessage from '../lib/room-component/TextMessage';
 import Header from '../lib/Header'
+import SmallButton from '../lib/button-component/SmallButton'
+
+import { FiSearch } from "react-icons/fi";
 
 export default function Browse() {
     const user = supabase.auth.user();
@@ -64,26 +67,26 @@ export default function Browse() {
       </Head>
       <Header/>
       <div className="bodyPadding">
-          <h1>Prattle Rooms</h1>
-          <h4>他の人がどうしてるを確認してみよう</h4>
-          <br />
-          <form
-            className="shedAlignedForm"
-            onSubmit={handleSearchSubmit}
+        <h1>Prattle Rooms</h1>
+        <h4>他の人がどうしてるを確認してみよう</h4>
+        <br />
+        <form
+          className="shedAlignedForm"
+          onSubmit={handleSearchSubmit}
+        >
+          <input
+            placeholder="Prattleの部屋・投稿を検索"
+            onChange={(e) => setSearchInput(e.target.value)}
+            value={searchInput}
+          />
+          <IconButton
+            disabled={!searchInput}
+            type="submit"
+            onClick={handleSearchSubmit}
           >
-              <input
-                  placeholder="Prattleの部屋・投稿を検索"
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  value={searchInput}
-              />
-              <Button
-                  disabled={!searchInput}
-                  type="submit"
-                  click={handleSearchSubmit}
-                  // icon={<VscMail />}
-                  name="検索"
-              />
-          </form>
+            <FiSearch />
+          </IconButton>
+        </form>
           <br/>
           <AlignItems spaceBetween={true}>
             <GridItems>
@@ -102,7 +105,9 @@ export default function Browse() {
                 <label>閲覧のみの部屋</label>
               </AlignItems>
             </GridItems>
-            <Button click={fetchAllRooms} name="全部屋表示"/>
+            <SmallButton onClick={fetchAllRooms}>
+              全部屋表示
+            </SmallButton>
           </AlignItems>
           
           <br/>

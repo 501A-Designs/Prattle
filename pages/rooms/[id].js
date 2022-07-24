@@ -6,6 +6,9 @@ import TextMessageNote from '../../lib/room-component/TextMessageNote';
 import { supabase } from '../../utils/supabaseClient'
 import Link from 'next/link'
 import Button from '../../lib/button-component/Button';
+import IconButton from '../../lib/button-component/IconButton';
+
+import {FiFileText, FiPlus, FiSettings, FiXCircle} from 'react-icons/fi'
 
 import {VscAccount, VscHome, VscSymbolParameter, VscRocket,VscSettingsGear,VscComment,VscMail,VscClose,VscArrowSwap,VscNote,VscBold,VscItalic,VscSymbolColor,VscDebugLineByLine,VscLocation,VscAdd} from "react-icons/vsc";
 
@@ -23,8 +26,11 @@ import VisibilityTag from '../../lib/tag-component/VisibilityTag';
 import StaticScreen from '../../lib/scene-component/StaticScreen';
 import GhenInterpreter from '../../lib/GhenInterpreter';
 import TabComponent from '../../lib/TabComponent';
-import { isMobile } from 'react-device-detect'
+import { isBrowser, isMobile } from 'react-device-detect'
 import Header from '../../lib/Header';
+import { modalStyle } from '../../modalStyle';
+
+import { getFeed } from "../../lib/rss";
 
 function IndivisualPrateRoom({ roomId }) {
   const user = supabase.auth.user();
@@ -44,7 +50,7 @@ function IndivisualPrateRoom({ roomId }) {
   const shortcutsData = [
     {sc:'*',name:'太字',icon:<VscBold/>},
     {sc:'/',name:'イタリック',icon:<VscItalic/>},
-    {sc:'$色名 ',name:'色',icon:<VscSymbolColor/>},
+    {sc:'$ ',name:'色',icon:<VscSymbolColor/>},
     {sc:'+',name:'ドロップダウン',icon:<VscDebugLineByLine/>},
     {sc:'?',name:'Google Mapsピン留め',icon:<VscLocation/>},
   ];
@@ -56,22 +62,6 @@ function IndivisualPrateRoom({ roomId }) {
   }
   function closeModal() {
     setIsOpen(false);
-  }
-  let modalStyle = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        maxWidth: '500px',
-        width: '100%',
-        transform: 'translate(-50%, -50%)',
-        backgroundColor: 'var(--baseColor0)',
-        border: 'var(--baseBorder2)',
-        borderRadius: 'calc(var(--borderRadius)*2)',
-        boxShadow: 'var(--boxShadow)',
-        padding: '1em',
-    },
   }
 
   const router = useRouter()
@@ -87,11 +77,11 @@ function IndivisualPrateRoom({ roomId }) {
   const [messageWordCount, setMessageWordCount] = useState(0);
 
   const fetchRoomInfo = async () => {
-      let { data: roomsInfo, error } = await supabase
-        .from('rooms')
-        .select('*')
-        .eq('room_id', roomId);
-      setRoomInfo(roomsInfo[0]);
+    let { data: roomsInfo, error } = await supabase
+      .from('rooms')
+      .select('*')
+      .eq('room_id', roomId);
+    setRoomInfo(roomsInfo[0]);
   }
 
   const fetchMessages = async () => {
@@ -113,78 +103,77 @@ function IndivisualPrateRoom({ roomId }) {
   },[])
   
   // Sent message
-    const [messageSentNumber, setMessageSentNumber] = useState(0);
-    const handleMessageSubmit = async (e) => {
-      e.preventDefault();
-      setMessageSending(true);
-      let timeStamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
-      const { data, error } = await supabase
-        .from('messages')
-        .insert([{
-          created_at: timeStamp,
-          message: message,
-          sent_by_user: user.id,
-          room_id: roomId
-        },])
-      console.log(message);
-      setMessage('');
+  const [messageSentNumber, setMessageSentNumber] = useState(0);
+  const handleMessageSubmit = async (e) => {
+    e.preventDefault();
+    setMessageSending(true);
+    let timeStamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
+    const { data, error } = await supabase
+      .from('messages')
+      .insert([{
+        created_at: timeStamp,
+        message: message,
+        sent_by_user: user.id,
+        room_id: roomId
+      },])
+    console.log(message);
+    setMessage('');
+    setMessageByte(0);
+    setMessageWordCount(0);
+    setMessageSentNumber(messageSentNumber + 1);
+    setMessageSending(false);
+  }
+  const handleMessageChange = (e) => {
+    setMessage(e.target.value);
+    setMessageByte(e.target.value.split('').length);
+    setMessageWordCount(e.target.value.split(' ').length);
+    if (e.target.value === '') {
       setMessageByte(0);
       setMessageWordCount(0);
-      setMessageSentNumber(messageSentNumber + 1);
-      setMessageSending(false);
     }
-    const handleMessageChange = (e) => {
-      setMessage(e.target.value);
-      setMessageByte(e.target.value.split('').length);
-      setMessageWordCount(e.target.value.split(' ').length);
-      if (e.target.value === '') {
-        setMessageByte(0);
-        setMessageWordCount(0);
-      }
-    }
+  }
 
-    const handleOwnerTransferSubmit = async (e) => {
-      e.preventDefault();
-      const { data, error } = await supabase
-        .from('rooms')
-        .update({ room_creator : owner })
-        .eq('room_id', roomId)
-      setOwner('');
-      router.push('/');
-    }
+  const handleOwnerTransferSubmit = async (e) => {
+    e.preventDefault();
+    const { data, error } = await supabase
+      .from('rooms')
+      .update({ room_creator : owner })
+      .eq('room_id', roomId)
+    setOwner('');
+    router.push('/');
+  }
 
-    const handleSharingSubmit = async (prop) => {
-      const { data, error } = await supabase
-        .from('rooms')
-        .update({ room_editable : prop })
-        .eq('room_id', roomId);
-      router.push('/')
-    }
-    const handleDiscoverabilitySubmit = async (prop) => {
-      const { data, error } = await supabase
-        .from('rooms')
-        .update({ room_public : prop })
-        .eq('room_id', roomId);
-      router.push('/')
-    }
+  const handleSharingSubmit = async (prop) => {
+    const { data, error } = await supabase
+      .from('rooms')
+      .update({ room_editable : prop })
+      .eq('room_id', roomId);
+    router.push('/')
+  }
+  const handleDiscoverabilitySubmit = async (prop) => {
+    const { data, error } = await supabase
+      .from('rooms')
+      .update({ room_public : prop })
+      .eq('room_id', roomId);
+    router.push('/')
+  }
 
-    let notesArray = [];
-    messagesArray.map((prop) => {
-      console.log(prop.noted)
-      if (prop.noted) {
-        notesArray.push(prop)
-      }
-    })
-    console.log(notesArray)
-    
+  let notesArray = [];
+  messagesArray.map((prop) => {
+    console.log(prop.noted)
+    if (prop.noted) {
+      notesArray.push(prop)
+    }
+  })
+
   return (
     <>
       <Head>
         <title>{roomInfo.room_name}</title>
       </Head>
       {roomInfo && messagesArray ?
-      <>
-      <GridItems grid={gridStatus} gap={'0'}>
+        <>
+          <GridItems grid={gridStatus} gap={'0'}>
             {gridStatus != '1fr' && <div style={sideBarContainer}>
               <GridItems grid={'1fr'}>
                 <h3 style={{marginBottom: 0}}>Memo</h3>
@@ -207,7 +196,7 @@ function IndivisualPrateRoom({ roomId }) {
             </div>}
             <div>
             <div>
-              <Header/>
+            <Header/>
             <div className={'bodyPadding'}>
               <AlignItems scroll={true}>
                 {user ?
@@ -224,42 +213,43 @@ function IndivisualPrateRoom({ roomId }) {
                     isEditable={roomInfo.room_editable}
                   />
                 }
-                {!isMobile && <Button
-                  size={'medium'}
-                  disabled={!roomId}
-                  click={()=>{gridStatus === '1fr' ? setGridStatus('1fr 4fr'): setGridStatus('1fr')}}
-                  icon={<VscNote />}
-                  name="メモ"
-                />}
-                {user &&
-                <>
-                  {user.id === roomInfo.room_creator && <>
-                    <Button
-                      size={'medium'}
-                      disabled={!roomId}
-                      click={() => {
-                        setModalContent('roomSettings');
-                        openModal();
-                      }}
-                      icon={<VscSettingsGear />}
-                      name="設定"
-                    />
-                  </>}
-                </>
+                {isBrowser && 
+                  <IconButton
+                    disabled={!roomId}
+                    onClick={()=>{gridStatus === '1fr' ? setGridStatus('1fr 4fr'): setGridStatus('1fr')}}
+                  >
+                    <FiFileText />
+                  </IconButton>
+                }
+                {user && user.id === roomInfo.room_creator && 
+                  <IconButton
+                    disabled={!roomId}
+                    onClick={() => {
+                      setModalContent('roomSettings');
+                      openModal();
+                    }}
+                  >
+                    <FiSettings/>
+                  </IconButton>
                 }
               </AlignItems>
               <Modal
                 isOpen={modalIsOpen}
                 style={modalStyle}
               >
-                <SmallButton
-                  click={() => closeModal()}
-                  icon={<VscClose />}
-                  right={true}
-                />
+                <AlignItems spaceBetween>
+                  <h3>
+                    {modalContent === 'newPrate' && 'Compose new Prate'}
+                    {modalContent === 'roomSettings' && 'Room Settings'}
+                  </h3>
+                  <IconButton
+                    onClick={() => closeModal()}                    noOutline
+                  >
+                    <FiXCircle/>
+                  </IconButton>
+                </AlignItems>
                 {modalContent === 'newPrate' &&
                 <>
-                <h3>Compose new Prate</h3>
                   {message && 
                     <TabComponent icon={<VscComment/>} name={'新しいPrate'}>
                       {messageSending ? <p>「{roomInfo.room_name}」に送信中...</p>:<GhenInterpreter inputValue={message}/>}
@@ -267,13 +257,16 @@ function IndivisualPrateRoom({ roomId }) {
                   }
                   <AlignItems scroll={true}>
                       {shortcutsData.map(data =>
-                        <Button
+                        <IconButton
+                          onClick={(e) => { 
+                            e.preventDefault();
+                            setMessage(data.sc)
+                          }}
                           key={data.sc}
-                          name={data.name}
-                          size={'medium'}
-                          icon={data.icon}
-                          click={(e) => { e.preventDefault(); setMessage(data.sc) }}
-                        />
+                          solid={message && message.split('')[0] === data.sc}
+                        >
+                          {data.icon}
+                        </IconButton>
                       )}
                   </AlignItems>
                   <form
@@ -294,19 +287,18 @@ function IndivisualPrateRoom({ roomId }) {
                         </AlignItems>:<p></p>
                       }
                       <Button
+                        onClick={handleMessageSubmit}
                         disabled={!message}
                         type="submit"
-                        click={handleMessageSubmit}
-                        icon={<VscMail />}
-                        name="投稿"
-                      />
+                      >
+                        投稿
+                      </Button>
                     </AlignItems>
                   </form>
                 </>
                 }
                 {modalContent === 'roomSettings' &&
                 <>
-                  <h3>Room Settings</h3>
                   <AlignItems spaceBetween={true}>
                     <h4 style={{margin:'0.5em 0'}}>パブリックシェアリング</h4>
                     <span style={{backgroundColor:'var(--baseColor1)',borderRadius:'var(--borderRadius)', fontSize:'0.7em', padding:'0.5em 1em'}}>現在のステータス: {roomInfo.room_editable === true ? '有効' : '無効'}</span>
@@ -314,13 +306,15 @@ function IndivisualPrateRoom({ roomId }) {
                   <p>有効化することで、他の人もこの部屋で会話できるようになります。詳細は <Link href={'/usage'}>Usage</Link> のページからアクセスできます。</p>
                   <GridItems grid={'1fr 1fr'}>
                     <Button
-                      name="有効化"
-                      click={()=>{handleSharingSubmit(true);}}
-                    />
+                      onClick={()=>{handleSharingSubmit(true);}}
+                    >
+                      有効化
+                    </Button>
                     <Button
-                      name="無効化"
-                      click={()=>{handleSharingSubmit(false);}}
-                    />
+                      onClick={()=>{handleSharingSubmit(false);}}
+                    >
+                      無効化
+                    </Button>
                   </GridItems>
                   <br/>
                   <AlignItems spaceBetween={true}>
@@ -330,13 +324,15 @@ function IndivisualPrateRoom({ roomId }) {
                   <p>本設定を有効化する事で <Link href="/browse">browse</Link> や <Link href={`/profile/${user.id}`}>profile</Link> ページへ部屋が表示されるようになります。</p>
                   <GridItems grid={'1fr 1fr'}>
                     <Button
-                      name="有効化"
-                      click={()=>{handleDiscoverabilitySubmit(true);}}
-                    />
+                      onClick={()=>{handleDiscoverabilitySubmit(true);}}
+                    >
+                      有効化
+                    </Button>
                     <Button
-                      name="無効化"
-                      click={()=>{handleDiscoverabilitySubmit(false);}}
-                    />
+                      onClick={()=>{handleDiscoverabilitySubmit(false);}}
+                    >
+                      無効化
+                    </Button>
                   </GridItems>
                   <h4 style={{marginBottom:'0.5em'}}>部屋のオーナー</h4>
                   <p>オーナーシップを移行したい相手のユーザーIDを以下のフォームに入力する必要があります。</p>
@@ -393,15 +389,18 @@ function IndivisualPrateRoom({ roomId }) {
                     {roomInfo.room_editable === true &&                     
                       <StickyBottom>
                         <Button
-                          boxShadow={true}
+                          solid
                           disabled={!roomId}
-                          click={() => {
+                          onClick={() => {
                             setModalContent('newPrate');
                             openModal();
                           }}
-                          icon={<VscAdd />}
-                          name="新規作成"
-                        />
+                        >
+                          <AlignItems>
+                            <FiPlus/>
+                            <span>新規作成</span>
+                          </AlignItems>
+                        </Button>
                       </StickyBottom>
                     }
                   </>
@@ -411,15 +410,19 @@ function IndivisualPrateRoom({ roomId }) {
                     {roomInfo.room_editable === true &&                     
                       <StickyBottom>
                         <Button
+                          solid
                           boxShadow={true}
                           disabled={!roomId}
-                          click={() => {
+                          onClick={() => {
                             setModalContent('newPrate');
                             openModal();
                           }}
-                          icon={<VscAdd />}
-                          name="新規作成"
-                        />
+                        >
+                          <AlignItems>
+                            <FiPlus/>
+                            <span>新規作成</span>
+                          </AlignItems>
+                        </Button>
                       </StickyBottom>
                     }
                   </>
@@ -429,15 +432,18 @@ function IndivisualPrateRoom({ roomId }) {
                     {roomInfo.room_editable !== true &&                     
                       <StickyBottom>
                         <Button
-                          boxShadow={true}
+                          solid
                           disabled={!roomId}
-                          click={() => {
+                          onClick={() => {
                             setModalContent('newPrate');
                             openModal();
                           }}
-                          icon={<VscAdd />}
-                          name="新規作成"
-                        />
+                        >
+                          <AlignItems>
+                            <FiPlus/>
+                            <span>新規作成</span>
+                          </AlignItems>
+                        </Button>
                       </StickyBottom>
                     }
                   </>

@@ -6,7 +6,6 @@ import { VscLinkExternal } from "react-icons/vsc";
 
 Modal.setAppElement('#__next');
 import Modal from 'react-modal';
-import TextMessage from '../../lib/room-component/TextMessage'
 import Button from '../../lib/button-component/Button';
 import GhenInterpreter from '../../lib/GhenInterpreter';
 
@@ -14,6 +13,7 @@ import moment from 'moment';
 import 'moment/locale/ja'
 import AlignItems from '../../lib/style-component/AlignItems';
 import GridItems from '../../lib/style-component/GridItems';
+import SmallButton from '../../lib/button-component/SmallButton';
 
 function IndivisualPrate({ messageId }) {
     const router = useRouter()
@@ -57,20 +57,25 @@ function IndivisualPrate({ messageId }) {
         <>
             {user &&           
                 <header>
-                    <Button
-                        click={()=>{copiedContent();}}
-                        name="ユーザーIDをコピー"
-                    />
+                    <SmallButton
+                        onClick={()=>{copiedContent();}}
+                    >
+                        ユーザーIDをコピー
+                    </SmallButton>
                 </header>
             }
             <div className="bodyPadding">
-                {/* <ProfileInfo profileId={profileId}/> */}
-                {message && <div style={{boxShadow:'var(--boxShadow)', borderRadius:'var(--borderRadius)',border:'var(--baseBorder2)'}}>
+                {message && 
+                    <div
+                        style={{
+                            boxShadow:'var(--boxShadow)', borderRadius:'var(--borderRadius2)',border:'var(--baseBorder2)'
+                        }}
+                    >
                         <AlignItems spaceBetween={true} margin={'1em'}>
                             {userInfo && <AlignItems gap={'1em'}>
                                 <img
                                     style={{
-                                        borderRadius:'calc(var(--borderRadius)*50)',
+                                        borderRadius:'var(--borderRadius1)',
                                         width:'3em',
                                         height:'3em',
                                         border:'var(--baseBorder2)',
@@ -85,10 +90,10 @@ function IndivisualPrate({ messageId }) {
                             </AlignItems>}
                             <AlignItems>
                                 <Button
-                                    name={'送信先の部屋'}
-                                    icon={<VscLinkExternal/>}
-                                    click={() =>router.push(`/rooms/${message.room_id}`)}
-                                />
+                                    onClick={() =>router.push(`/rooms/${message.room_id}`)}
+                                >
+                                    送信先の部屋
+                                </Button>
                             </AlignItems>
                         </AlignItems>
                         <hr/>

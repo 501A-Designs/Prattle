@@ -1,12 +1,17 @@
 .textMessage{
-	border: 1px solid transparent;
+	border: 1.5px solid transparent;
 	width:100%;
-	padding-bottom: 0.5em;
+	padding: 0.5em;
 	align-items: start;
 	transition: 0.3s;
 }
 .textMessage:focus{
 	outline: auto;
+}
+.textMessage:hover{
+	background-color: rgb(246, 246, 246);
+	border-radius: var(--borderRadius2);
+	cursor: pointer;
 }
 .messageContainer{
 	display: flex;
@@ -44,7 +49,7 @@
 	width: 30px;
 	height: 30px;
 	border: var(--baseBorder2);
-	border-radius:calc(var(--borderRadius)*5);
+	border-radius:var(--borderRadius1);
 }
 .placeHolderImage{
 	margin: 0;
