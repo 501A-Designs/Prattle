@@ -9,8 +9,10 @@ import RoomThumbNail from '../../lib/RoomThumbNail';
 import ProfileInfo from '../../lib/ProfileInfo';
 import Button from '../../lib/button-component/Button';
 
-function IndivisualProfile({ profileId }) {
-    const router = useRouter()
+function IndivisualProfile() {
+    const router = useRouter();
+    const profileId = router.query.id;
+    
     const user = supabase.auth.user();
     const [rooms, setRooms] = useState('');
     
@@ -69,13 +71,6 @@ function IndivisualProfile({ profileId }) {
             </div>
         </>
     )
-}
-
-export async function getServerSideProps({ params }) {
-  let profileId = params.id;
-  return {
-    props: { profileId },
-  }
 }
 
 export default IndivisualProfile

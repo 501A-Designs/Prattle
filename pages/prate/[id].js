@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { supabase } from '../../utils/supabaseClient'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify';
-import { VscLinkExternal } from "react-icons/vsc";
 
 Modal.setAppElement('#__next');
 import Modal from 'react-modal';
@@ -15,8 +14,10 @@ import AlignItems from '../../lib/style-component/AlignItems';
 import GridItems from '../../lib/style-component/GridItems';
 import SmallButton from '../../lib/button-component/SmallButton';
 
-function IndivisualPrate({ messageId }) {
-    const router = useRouter()
+function IndivisualPrate() {
+    const router = useRouter();
+    const messageId = router.query.id;
+
     const user = supabase.auth.user();
     const [message, setMessage] = useState();
 
@@ -31,7 +32,7 @@ function IndivisualPrate({ messageId }) {
     }
         
     useEffect(() => {
-        fetchMessage();
+        messageId && fetchMessage();
     }, [messageId])
 
     const fetchProfileInfo = async () => {
@@ -105,13 +106,6 @@ function IndivisualPrate({ messageId }) {
             </div>
         </>
     )
-}
-
-export async function getServerSideProps({ params }) {
-  let messageId = params.id;
-  return {
-    props: { messageId },
-  }
 }
 
 export default IndivisualPrate
