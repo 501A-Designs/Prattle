@@ -8,6 +8,8 @@ import Modal from 'react-modal';
 import RoomThumbNail from '../../lib/RoomThumbNail';
 import ProfileInfo from '../../lib/ProfileInfo';
 import Button from '../../lib/button-component/Button';
+import SmallButton from '../../lib/button-component/SmallButton';
+import Header from '../../lib/Header';
 
 function IndivisualProfile() {
     const router = useRouter();
@@ -38,16 +40,9 @@ function IndivisualProfile() {
 
     return (
         <>
-            {user &&           
-                <header>
-                    <Button
-                        click={()=>{copiedContent();}}
-                        name="ユーザーIDをコピー"
-                    />
-                </header>
-            }
+            {user && <Header/>}
             <div className="bodyPadding">
-                <ProfileInfo profileId={profileId}/>
+                <ProfileInfo profileId={profileId && profileId}/>
                 <div className="grid triGrid">
                     {rooms && rooms.map((props) => {
                         return (

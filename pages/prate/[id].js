@@ -75,7 +75,7 @@ function IndivisualPrate() {
                             </AlignItems>
                             <AlignItems>
                                 <Button
-                                    onClick={() =>router.push(`/rooms/${messageData.linked_id}`)}
+                                    onClick={() =>router.push(`/rooms/${messageData.room_id}`)}
                                 >
                                     送信先の部屋
                                 </Button>
