@@ -16,11 +16,7 @@ function IndivisualProfile() {
     const user = supabase.auth.user();
     const [rooms, setRooms] = useState('');
     
-    if (user) {        
-        if (user.id === profileId) {
-            router.push('/profile')
-        }
-    }
+    user && user.id === profileId && router.push('/profile');
 
     const fetchRooms = async () => {
         let { data: room, error } = await supabase

@@ -17,40 +17,23 @@ import SmallButton from '../../lib/button-component/SmallButton';
 function IndivisualPrate() {
     const router = useRouter();
     const messageId = router.query.id;
-
     const user = supabase.auth.user();
-    const [message, setMessage] = useState();
 
-    const [userInfo, setUserInfo] = useState();
+    const [messageData, setMessageData] = useState();
     const fetchMessage = async () => {
-        let { data: message, error } = await supabase
+        let { data, error } = await supabase
             .from('messages')
             .select('*')
             .eq('id', messageId);
-        setMessage(message[0]);
-        fetchProfileInfo();
+        setMessageData(data[0]);
     }
         
     useEffect(() => {
         messageId && fetchMessage();
     }, [messageId])
 
-    const fetchProfileInfo = async () => {
-        if (message !== undefined) {
-            console.log('profiles');
-            let { data: profiles, error } = await supabase
-                .from('profiles')
-                .select("*")
-                .eq('id', message.sent_by_user);
-            setUserInfo(profiles[0]);
-        }
-    }
-    useEffect(() => {
-        fetchProfileInfo();
-    }, [message])
-
     const copiedContent = () => {
-        navigator.clipboard.writeText(`${userInfo.id} `);
+        navigator.clipboard.writeText(`${messageData.sent_by_user_id} `);
         toast('ユーザーIDがコピーされました。');
     }
 
@@ -60,20 +43,21 @@ function IndivisualPrate() {
                 <header>
                     <SmallButton
                         onClick={()=>{copiedContent();}}
+                        solid
                     >
                         ユーザーIDをコピー
                     </SmallButton>
                 </header>
             }
             <div className="bodyPadding">
-                {message && 
+                {messageData && 
                     <div
                         style={{
                             boxShadow:'var(--boxShadow)', borderRadius:'var(--borderRadius2)',border:'var(--baseBorder2)'
                         }}
                     >
                         <AlignItems spaceBetween={true} margin={'1em'}>
-                            {userInfo && <AlignItems gap={'1em'}>
+                            <AlignItems gap={'1em'}>
                                 <img
                                     style={{
                                         borderRadius:'var(--borderRadius1)',
@@ -82,16 +66,16 @@ function IndivisualPrate() {
                                         border:'var(--baseBorder2)',
                                         boxShadow:'var(--boxShadow)',
                                     }}
-                                    src={userInfo.profile.user_image}
+                                    src={messageData.sent_by_user_photo}
                                 />
                                 <GridItems gap={'0'}>
-                                   <h3 style={{margin:0, padding:0}}>{userInfo.profile.first_name}</h3>
-                                    <time className={'messageTime'}>{moment(message.created_at).subtract(9, 'hours').fromNow()}</time>
+                                   <h3 style={{margin:0, padding:0}}>{messageData.sent_by_user_name}</h3>
+                                    <time className={'messageTime'}>{moment(messageData.created_at).subtract(9, 'hours').fromNow()}</time>
                                 </GridItems>
-                            </AlignItems>}
+                            </AlignItems>
                             <AlignItems>
                                 <Button
-                                    onClick={() =>router.push(`/rooms/${message.room_id}`)}
+                                    onClick={() =>router.push(`/rooms/${messageData.linked_id}`)}
                                 >
                                     送信先の部屋
                                 </Button>
@@ -99,7 +83,7 @@ function IndivisualPrate() {
                         </AlignItems>
                         <hr/>
                         <div style={{margin:'1em'}}>
-                            <GhenInterpreter inputValue={message.message}/>
+                            <GhenInterpreter inputValue={messageData.message}/>
                         </div>
                     </div>
                 }

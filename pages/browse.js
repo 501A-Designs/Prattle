@@ -14,6 +14,8 @@ import Header from '../lib/Header'
 import SmallButton from '../lib/button-component/SmallButton'
 
 import { FiSearch } from "react-icons/fi";
+import Masonry from 'react-masonry-css'
+import { masonGridStyle } from '../masonGridStyle'
 
 export default function Browse() {
     const user = supabase.auth.user();
@@ -67,9 +69,31 @@ export default function Browse() {
       </Head>
       <Header/>
       <div className="bodyPadding">
-        <h1>Prattle Rooms</h1>
         <h4>他の人がどうしてるを確認してみよう</h4>
-        <br />
+        <AlignItems spaceBetween={true}>
+          <GridItems>
+            <AlignItems>
+              <VisibilityTag
+                size={'small'}
+                isEditable={true}
+              />
+              <label>自分も会話に参加できる部屋</label>
+            </AlignItems>
+            <AlignItems>
+              <VisibilityTag
+                size={'small'}
+                isEditable={false}
+              />
+              <label>閲覧のみの部屋</label>
+            </AlignItems>
+          </GridItems>
+          <SmallButton
+            onClick={fetchAllRooms}
+          >
+            全部屋表示
+          </SmallButton>
+        </AlignItems>
+        <br/>
         <form
           className="shedAlignedForm"
           onSubmit={handleSearchSubmit}
@@ -80,90 +104,71 @@ export default function Browse() {
             value={searchInput}
           />
           <IconButton
+            onClick={handleSearchSubmit}
             disabled={!searchInput}
             type="submit"
-            onClick={handleSearchSubmit}
+            solid
           >
             <FiSearch />
           </IconButton>
         </form>
-          <br/>
-          <AlignItems spaceBetween={true}>
-            <GridItems>
-              <AlignItems>
-                <VisibilityTag
-                  size={'small'}
-                  isEditable={true}
-                />
-                <label>自分も会話に参加できる部屋</label>
-              </AlignItems>
-              <AlignItems>
-                <VisibilityTag
-                  size={'small'}
-                  isEditable={false}
-                />
-                <label>閲覧のみの部屋</label>
-              </AlignItems>
-            </GridItems>
-            <SmallButton onClick={fetchAllRooms}>
-              全部屋表示
-            </SmallButton>
-          </AlignItems>
-          
-          <br/>
-          <AlignItems margin={'0 0 2em 0em'}>
-            {searchStatus == 'querying' && 
-              <>
-                <img src="https://i.gifer.com/ZZ5H.gif" width="30px" height="30px"/>
-                <h2 style={{margin:0}}>Prattle内を検索中...</h2>
-              </>
-            }
-            {searchStatus == 'executed' &&
-              <>
-                {allPublicRooms &&
-                  <GridItems>
-                    <h2 style={{margin:0}}>{allPublicRooms.length}件ヒット</h2>
-                    {allPublicRooms.length === 0 && <p>違うキーワードを使ってまた調べてみよう！</p>}
-                  </GridItems>
-                }
-              </>
-            }
-          </AlignItems>
-          <div className="grid triGrid">
-              {allPublicRooms && allPublicRooms.map(props=>
-                  <RoomThumbNail
-                      key={props.room_id}
-                      backgroundImage={props.background_image}
-                      roomName={props.room_name}
-                      roomCode={props.room_id}
-                      description={props.description}
-                      user={user}
-                      isEditable={props.room_editable}
-                      // src={''}
-                      // author={'bruhh they'}
-                  />
+        <AlignItems margin={'0 0 2em 0em'}>
+          {searchStatus == 'querying' && 
+            <>
+              <img src="https://i.gifer.com/ZZ5H.gif" width="30px" height="30px"/>
+              <h2 style={{margin:0}}>Prattle内を検索中...</h2>
+            </>
+          }
+          {searchStatus == 'executed' &&
+            <>
+              {allPublicRooms &&
+                <GridItems>
+                  <h2 style={{margin:0}}>{allPublicRooms.length}件ヒット</h2>
+                  {allPublicRooms.length === 0 && <p>違うキーワードを使ってまた調べてみよう！</p>}
+                </GridItems>
+              }
+            </>
+          }
+        </AlignItems>
+        <Masonry
+          breakpointCols={masonGridStyle}
+          className="my-masonry-grid"
+          columnClassName="my-masonry-grid_column"
+        >
+          {allPublicRooms && allPublicRooms.map(props=>
+            <RoomThumbNail
+              key={props.room_id}
+              backgroundImage={props.background_image}
+              roomName={props.room_name}
+              roomCode={props.room_id}
+              description={props.description}
+              user={user}
+              isEditable={props.room_editable}
+              // src={''}
+              // author={'bruhh they'}
+            />
+          )}
+        </Masonry>
+        <br/>
+        <GridItems>
+          {searchedMessages && <>          
+            {searchedMessages.length !== 0 && <h3 style={{marginBottom:'0.5em'}}>Prate投稿{searchedMessages.length}件ヒット</h3>}
+              {searchedMessages && searchedMessages.map(props =>
+                <TextMessage
+                  hideThread={true}
+                  style={{border:'var(--baseBorder2)',borderRadius:'var(--borderRadius)', boxShadow:'var(--boxShadow)',padding:'0.5em'}}
+                  key={props.message}
+                  messageId={props.id}
+                  // currentRoom={roomId}
+                  id={props.sent_by_user}
+                  message={props.message}
+                  time={props.created_at}
+                  // roomCreator={roomInfo.room_creator}
+                  // roomEditable={roomInfo.room_editable}
+                />  
               )}
-          </div>
-          <br/>
-          <GridItems>
-            {searchedMessages && <>          
-              {searchedMessages.length !== 0 && <h3 style={{marginBottom:'0.5em'}}>Prate投稿{searchedMessages.length}件ヒット</h3>}
-                {searchedMessages && searchedMessages.map(props =>
-                  <TextMessage
-                    hideThread={true}
-                    style={{border:'var(--baseBorder2)',borderRadius:'var(--borderRadius)', boxShadow:'var(--boxShadow)',padding:'0.5em'}}
-                    key={props.message}
-                    messageId={props.id}
-                    // currentRoom={roomId}
-                    id={props.sent_by_user}
-                    message={props.message}
-                    time={props.created_at}
-                    // roomCreator={roomInfo.room_creator}
-                    // roomEditable={roomInfo.room_editable}
-                  />  
-                )}
-            </>}
-          </GridItems>
+          </>}
+        </GridItems>
       </div>
     </>
   )

@@ -9,10 +9,16 @@
 	outline: auto;
 }
 .textMessage:hover{
-	background-color: rgb(246, 246, 246);
+	border: var(--baseBorder1);
+	background-color: rgba(244, 244, 244, 0.458);
 	border-radius: var(--borderRadius2);
 	cursor: pointer;
 }
+.nested:hover{
+	border: var(--baseBorder1);
+	background-color: rgba(236, 236, 236, 0.579);
+}
+
 .messageContainer{
 	display: flex;
 	align-items: start;

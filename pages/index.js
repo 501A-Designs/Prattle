@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { supabase } from '../utils/supabaseClient'
 import ChatApp from '../lib/ChatApp';
-import LandingPage from '../lib/LandingPage';
+import LandingPage from '../lib/scene-component/LandingPage';
 import Header from '../lib/Header';
 
 export default function Home() {
@@ -15,14 +15,14 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
         {user ?
-          <>  
+          <>
             <Header/>
             <div className="bodyPadding">
               <ChatApp />
             </div>
           </> : 
           <div className="bodyPadding">
-            <LandingPage />
+            <LandingPage/>
           </div>
         }
     </>

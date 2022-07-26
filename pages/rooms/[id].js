@@ -8,15 +8,12 @@ import Link from 'next/link'
 import Button from '../../lib/button-component/Button';
 import IconButton from '../../lib/button-component/IconButton';
 
-import {FiFileText, FiPlus, FiSettings, FiXCircle} from 'react-icons/fi'
-
-import {VscComment,VscArrowSwap,VscBold,VscItalic,VscSymbolColor,VscDebugLineByLine,VscLocation} from "react-icons/vsc";
+import {FiAlignJustify, FiBold, FiFileText, FiGitBranch, FiItalic, FiMapPin, FiPlus, FiSend, FiSettings, FiXCircle} from 'react-icons/fi'
+import {VscArrowSwap,VscBold,VscItalic,VscSymbolColor,VscDebugLineByLine,VscLocation} from "react-icons/vsc";
 
 import { useRouter } from 'next/router'
 import AlignItems from '../../lib/style-component/AlignItems';
 import StickyBottom from '../../lib/style-component/StickyBottom';
-
-import SmallButton from '../../lib/button-component/SmallButton';
 import StylizedBanner from '../../lib/room-component/StylizedBanner';
 
 Modal.setAppElement('#__next');
@@ -29,8 +26,22 @@ import TabComponent from '../../lib/TabComponent';
 import { isBrowser, isMobile } from 'react-device-detect'
 import Header from '../../lib/Header';
 import { modalStyle } from '../../modalStyle';
+import { useFilter, useInsert, useRealtime } from 'react-supabase';
 
 function IndivisualPrateRoom({ roomId }) {
+  const filter = useFilter(
+    (query) =>
+      query
+        .eq('linked_id', roomId)
+        .order('created_at', { ascending: false })
+        .limit(10),
+  )
+
+  const [{ data, fetching, error }, reexecute] = useRealtime('messages',{select: {filter: filter}});
+
+  fetching && console.log(data)
+  error && console.log(error)
+
   const user = supabase.auth.user();
 
   const [gridStatus, setGridStatus] = useState('1fr');
@@ -44,24 +55,13 @@ function IndivisualPrateRoom({ roomId }) {
     overflowY: 'auto'
   }
 
-  const shortcutsData = [
-    {sc:'*',name:'太字',icon:<VscBold/>},
-    {sc:'/',name:'イタリック',icon:<VscItalic/>},
-    {sc:'$ ',name:'色',icon:<VscSymbolColor/>},
-    {sc:'+',name:'ドロップダウン',icon:<VscDebugLineByLine/>},
-    {sc:'?',name:'Google Mapsピン留め',icon:<VscLocation/>},
-  ];
-
   const [modalIsOpen, setIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState('');
-  const openModal =()=> {
-    setIsOpen(true);
-  }
-  function closeModal() {
-    setIsOpen(false);
-  }
+  const openModal =()=> setIsOpen(true);
+  const closeModal =()=> setIsOpen(false);
 
-  const router = useRouter()
+  const router = useRouter();
+
   const [message, setMessage] = useState('');
   const [messageSending, setMessageSending] = useState(false)
   const [roomInfo, setRoomInfo] = useState('');
@@ -72,53 +72,43 @@ function IndivisualPrateRoom({ roomId }) {
 
   const [messageByte, setMessageByte] = useState(0);
   const [messageWordCount, setMessageWordCount] = useState(0);
-
-  const fetchRoomInfo = async () => {
-    let { data: roomsInfo, error } = await supabase
-      .from('rooms')
-      .select('*')
-      .eq('room_id', roomId);
-    setRoomInfo(roomsInfo[0]);
-  }
-
-  const fetchMessages = async () => {
-    if (!messagesArray.length) {
-      let { data: messages, error } = await supabase
-        .from('messages')
-        .select('*')
-        .eq('room_id', roomId)
-        .order('created_at', { ascending: false })
-        .limit(50);
-      setMessagesArray(messages);
-    }
-  }
-  
-  useEffect(() => {
-    fetchRoomInfo();
-    fetchMessages();
-  },[])
   
   // Sent message
   const [messageSentNumber, setMessageSentNumber] = useState(0);
+console.log(user)
   const handleMessageSubmit = async (e) => {
     e.preventDefault();
     setMessageSending(true);
     let timeStamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
     const { data, error } = await supabase
       .from('messages')
-      .insert([{
-        created_at: timeStamp,
-        message: message,
-        sent_by_user: user.id,
-        room_id: roomId
-      },])
-    console.log(message);
+      .insert([
+        {
+          created_at: timeStamp,
+          message: message,
+          sent_by_user_id: user.id,
+          sent_by_user_photo: user.user_metadata.picture,
+          noted:false,
+          linked_id: roomId && roomId
+        },
+      ])
+
+    console.log(data);
+    console.log(error)
     setMessage('');
     setMessageByte(0);
     setMessageWordCount(0);
     setMessageSentNumber(messageSentNumber + 1);
     setMessageSending(false);
+    reexecute();
   }
+
+  // async function onClickInsert(name) {
+  //   const { count, data, error } = await insertTodos({
+  //     name,
+  //   })
+  // }
+
   const handleMessageChange = (e) => {
     setMessage(e.target.value);
     setMessageByte(e.target.value.split('').length);
@@ -131,330 +121,263 @@ function IndivisualPrateRoom({ roomId }) {
 
   const handleOwnerTransferSubmit = async (e) => {
     e.preventDefault();
-    const { data, error } = await supabase
-      .from('rooms')
-      .update({ room_creator : owner })
-      .eq('room_id', roomId)
-    setOwner('');
-    router.push('/');
+    // const { data, error } = await supabase
+    //   .from('rooms')
+    //   .update({ room_creator : owner })
+    //   .eq('room_id', roomId)
+    // setOwner('');
+    // router.push('/');
   }
 
   const handleSharingSubmit = async (prop) => {
-    const { data, error } = await supabase
-      .from('rooms')
-      .update({ room_editable : prop })
-      .eq('room_id', roomId);
-    router.push('/')
+    // const { data, error } = await supabase
+    //   .from('rooms')
+    //   .update({ room_editable : prop })
+    //   .eq('room_id', roomId);
+    // router.push('/')
   }
   const handleDiscoverabilitySubmit = async (prop) => {
-    const { data, error } = await supabase
-      .from('rooms')
-      .update({ room_public : prop })
-      .eq('room_id', roomId);
-    router.push('/')
+    // const { data, error } = await supabase
+    //   .from('rooms')
+    //   .update({ room_public : prop })
+    //   .eq('room_id', roomId);
+    // router.push('/')
   }
 
   let notesArray = [];
-  messagesArray.map((prop) => {
-    console.log(prop.noted)
-    if (prop.noted) {
-      notesArray.push(prop)
-    }
-  })
+  // messagesArray && messagesArray.map((prop) => {
+  //   console.log(prop.noted)
+  //   if (prop.noted) {
+  //     notesArray.push(prop)
+  //   }
+  // })
 
   return (
     <>
       <Head>
         <title>{roomInfo.room_name}</title>
       </Head>
-      {roomInfo && messagesArray ?
+      {/* {messageData ? */}
         <>
           <GridItems grid={gridStatus} gap={'0'}>
-            {gridStatus != '1fr' && <div style={sideBarContainer}>
-              <GridItems grid={'1fr'}>
-                <h3 style={{marginBottom: 0}}>Memo</h3>
-                <div className="notesContainer">
-                  {notesArray.length !== 0 ?
-                    notesArray.map(props =>
-                      <TextMessageNote
-                        key={props.message}
-                        whoSaid={props.sent_by_user}
-                        message={props.message}
-                        time={props.created_at}
-                      />
-                    ) :
-                    <p>
-                      ピン留めした Prate (メッセージ) は全てメモはとしてこちらで表示されます。
-                    </p>
-                  }
-                </div>
-              </GridItems>
-            </div>}
-            <div>
-            <div>
-            <Header/>
-            <div className={'bodyPadding'}>
-              <AlignItems spaceBetween style={{marginBottom:'1em'}}>
-                {isBrowser && 
-                  <IconButton
-                    disabled={!roomId}
-                    onClick={()=>{gridStatus === '1fr' ? setGridStatus('1fr 4fr'): setGridStatus('1fr')}}
-                  >
-                    <FiFileText />
-                  </IconButton>
-                }
-                {user && user.id === roomInfo.room_creator && 
-                  <IconButton
-                    disabled={!roomId}
-                    onClick={() => {
-                      setModalContent('roomSettings');
-                      openModal();
-                    }}
-                  >
-                    <FiSettings/>
-                  </IconButton>
-                }
-                {user ?
-                  <>
-                    {user.id !== roomInfo.room_creator &&
-                      <VisibilityTag
-                        largeVisibility
-                        user={user.id}
-                        isEditable={roomInfo.room_editable}
-                      />
+            {gridStatus != '1fr' && 
+              <div style={sideBarContainer}>
+                <GridItems grid={'1fr'}>
+                  <h3 style={{marginBottom: 0}}>Memo</h3>
+                  <div className="notesContainer">
+                    {notesArray.length !== 0 ?
+                      notesArray.map(props =>
+                        <TextMessageNote
+                          key={props.message}
+                          whoSaid={props.sent_by_user}
+                          message={props.message}
+                          time={props.created_at}
+                        />
+                      ) :
+                      <p>
+                        ピン留めした Prate (メッセージ) は全てメモはとしてこちらで表示されます。
+                      </p>
                     }
-                  </>:
-                  <VisibilityTag
-                    largeVisibility
-                    user={user}
-                    isEditable={roomInfo.room_editable}
-                  />
-                }
-              </AlignItems>
-              <Modal
-                isOpen={modalIsOpen}
-                style={modalStyle}
-              >
-                <AlignItems spaceBetween>
-                  <h3>
-                    {modalContent === 'newPrate' && 'Compose new Prate'}
-                    {modalContent === 'roomSettings' && 'Room Settings'}
-                  </h3>
-                  <IconButton
-                    onClick={() => closeModal()}                    noOutline
-                  >
-                    <FiXCircle/>
-                  </IconButton>
-                </AlignItems>
-                {modalContent === 'newPrate' &&
-                <>
-                  {message && 
-                    <TabComponent icon={<VscComment/>} name={'新しいPrate'}>
-                      {messageSending ? <p>「{roomInfo.room_name}」に送信中...</p>:<GhenInterpreter inputValue={message}/>}
-                    </TabComponent>
-                  }
-                  <AlignItems scroll={true}>
-                      {shortcutsData.map(data =>
-                        <IconButton
-                          onClick={(e) => { 
-                            e.preventDefault();
-                            setMessage(data.sc)
-                          }}
-                          key={data.sc}
-                          solid={message && message.split('')[0] === data.sc}
-                        >
-                          {data.icon}
-                        </IconButton>
-                      )}
-                  </AlignItems>
-                  <form
-                    style={{ marginTop: '0.5em' }}
-                    className="shedForm"
-                    onSubmit={handleMessageSubmit}
-                  >
-                    <textarea
-                      placeholder='メッセージ'
-                      onChange={handleMessageChange}
-                      value={message}
-                    />
-                    <AlignItems spaceBetween={true}>
-                      {message ?
-                        <AlignItems>
-                          <p style={{width:'fit-content'}}>{messageByte} Bytes</p>
-                          <p style={{width:'fit-content'}}>{messageWordCount} Words</p>
-                        </AlignItems>:<p></p>
-                      }
-                      <Button
-                        onClick={handleMessageSubmit}
-                        disabled={!message}
-                        type="submit"
-                        solid
-                      >
-                        投稿
-                      </Button>
-                    </AlignItems>
-                  </form>
-                </>
-                }
-                {modalContent === 'roomSettings' &&
-                <>
-                  <AlignItems spaceBetween={true}>
-                    <h4 style={{margin:'0.5em 0'}}>パブリックシェアリング</h4>
-                    <span style={{backgroundColor:'var(--baseColor1)',borderRadius:'var(--borderRadius)', fontSize:'0.7em', padding:'0.5em 1em'}}>現在のステータス: {roomInfo.room_editable === true ? '有効' : '無効'}</span>
-                  </AlignItems>
-                  <p>有効化することで、他の人もこの部屋で会話できるようになります。詳細は <Link href={'/usage'}>Usage</Link> のページからアクセスできます。</p>
-                  <GridItems grid={'1fr 1fr'}>
-                    <Button
-                      onClick={()=>{handleSharingSubmit(true);}}
-                    >
-                      有効化
-                    </Button>
-                    <Button
-                      onClick={()=>{handleSharingSubmit(false);}}
-                    >
-                      無効化
-                    </Button>
-                  </GridItems>
-                  <br/>
-                  <AlignItems spaceBetween={true}>
-                    <h4 style={{margin:'0.5em 0'}}>Prattle 内で部屋を表示</h4>
-                    <span style={{backgroundColor:'var(--baseColor1)',borderRadius:'var(--borderRadius)', fontSize:'0.7em', padding:'0.5em 1em'}}>現在のステータス: {roomInfo.room_public === true ? '有効' : '無効'}</span>
-                  </AlignItems>
-                  <p>本設定を有効化する事で <Link href="/browse">browse</Link> や <Link href={`/profile/${user.id}`}>profile</Link> ページへ部屋が表示されるようになります。</p>
-                  <GridItems grid={'1fr 1fr'}>
-                    <Button
-                      onClick={()=>{handleDiscoverabilitySubmit(true);}}
-                    >
-                      有効化
-                    </Button>
-                    <Button
-                      onClick={()=>{handleDiscoverabilitySubmit(false);}}
-                    >
-                      無効化
-                    </Button>
-                  </GridItems>
-                  <h4 style={{marginBottom:'0.5em'}}>部屋のオーナー</h4>
-                  <p>オーナーシップを移行したい相手のユーザーIDを以下のフォームに入力する必要があります。</p>
-                  <form
-                    className="shedAlignedForm"
-                    onSubmit={handleOwnerTransferSubmit}
-                  >
-                    <input
-                      placeholder="ユーザーID"
-                      onChange={(e)=>{setOwner(e.target.value)}}
-                      value={owner}
-                    />
-                    <Button
-                      disabled={!owner}
-                      type="submit"
-                      click={handleOwnerTransferSubmit}
-                      icon={<VscArrowSwap />}
-                      name="オーナーを移行"
-                    />
-                  </form>
-                </>
-                }
-              </Modal>
-              <StylizedBanner
-                backgroundImage={roomInfo.background_image}
-                roomName={roomInfo.room_name}
-                roomCode={roomInfo.room_id}
-                authorId={roomInfo.room_creator}
-                roomPublic={roomInfo.room_public}
-                roomDescription={roomInfo.description}
-              />
-              {messageSentNumber != 0 && 
-                  <p style={{textAlign: 'center'}}>{messageSentNumber} 通追加済み</p>
-              }
-              <div className="messagesContainer">
-                {messagesArray.map(props =>
-                  <TextMessage
-                    style={{marginBottom: '0.5em'}}
-                    key={props.message}
-                    messageId={props.id}
-                    currentRoom={roomId}
-                    id={props.sent_by_user}
-                    message={props.message}
-                    time={props.created_at}
-                    roomCreator={roomInfo.room_creator}
-                    roomEditable={roomInfo.room_editable}
-                  />
-                )}
+                  </div>
+                </GridItems>
               </div>
-              {user &&               
-                <>
-                {user.id === roomInfo.room_creator &&    
-                  <>
-                    {roomInfo.room_editable === true &&                     
-                      <StickyBottom>
-                        <Button
-                          solid
-                          disabled={!roomId}
-                          onClick={() => {
-                            setModalContent('newPrate');
-                            openModal();
-                          }}
-                        >
-                          <AlignItems>
-                            <FiPlus/>
-                            <span>新規作成</span>
-                          </AlignItems>
-                        </Button>
-                      </StickyBottom>
+            }
+            <div>
+              <div>
+                <Header/>
+                <div className={'bodyPadding'}>
+                  {/* <AlignItems spaceBetween style={{marginBottom:'1em'}}>
+                    {isBrowser && 
+                      <IconButton
+                        disabled={!roomId}
+                        onClick={()=>{gridStatus === '1fr' ? setGridStatus('1fr 4fr'): setGridStatus('1fr')}}
+                      >
+                        <FiFileText />
+                      </IconButton>
                     }
-                  </>
-                }
-                {user.id !== roomInfo.room_creator &&    
-                  <>
-                    {roomInfo.room_editable === true &&                     
-                      <StickyBottom>
-                        <Button
-                          solid
-                          boxShadow={true}
-                          disabled={!roomId}
-                          onClick={() => {
-                            setModalContent('newPrate');
-                            openModal();
-                          }}
-                        >
-                          <AlignItems>
-                            <FiPlus/>
-                            <span>新規作成</span>
-                          </AlignItems>
-                        </Button>
-                      </StickyBottom>
+                    {user && user.id === roomInfo.room_creator && 
+                      <IconButton
+                        disabled={!roomId}
+                        onClick={() => {
+                          setModalContent('roomSettings');
+                          openModal();
+                        }}
+                      >
+                        <FiSettings/>
+                      </IconButton>
                     }
-                  </>
-                }
-                {user.id === roomInfo.room_creator &&    
-                  <>
-                    {roomInfo.room_editable !== true &&                     
-                      <StickyBottom>
-                        <Button
-                          solid
-                          disabled={!roomId}
-                          onClick={() => {
-                            setModalContent('newPrate');
-                            openModal();
-                          }}
+                  </AlignItems> */}
+
+                  {/* MODAL */}
+                  <Modal
+                    isOpen={modalIsOpen}
+                    style={modalStyle}
+                  >
+                    {/* HEADER & CLOSE BUTTON */}
+                    <AlignItems spaceBetween>
+                      <h3>
+                        {modalContent === 'newPrate' && 'Compose'}
+                        {modalContent === 'roomSettings' && 'Settings'}
+                      </h3>
+                      <IconButton
+                        onClick={() => closeModal()}
+                        noOutline
+                      >
+                        <FiXCircle/>
+                      </IconButton>
+                    </AlignItems>
+
+                    {/* CREATE NEW */}
+                    {modalContent === 'newPrate' &&
+                    <>
+                      {message && 
+                        <TabComponent
+                          icon={<FiSend/>}
+                          name={'新しいPrate'}
                         >
-                          <AlignItems>
-                            <FiPlus/>
-                            <span>新規作成</span>
-                          </AlignItems>
-                        </Button>
-                      </StickyBottom>
+                          {messageSending ? 
+                            <p>部屋に送信中...</p>:
+                            <GhenInterpreter inputValue={message}/>
+                          }
+                        </TabComponent>
+                      }
+                      <form
+                        style={{ marginTop: '0.5em' }}
+                        className="shedForm"
+                        onSubmit={handleMessageSubmit}
+                      >
+                        <textarea
+                          placeholder='メッセージ'
+                          onChange={handleMessageChange}
+                          value={message}
+                        />
+                        <AlignItems spaceBetween={true}>
+                          {message ?
+                            <AlignItems>
+                              <p style={{width:'fit-content'}}>{messageByte} Bytes</p>
+                              <p style={{width:'fit-content'}}>{messageWordCount} Words</p>
+                            </AlignItems>:<p></p>
+                          }
+                          <Button
+                            onClick={handleMessageSubmit}
+                            disabled={!message}
+                            type="submit"
+                            solid
+                          >
+                            投稿
+                          </Button>
+                        </AlignItems>
+                      </form>
+                    </>
                     }
-                  </>
-                }
-                </>
-              }
-            </div>
-            </div>
+                    {modalContent === 'roomSettings' &&
+                    <>
+                      <AlignItems spaceBetween={true}>
+                        <h4 style={{margin:'0.5em 0'}}>パブリックシェアリング</h4>
+                        <span style={{backgroundColor:'var(--baseColor1)',borderRadius:'var(--borderRadius)', fontSize:'0.7em', padding:'0.5em 1em'}}>現在のステータス: {roomInfo.room_editable === true ? '有効' : '無効'}</span>
+                      </AlignItems>
+                      <p>有効化することで、他の人もこの部屋で会話できるようになります。詳細は <Link href={'/usage'}>Usage</Link> のページからアクセスできます。</p>
+                      <GridItems grid={'1fr 1fr'}>
+                        <Button
+                          onClick={()=>{handleSharingSubmit(true);}}
+                        >
+                          有効化
+                        </Button>
+                        <Button
+                          onClick={()=>{handleSharingSubmit(false);}}
+                        >
+                          無効化
+                        </Button>
+                      </GridItems>
+                      <br/>
+                      <AlignItems spaceBetween={true}>
+                        <h4 style={{margin:'0.5em 0'}}>Prattle 内で部屋を表示</h4>
+                        <span style={{backgroundColor:'var(--baseColor1)',borderRadius:'var(--borderRadius)', fontSize:'0.7em', padding:'0.5em 1em'}}>現在のステータス: {roomInfo.room_public === true ? '有効' : '無効'}</span>
+                      </AlignItems>
+                      <p>本設定を有効化する事で <Link href="/browse">browse</Link> や <Link href={`/profile/${user.id}`}>profile</Link> ページへ部屋が表示されるようになります。</p>
+                      <GridItems grid={'1fr 1fr'}>
+                        <Button
+                          onClick={()=>{handleDiscoverabilitySubmit(true);}}
+                        >
+                          有効化
+                        </Button>
+                        <Button
+                          onClick={()=>{handleDiscoverabilitySubmit(false);}}
+                        >
+                          無効化
+                        </Button>
+                      </GridItems>
+                      <h4 style={{marginBottom:'0.5em'}}>部屋のオーナー</h4>
+                      <p>オーナーシップを移行したい相手のユーザーIDを以下のフォームに入力する必要があります。</p>
+                      <form
+                        className="shedAlignedForm"
+                        onSubmit={handleOwnerTransferSubmit}
+                      >
+                        <input
+                          placeholder="ユーザーID"
+                          onChange={(e)=>{setOwner(e.target.value)}}
+                          value={owner}
+                        />
+                        <Button
+                          disabled={!owner}
+                          type="submit"
+                          click={handleOwnerTransferSubmit}
+                          icon={<VscArrowSwap />}
+                          name="オーナーを移行"
+                        />
+                      </form>
+                    </>
+                    }
+                  </Modal>
+
+
+                  <StylizedBanner
+                    roomId={roomId && roomId}
+                    user={user && user}
+                  />
+                  {/* {messageSentNumber != 0 && 
+                    <p style={{textAlign: 'center'}}>{messageSentNumber} 通追加済み</p>
+                  } */}
+                  <div className="messagesContainer">
+                    {data && data.map(props =>
+                      <TextMessage
+                        style={{marginBottom: '0.5em'}}
+                        key={props.id}
+                        data={props}
+                        currentRoom={roomId}
+                        roomCreator={roomInfo.room_creator}
+                        roomEditable={roomInfo.room_editable}
+                      />
+                    )}
+                  </div>
+
+                  {/* CREATE NEW BUTTON */}
+                  <StickyBottom>
+                  {user &&
+                    <>
+                      <Button
+                        solid
+                        disabled={!roomId}
+                        onClick={() => {
+                          setModalContent('newPrate');
+                          openModal();
+                        }}
+                      >
+                        <AlignItems>
+                          <FiPlus/>
+                          <span>新規作成</span>
+                        </AlignItems>
+                      </Button>
+                    </>
+                  }
+                  </StickyBottom>
+                </div>
+              </div>
             </div>
           </GridItems>
-        </>:<StaticScreen type="loading"><h2>現在ルーム取得中</h2></StaticScreen>
-        }
+        </>
+        {/* :<StaticScreen type="loading"><h2>現在ルーム取得中</h2></StaticScreen>
+        } */}
     </>
   )
 }

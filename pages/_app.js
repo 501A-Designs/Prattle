@@ -2,24 +2,25 @@ import '../styles/globals.css'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { supabase } from '../utils/supabaseClient'
-
-import AlignItems from '../lib/style-component/AlignItems';
-import prattleIcon from '../public/prattle.png'
-import Image from 'next/image';
-import SmallButton from '../lib/button-component/SmallButton';
 import { useRouter } from 'next/router';
-
-import {VscAdd,VscAccount,VscComment,VscRepo,VscSymbolParameter} from "react-icons/vsc";
-import Button from '../lib/button-component/Button';
-
+import { Provider } from 'react-supabase';
 
 function MyApp({ Component, pageProps }) {
   const user = supabase.auth.user();
   const router = useRouter();
 
-  return <>
+  return (
+    <Provider value={supabase}>
       <ToastContainer
-        position="top-right"
+        toastStyle={{
+          backgroundColor: 'var(--baseColor0)',
+          color: 'var(--prattleColor0)',
+          borderRadius:'var(--borderRadius1)',
+          boxShadow:'var(--boxShadow)',
+          padding: '1em',
+          border:'var(--baseBorder2)'
+        }}
+        position="top-center"
         autoClose={5000}
         hideProgressBar
         newestOnTop={false}
@@ -30,7 +31,8 @@ function MyApp({ Component, pageProps }) {
         pauseOnHover
       />
       <Component {...pageProps} />
-    </>
+    </Provider>
+  )
 }
 
 export default MyApp
