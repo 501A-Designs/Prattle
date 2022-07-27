@@ -6,9 +6,6 @@ import { useRouter } from 'next/router';
 import { Provider } from 'react-supabase';
 
 function MyApp({ Component, pageProps }) {
-  const user = supabase.auth.user();
-  const router = useRouter();
-
   return (
     <Provider value={supabase}>
       <ToastContainer

@@ -28,9 +28,15 @@ import Header from '../../lib/Header';
 import { modalStyle } from '../../modalStyle';
 import { useFilter, useRealtime, useSelect } from 'react-supabase';
 
+import LoadingBar from 'react-top-loading-bar'
+
+
 function IndivisualPrateRoom({ roomId }) {
-  const [{data:roomInfoData }] = useSelect('rooms',{filter:useFilter((query) =>query.eq('room_id', roomId && roomId))})
-  const [{ data:messagesData}, reexecute] = useRealtime('messages',
+  const user = supabase.auth.user();
+  
+  const [progress, setProgress] = useState(0);
+  const [{ data:roomInfoData,fetching:fetchingRoomInfoData }] = useSelect('rooms',{filter:useFilter((query) =>query.eq('room_id', roomId && roomId))})  
+  const [{ data:messagesData, fetching:fetchingMessagesData }, reexecute] = useRealtime('messages',
   {select: {
     filter: useFilter(
       (query) =>
@@ -42,7 +48,12 @@ function IndivisualPrateRoom({ roomId }) {
     )
   }});
 
-  const user = supabase.auth.user();
+  useEffect(() => {
+    fetchingMessagesData && setProgress(progress+30);
+    fetchingRoomInfoData && setProgress(progress+10);
+    roomInfoData && messagesData && setProgress(100);
+  }, [fetchingRoomInfoData, fetchingMessagesData])
+  
   const [gridStatus, setGridStatus] = useState('1fr');
   let sideBarContainer ={
     borderRight:'var(--baseBorder2)',
@@ -66,8 +77,7 @@ function IndivisualPrateRoom({ roomId }) {
   const [messageByte, setMessageByte] = useState(0);
   const [messageWordCount, setMessageWordCount] = useState(0);
   
-  // Sent message
-  const [messageSentNumber, setMessageSentNumber] = useState(0);
+  // SEND MESSAGE
   const handleMessageSubmit = async (e) => {
     e.preventDefault();
     setMessageSending(true);
@@ -89,7 +99,6 @@ function IndivisualPrateRoom({ roomId }) {
     setMessage('');
     setMessageByte(0);
     setMessageWordCount(0);
-    setMessageSentNumber(messageSentNumber + 1);
     setMessageSending(false);
     closeModal();
     reexecute();
@@ -140,6 +149,11 @@ function IndivisualPrateRoom({ roomId }) {
 
   return (
     <>
+      <LoadingBar
+        color='var(--prattleColor1)'
+        progress={progress}
+        onLoaderFinished={() => setProgress(0)}
+      />
       {roomInfoData &&    
         <>
           <Head>
@@ -173,28 +187,6 @@ function IndivisualPrateRoom({ roomId }) {
                 <div>
                   <Header/>
                   <div className={'bodyPadding'}>
-                    {/* <AlignItems spaceBetween style={{marginBottom:'1em'}}>
-                      {isBrowser && 
-                        <IconButton
-                          disabled={!roomId}
-                          onClick={()=>{gridStatus === '1fr' ? setGridStatus('1fr 4fr'): setGridStatus('1fr')}}
-                        >
-                          <FiFileText />
-                        </IconButton>
-                      }
-                      {user && user.id === roomInfo.room_creator && 
-                        <IconButton
-                          disabled={!roomId}
-                          onClick={() => {
-                            setModalContent('roomSettings');
-                            openModal();
-                          }}
-                        >
-                          <FiSettings/>
-                        </IconButton>
-                      }
-                    </AlignItems> */}
-
                     {/* MODAL */}
                     <Modal
                       isOpen={modalIsOpen}
@@ -325,9 +317,6 @@ function IndivisualPrateRoom({ roomId }) {
                       user={user && user}
                       data={roomInfoData[0]}
                     />
-                    {/* {messageSentNumber != 0 && 
-                      <p style={{textAlign: 'center'}}>{messageSentNumber} 通追加済み</p>
-                    } */}
                     {messagesData && 
                       <div className="messagesContainer">
                         {messagesData.map(props =>
@@ -345,31 +334,60 @@ function IndivisualPrateRoom({ roomId }) {
 
                     {/* CREATE NEW BUTTON */}
                     <StickyBottom>
-                    {user &&
-                      <>
-                        <Button
-                          solid
-                          disabled={!roomId}
-                          onClick={() => {
-                            setModalContent('newPrate');
-                            openModal();
-                          }}
-                        >
-                          <AlignItems>
-                            <FiPlus/>
-                            <span>新規作成</span>
-                          </AlignItems>
-                        </Button>
-                      </>
-                    }
+                      <AlignItems>
+                        {isBrowser && 
+                          <IconButton
+                            disabled={!roomId}
+                            onClick={()=>{gridStatus === '1fr' ? setGridStatus('1fr 4fr'): setGridStatus('1fr')}}
+                          >
+                            <FiFileText />
+                          </IconButton>
+                        }
+                        {user && user.id === roomInfoData[0].room_creator && 
+                          <IconButton
+                            disabled={!roomId}
+                            onClick={() => {
+                              setModalContent('roomSettings');
+                              openModal();
+                            }}
+                          >
+                            <FiSettings/>
+                          </IconButton>
+                        }
+                      </AlignItems>
+                      {user &&
+                        <>
+                          {roomInfoData[0].room_editable || user.id === roomInfoData[0].room_creator && 
+                            <button
+                              onClick={() => {
+                                setModalContent('newPrate');
+                                openModal();
+                              }}
+                              disabled={!roomId}
+                              solid
+                              style={{
+                                fontSize: '1.7em',
+                                padding: '0.5em',
+                                border: '1.5px solid var(--prattleColor0)',
+                                borderRadius: 'calc(var(--borderRadius2)*2)',
+                                backgroundColor: 'var(--prattleColor1)',
+                                color: 'var(--baseColor0)',
+                                cursor:'pointer',
+                              }}
+                            >
+                              <AlignItems justifyContent>
+                                <FiPlus/>
+                              </AlignItems>
+                            </button>
+                          }
+                        </>
+                      }
                     </StickyBottom>
                   </div>
                 </div>
               </div>
             </GridItems>
           </>
-          {/* :<StaticScreen type="loading"><h2>現在ルーム取得中</h2></StaticScreen>
-          } */}
         </>
       }
     </>

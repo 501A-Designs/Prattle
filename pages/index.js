@@ -15,12 +15,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
         {user ?
-          <>
-            <Header/>
-            <div className="bodyPadding">
-              <ChatApp />
-            </div>
-          </> : 
+          <ChatApp />: 
           <div className="bodyPadding">
             <LandingPage/>
           </div>
